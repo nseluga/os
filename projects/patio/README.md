@@ -1,6 +1,6 @@
 # Patio
 
-**Repo:** `~/Downloads/Patio`
+**Repo:** `~/Downloads/Patio` — https://github.com/nseluga/patio
 **Status:** active
 
 One-line purpose: _fill in — what Patio is._

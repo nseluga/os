@@ -1,6 +1,6 @@
 # Pitcher Injury Risk
 
-**Repo:** `~/Pitcher-Injury-Risk`
+**Repo:** `~/Pitcher-Injury-Risk` — https://github.com/nseluga/Pitcher-Injury-Risk
 **Status:** active
 
 One-line purpose: Modeling injury risk for pitchers from biomechanical / workload data.
