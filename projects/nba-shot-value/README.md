@@ -1,7 +1,7 @@
 # NBA Shot Value
 
 **Repo:** https://github.com/nseluga/Shot-Value-Machine-Learning  
-**Status:** active
+**Status:** on hold
 
 One-line purpose: Predicting expected point value of NBA shots from play-by-play context using machine learning.
 

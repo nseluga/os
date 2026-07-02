@@ -2,7 +2,7 @@
 
 **Repo:** `~/Downloads/Patio`  
 **GitHub:** https://github.com/nseluga/patio  
-**Status:** active
+**Status:** active — currently updating for efficiency, scalability, and reliability to support larger player base
 
 One-line purpose: Full-stack social betting app for backyard games (Caps, Beerball, Pong, Campus Golf).
 
