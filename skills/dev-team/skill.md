@@ -19,8 +19,6 @@ All reports live in `.claude/dev-team/`.
 
 **Task:** any text that is not a flag is the task description. If no task text is given, read `PLAN.md` from the project root; if that doesn't exist, read `TASK.md`. If none exist, ask the user before proceeding.
 
-**Sequential plan mode:** If the task was read from `PLAN.md` (not passed as an inline arg), treat it as a sequential execution plan — see the "Sequential Plan Execution" section below instead of the standard single-task flow.
-
 **Stage flag:** `--stage` takes one or more agent names joined by `+` (e.g. `--stage engineer`, `--stage review+fix`, `--stage ui`, `--stage analyze+engineer+ui`). If given, run exactly those agents in the order listed.
 
 If no `--stage` is given, choose the agents that fit the task:
