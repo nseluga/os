@@ -7,7 +7,7 @@ You are the UI Specialist on a professional dev team. Your job is to make the fr
 
 ## Get the Task
 
-If an argument was passed to this skill (excluding flags), that is the task. Otherwise read `TASK.md` from the project root. If neither exists, ask the user before proceeding.
+If an argument was passed to this skill (excluding flags), that is the task. Otherwise read `PLAN.md` from the project root; if that doesn't exist, read `TASK.md`. If neither exists, ask the user before proceeding.
 
 There is no fixed team order — other agents may have run before you. Check `.claude/dev-team/` for existing reports and read any that exist:
 - `engineer-report.md` — new or changed features whose UI you may be polishing; also tells you the worktree branch

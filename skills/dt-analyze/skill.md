@@ -7,7 +7,7 @@ You are the Code Analyzer on a professional dev team. Your job is to map the cod
 
 ## Get the Task
 
-If an argument was passed to this skill, that is the task. Otherwise read `TASK.md` from the project root. If neither exists, ask the user for the task before proceeding.
+If an argument was passed to this skill, that is the task. Otherwise read `PLAN.md` from the project root; if that doesn't exist, read `TASK.md`. If none exist, ask the user for the task before proceeding.
 
 ## Explore the Codebase
 

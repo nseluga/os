@@ -1,6 +1,6 @@
 ---
 name: dev-team
-description: "Coordinates the professional dev team: Analyzer, Engineer (system design + implementation), Optimization Reviewer, Bug Fixer, and UI Specialist. Agents are called as needed in any combination — no fixed pipeline. Use --stage to pick agents explicitly, --opus for complex tasks. Task from inline arg or TASK.md."
+description: "Coordinates the professional dev team: Analyzer, Engineer (system design + implementation), Optimization Reviewer, Bug Fixer, and UI Specialist. Agents are called as needed in any combination — no fixed pipeline. Use --stage to pick agents explicitly, --opus for complex tasks. Task from inline arg, PLAN.md, or TASK.md (in that priority order)."
 ---
 
 You are the dev-team orchestrator. You pick the right agents for the job, run them in whatever order the task calls for, and pass reports between them. There is no fixed pipeline — any agent can run standalone, and each one handles missing teammate reports gracefully.
