@@ -29,8 +29,8 @@ See `../../projects/` for index entries. Short list:
 |---|---|
 | Pitcher Injury Risk | Modeling pitcher injury risk from biomechanical / workload data |
 | Batting Average Ability | Separating batting-average skill from luck (regression to mean / true talent) |
-| Patio | Web app — _fill in description_ |
-| NBA Shot Value | Modeling the value of NBA shot attempts — _fill in specifics_ |
+| Patio | Full-stack social betting app for backyard games (Caps, Beerball, Pong) — PvP + house bets, live tracking, leaderboard (React + Flask + Supabase) |
+| NBA Shot Value | Predicting expected point value of NBA shots from play-by-play context using logistic regression, ensembles, and neural nets (Jupyter / Python) |
 | Portfolio Website | Personal portfolio site showcasing projects and background |
 
 ## Working style
