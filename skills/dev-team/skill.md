@@ -1,96 +1,63 @@
 ---
 name: dev-team
-description: Orchestrates the full professional dev team pipeline: Analyzer → Engineer → Reviewer → Bug Fixer. Use --stage to run a subset. Use --opus for complex tasks. Task from inline arg or TASK.md.
+description: "Coordinates the professional dev team: Analyzer, Engineer (system design + implementation), Optimization Reviewer, Bug Fixer, and UI Specialist. Agents are called as needed in any combination — no fixed pipeline. Use --stage to pick agents explicitly, --opus for complex tasks. Task from inline arg or TASK.md."
 ---
 
-You are the dev-team orchestrator. You sequence the right agents for the job, pass reports between them, and gate between stages.
+You are the dev-team orchestrator. You pick the right agents for the job, run them in whatever order the task calls for, and pass reports between them. There is no fixed pipeline — any agent can run standalone, and each one handles missing teammate reports gracefully.
+
+## The Team
+
+- **Analyzer** (`dt-analyze`) — maps the codebase before anyone writes code. Read-only; writes `analyze-report.md`.
+- **Engineer** (`dt-engineer`) — owns large-scale design: architecture, API design, data modeling, module boundaries, dependency choices. Designs the system and implements it in a worktree. Writes `engineer-report.md`.
+- **Optimization Reviewer** (`dt-review`) — reviews for efficiency, scalability, reliability, fault tolerance, and security. Optimizes the system the Engineer designed. No code edits; writes `review-report.md`.
+- **Bug Fixer** (`dt-fix`) — applies the Reviewer's findings. Writes `fix-report.md`.
+- **UI Specialist** (`dt-ui`) — improves the frontend user interface: layout, hierarchy, interaction states, responsiveness, accessibility. Frontend files only; writes `ui-report.md`.
+
+All reports live in `.claude/dev-team/`.
 
 ## Parse Arguments
 
-From the arguments passed to this skill:
-
 **Task:** any text that is not a flag is the task description. If no task text is given, read `TASK.md` from the project root. If neither exists, ask the user before proceeding.
 
-**Stage flag** (default: `all`):
-- `--stage analyze` — run Analyzer only
-- `--stage engineer` — run Engineer only
-- `--stage review` — run Reviewer only
-- `--stage fix` — run Bug Fixer only
-- `--stage all` — run full pipeline (Engineer → Reviewer → Bug Fixer)
-- `--stage analyze+engineer` — run Analyzer then Engineer
-- Analyzer is never included in `--stage all` automatically — it must be explicitly requested
+**Stage flag:** `--stage` takes one or more agent names joined by `+` (e.g. `--stage engineer`, `--stage review+fix`, `--stage ui`, `--stage analyze+engineer+ui`). If given, run exactly those agents in the order listed.
+
+If no `--stage` is given, choose the agents that fit the task:
+- New backend or full-stack feature → Engineer, then Reviewer, then Bug Fixer
+- Unfamiliar modules or multi-file scope → add Analyzer before the Engineer
+- Frontend look-and-feel work → UI Specialist alone (add Engineer first if backend changes are needed)
+- Feature with a user-facing surface → Engineer, then UI Specialist, then Reviewer, then Bug Fixer
+- "Optimize / make faster / harden" an existing area → Reviewer, then Bug Fixer — no Engineer needed
+- Tell the user which agents you chose and why before spawning them
 
 **Model flag** (default: Sonnet):
-- `--opus` — use `claude-opus-4-8` for Engineer and Bug Fixer agents
+- `--opus` — use `claude-opus-4-8` for Engineer, Bug Fixer, and UI Specialist agents
 - default — use `claude-sonnet-4-6` for all agents
 
-## Run the Pipeline
+## Run the Agents
 
-Run only the stages requested. For each stage, spawn an Agent using the instructions below. Wait for each agent to complete before spawning the next — stages are sequential.
+For each selected agent, spawn an Agent using the prompt template below. Agents that edit the same worktree must run sequentially; wait for each to complete and read its report before spawning the next, so you can pass context forward.
 
-After each stage completes, read the report it wrote before spawning the next agent. Pass the report content directly in the next agent's prompt.
+Prompt template (fill in the pieces that apply):
 
----
-
-### Stage: Analyzer
-
-Spawn an Agent with this prompt (fill in [TASK]):
-
-> Read `~/.claude/skills/dt-analyze/skill.md` for your full instructions. Your task: [TASK]
-
-After it completes, read `.claude/dev-team/analyze-report.md`.
-
----
-
-### Stage: Engineer
-
-Spawn an Agent with this prompt (fill in [TASK], [MODEL], and [ANALYZE_REPORT] if available):
-
-> Read `~/.claude/skills/dt-engineer/skill.md` for your full instructions. Your task: [TASK]. Use model [MODEL].
+> Read `~/.claude/skills/dt-[AGENT]/skill.md` for your full instructions. Your task: [TASK]. Use model [MODEL].
 >
-> [If analyze report exists:] The Analyzer has already mapped the codebase. Here is the analysis report — use it instead of re-exploring:
-> [ANALYZE_REPORT content]
+> [For each teammate report that already exists, paste it:]
+> Here is the [analyze/engineer/review/ui] report from a teammate who already ran — use it instead of re-deriving that context:
+> [REPORT content]
 
-After it completes, read `.claude/dev-team/engineer-report.md`.
+After each agent completes, read its report from `.claude/dev-team/` before spawning the next one.
 
----
+Ordering rules (the only hard constraints):
+- Bug Fixer requires an existing review report — run the Reviewer first if there isn't one
+- If multiple agents will edit code for the same task, they share one worktree: whichever runs first creates it, and you pass the branch name forward via the reports
 
-### Stage: Reviewer
+## After the Agents Finish
 
-Spawn an Agent with this prompt (fill in [ENGINEER_REPORT]):
-
-> Read `~/.claude/skills/dt-review/skill.md` for your full instructions.
->
-> The Engineer has completed their work. Here is the engineer report:
-> [ENGINEER_REPORT content]
-
-After it completes, read `.claude/dev-team/review-report.md`.
-
----
-
-### Stage: Bug Fixer
-
-Spawn an Agent with this prompt (fill in [MODEL], [ENGINEER_REPORT], [REVIEW_REPORT]):
-
-> Read `~/.claude/skills/dt-fix/skill.md` for your full instructions. Use model [MODEL].
->
-> Engineer report:
-> [ENGINEER_REPORT content]
->
-> Review report:
-> [REVIEW_REPORT content]
-
-After it completes, read `.claude/dev-team/fix-report.md`.
-
----
-
-## After the Pipeline
-
-When all requested stages are complete, summarize for the user:
-- Which stages ran
-- Branch name (from engineer report)
+When all selected agents are complete, summarize for the user:
+- Which agents ran and in what order
+- Branch name (from the engineer or ui report)
 - Count of review findings and how many were fixed (from fix report, if applicable)
-- Any disputed or deferred findings the user should know about
+- Any disputed or deferred findings, and any Backend Flags from the UI Specialist
 - Next step: `git merge [branch]` to bring the work into main when satisfied
 
 Do not merge automatically. The user reviews and merges.
