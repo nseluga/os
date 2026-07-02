@@ -3,7 +3,7 @@
 **Repo:** `~/Downloads/Patio`
 **Status:** active
 
-One-line purpose: _fill in — what Patio is._
+One-line purpose: Web app — _fill in: what does Patio do?_
 
 ## Notes
 _This is an index entry, not the codebase. Work happens in the repo above._
