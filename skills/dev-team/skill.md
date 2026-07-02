@@ -1,6 +1,6 @@
 ---
 name: dev-team
-description: "Coordinates the professional dev team: Analyzer, Engineer (system design + implementation), Optimization Reviewer, Bug Fixer, and UI Specialist. Agents are called as needed in any combination — no fixed pipeline. Use --stage to pick agents explicitly, --opus for complex tasks. Task from inline arg, PLAN.md, or TASK.md (in that priority order)."
+description: "Coordinates the professional dev team: Analyzer, Engineer (system design + implementation), Optimization Reviewer, Bug Fixer, and UI Specialist. Agents are called as needed in any combination — no fixed pipeline. Use --stage to pick agents explicitly. Defaults to Sonnet; auto-escalates to Opus for items flagged as complex in PLAN.md. Task from inline arg, PLAN.md, or TASK.md (in that priority order)."
 ---
 
 You are the dev-team orchestrator. You pick the right agents for the job, run them in whatever order the task calls for, and pass reports between them. There is no fixed pipeline — any agent can run standalone, and each one handles missing teammate reports gracefully.
@@ -29,9 +29,9 @@ If no `--stage` is given, choose the agents that fit the task:
 - "Optimize / make faster / harden" an existing area → Reviewer, then Bug Fixer — no Engineer needed
 - Tell the user which agents you chose and why before spawning them
 
-**Model flag** (default: Sonnet):
-- `--opus` — use `claude-opus-4-8` for Engineer, Bug Fixer, and UI Specialist agents
-- default — use `claude-sonnet-4-6` for all agents
+**Model selection (automatic):**
+- Default: `claude-sonnet-4-6` for all agents
+- If the task or PLAN.md item has a `flag:` field warning about complexity or risk, use `claude-opus-4-8` for the Engineer and Bug Fixer; keep Sonnet for Analyzer and Reviewer
 
 ## Run the Agents
 
