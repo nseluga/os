@@ -2,7 +2,7 @@
 
 **Repo:** `~/portfolio`  
 **GitHub:** https://github.com/nseluga/portfolio  
-**Status:** active
+**Status:** in progress — currently being outlined
 
 One-line purpose: Personal portfolio site — software engineering, sports analytics, startups, and about.
 

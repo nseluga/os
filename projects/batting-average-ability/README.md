@@ -2,7 +2,7 @@
 
 **Repo:** `~/Downloads/Batting Average Ability/Batting-Average-Ability`  
 **GitHub:** https://github.com/nseluga/Batting-Average-Ability  
-**Status:** active
+**Status:** on hold
 
 One-line purpose: Separates MLB hitter batting-average skill from luck via ML and statistical modeling.
 

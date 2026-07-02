@@ -2,7 +2,7 @@
 
 **Repo:** `~/Pitcher-Injury-Risk`  
 **GitHub:** https://github.com/nseluga/Pitcher-Injury-Risk  
-**Status:** active
+**Status:** on hold
 
 One-line purpose: MLB pitcher health modeling platform — predicts injury probability, severity, time-to-injury, and composite Injury Risk+ score.
 
