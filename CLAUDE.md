@@ -15,6 +15,7 @@ os/
 │   ├── me/                # bio, roles, preferences, goals (hand-written)
 │   ├── frameworks/        # mental models, methods, reusable thinking
 │   ├── audience/          # people/orgs I write or build for
+│   ├── library/           # reference source docs (PDFs/papers) to read on demand
 │   ├── raw/               # inbox: unprocessed dumps, triage into the above
 │   └── memory/            # Claude Code's managed memory (MEMORY.md + facts)
 ├── skills/                # all Claude Code skills (real bodies) + skills.md template
@@ -39,7 +40,9 @@ When a session starts in this repo, orient yourself in this order:
 3. **Check `projects/`** — if the task concerns a specific project, open its
    README to get the real repo path, then go work in that repo.
 4. **Pull in `knowledge/frameworks/` and `knowledge/audience/`** only when the
-   task calls for a method or a target reader.
+   task calls for a method or a target reader. Read documents in
+   `knowledge/library/` only when a task points at them (or the topic clearly
+   matches) — it's optional reference material, nothing there auto-loads.
 5. New unsorted input lands in `knowledge/raw/`; triage it into `me/`,
    `frameworks/`, `audience/`, or a project — don't let it pile up.
 
