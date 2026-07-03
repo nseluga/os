@@ -12,6 +12,8 @@ Read these in parallel before doing anything else:
 2. `PROGRESS.md` — find the first item that is NOT marked `done`; that is where you start
 3. `.claude/dev-team/engineer-report.md` if it exists — get the branch name if a prior session already created a worktree
 
+Also run `git branch --show-current` and save the result as the **working branch** — you will merge the worktree branch back into it at shutdown.
+
 If there is no existing worktree branch, the first Engineer agent will create one. All subsequent agents in this session work on that same branch.
 
 ## Loop: For Each Item
@@ -69,6 +71,8 @@ Stop when you hit a `⚠️ AUTONOMOUS RUN — STOP HERE` marker or when all pre
 Before exiting:
 1. Commit any uncommitted changes on the worktree branch: `chore: autonomous session checkpoint — [list completed items]`
 2. Write a final PROGRESS.md update.
-3. Write a summary for the user covering: which items completed, which branch holds the work, what the next item is, and what (if anything) the human needs to do before the next session can proceed.
+3. Merge the worktree branch back into the working branch (recorded at startup): `git merge [worktree-branch] --no-edit` run from the main repo checkout (not the worktree path).
+4. Remove the worktree: `git worktree remove [worktree-path]`
+5. Write a summary for the user covering: which items completed, what the next item is, and what (if anything) the human needs to do before the next session can proceed.
 
-Do not merge into main. Do not push. The user reviews and merges when ready.
+Do not merge into main. Do not push to remote. The user reviews and pushes when ready.
