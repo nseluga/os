@@ -15,7 +15,7 @@ os/
 │   ├── me/                # bio, roles, preferences, goals (hand-written)
 │   ├── frameworks/        # mental models, methods, reusable thinking
 │   ├── audience/          # people/orgs I write or build for
-│   ├── library/           # reference source docs (PDFs/papers) to read on demand
+│   ├── library/           # reference docs to read on demand (files local-only/gitignored)
 │   ├── raw/               # inbox: unprocessed dumps, triage into the above
 │   └── memory/            # Claude Code's managed memory (MEMORY.md + facts)
 ├── skills/                # all Claude Code skills (real bodies) + skills.md template

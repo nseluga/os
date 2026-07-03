@@ -1,2 +1,10 @@
 .DS_Store
 *.swp
+
+# knowledge/library: reference documents live LOCAL-ONLY (repo is public).
+# Ignore every file under library, but keep the folder structure, .gitkeep,
+# and any markdown (README, NOTES) tracked.
+knowledge/library/**/*
+!knowledge/library/**/
+!knowledge/library/**/*.md
+!knowledge/library/**/.gitkeep
