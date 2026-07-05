@@ -49,8 +49,11 @@ When a session starts in this repo, orient yourself in this order:
 ## Integration with Claude Code
 
 Skills and memory physically live in this repo and are exposed to Claude Code
-via **absolute symlinks**:
+via **absolute symlinks**, and a global config file routes all sessions back
+to this repo:
 
+- `~/.claude/CLAUDE.md` — global session config; tells Claude what's in `~/os`
+  and when to pull from each knowledge area (no auto-reads, on-demand only)
 - `~/.claude/skills`  → `~/os/skills`
 - `~/.agents/skills`  → `~/os/skills`
 - `~/.claude/memory`  → `~/os/knowledge/memory`
