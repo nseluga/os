@@ -4,6 +4,4 @@
 - [Explain concepts plainly](feedback-explain-concepts-plainly.md) — Lead with plain English when introducing Claude Code workflow concepts; user asked "what do these mean?" after a rules cheat sheet
 - [Surface tradeoffs proactively](feedback-surface-tradeoffs-proactively.md) — Include risks/tradeoffs with any config recommendation; user had to ask "are there drawbacks?" before I volunteered them
 - [User is learning Claude Code tooling](user-learning-claude-code.md) — Peer-level on the codebase, but building fluency on hooks/skills/agents/memory — explain those as new unless shown otherwise
-- [dev-team-auto merge gap fixed](feedback-devteam-auto-merge.md) — skill now merges worktree branch back to working branch at shutdown; overnight-build is sufficient safety net
 - [Library notes format](feedback-library-notes-format.md) — one file per document, never a combined NOTES.md; never write stubs before reading the source
-- [dev-team convergence loop](feedback-devteam-convergence-loop.md) — dev-team/dev-team-auto are converge-until-working loops (build → QA gate → review → fix, cap 5), not linear pipelines; reviewer runs on every item
