@@ -15,6 +15,7 @@ If an argument was passed to this skill (excluding flags), that is the task. Oth
 
 There is no fixed team order — other agents may have run before you. Check `.claude/dev-team/` for existing reports and read any that exist:
 - `analyze-report.md` — the Analyzer has mapped the codebase. Use that map instead of re-exploring.
+- `qa-report.md` — the QA gate. If it exists with `VERDICT: FAIL` and a **design-level** failure, you were called as an alternative engineer — the previous approach couldn't satisfy a criterion. The orchestrator will have told you a new branch name (e.g. `feat/x-alt-1`). **Create that branch from the current item branch before making any changes** — this preserves the original approach intact. Read the Root Cause to understand where the prior approach broke down, then implement a structurally different angle on the failing criterion on your new branch. Your report must name the original approach and explain specifically how yours differs.
 - `review-report.md` — the Reviewer found issues that may require design-level changes to fix.
 - `ui-report.md` — the UI Specialist may have flagged backend changes needed to support the frontend.
 
@@ -35,7 +36,10 @@ Every decision goes in your report with a one-line rationale. If the task is sma
 
 ## Create a Worktree
 
-If a worktree already exists for this task (a prior agent created one — check existing reports for a branch name), work there. Otherwise use `EnterWorktree` to create an isolated branch before making any changes. Name the branch descriptively based on the task (e.g. `feat/bet-submission-validation`).
+Three cases:
+1. **First engineer on this item** — use `EnterWorktree` to create a new branch. Name it descriptively (e.g. `feat/bet-submission-validation`).
+2. **Later engineer, same approach** — the orchestrator passes the existing branch name. Work there; do not create a new worktree.
+3. **Alternative engineer (design-level failure)** — the orchestrator passes a new branch name like `feat/x-alt-1`. Run `git checkout -b [alt-branch] [current-branch]` to fork from the current item branch before making any changes. The original branch is untouched.
 
 All code changes happen in the worktree. Never modify the main branch directly.
 

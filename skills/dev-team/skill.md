@@ -1,63 +1,66 @@
 ---
 name: dev-team
-description: "Coordinates the professional dev team: Analyzer, Engineer (system design + implementation), Optimization Reviewer, Bug Fixer, and UI Specialist. Agents are called as needed in any combination — no fixed pipeline. Use --stage to pick agents explicitly. Defaults to Sonnet; auto-escalates to Opus for items flagged as complex in PLAN.md. Task from inline arg, PLAN.md, or TASK.md (in that priority order)."
+description: "Coordinates the professional dev team as a convergence loop: Engineer builds an item, QA gates it with tests, the Optimization Reviewer reviews it, the Bug Fixer applies findings — and the loop repeats until the item works as specified (QA PASS + clean review) or hits the 5-attempt cap. Analyzer and UI Specialist join when the task calls for them. Task from inline arg, PLAN.md, or TASK.md."
 ---
 
-You are the dev-team orchestrator. You pick the right agents for the job, run them in whatever order the task calls for, and pass reports between them. There is no fixed pipeline — any agent can run standalone, and each one handles missing teammate reports gracefully.
+You are the dev-team orchestrator. You drive **one plan item to completion** through the convergence loop: the team keeps iterating — build, test, review, fix — until the item works as specified or the attempt cap is hit. You pass reports between agents so no one re-derives context.
 
-## The Team
-
-- **Analyzer** (`dt-analyze`) — maps the codebase before anyone writes code. Read-only; writes `analyze-report.md`.
-- **Engineer** (`dt-engineer`) — owns large-scale design: architecture, API design, data modeling, module boundaries, dependency choices. Designs the system and implements it in a worktree. Writes `engineer-report.md`.
-- **Optimization Reviewer** (`dt-review`) — reviews for efficiency, scalability, reliability, fault tolerance, and security. Optimizes the system the Engineer designed. No code edits; writes `review-report.md`.
-- **Bug Fixer** (`dt-fix`) — applies the Reviewer's findings. Writes `fix-report.md`.
-- **UI Specialist** (`dt-ui`) — improves the frontend user interface: layout, hierarchy, interaction states, responsiveness, accessibility. Frontend files only; writes `ui-report.md`.
-
-All reports live in `.claude/dev-team/`.
+Read `~/.claude/skills/dev-team/convergence-loop.md` now — it is the engine you run. This skill sets up the loop and reports the outcome; the loop file defines the iteration itself.
 
 ## Parse Arguments
 
-**Task:** any text that is not a flag is the task description. If no task text is given, read `PLAN.md` from the project root; if that doesn't exist, read `TASK.md`. If none exist, ask the user before proceeding.
+**Task:** any text that is not a flag is the task description. If no task text is given, read `PLAN.md` from the project root; if that doesn't exist, read `TASK.md`. If none exist, ask the user before proceeding. Capture the item's `done when:` criteria — QA turns these into the gate.
 
-**Stage flag:** `--stage` takes one or more agent names joined by `+` (e.g. `--stage engineer`, `--stage review+fix`, `--stage ui`, `--stage analyze+engineer+ui`). If given, run exactly those agents in the order listed.
-
-If no `--stage` is given, choose the agents that fit the task:
-- New backend or full-stack feature → Engineer, then Reviewer, then Bug Fixer
-- Unfamiliar modules or multi-file scope → add Analyzer before the Engineer
-- Frontend look-and-feel work → UI Specialist alone (add Engineer first if backend changes are needed)
-- Feature with a user-facing surface → Engineer, then UI Specialist, then Reviewer, then Bug Fixer
-- "Optimize / make faster / harden" an existing area → Reviewer, then Bug Fixer — no Engineer needed
-- Tell the user which agents you chose and why before spawning them
+**Stage flag:** `--stage` takes one or more agent names joined by `+` (e.g. `--stage engineer`, `--stage qa`, `--stage review+fix`, `--stage analyze+engineer`). If given, run exactly those agents once in the order listed — this bypasses the convergence loop for targeted, single-shot work. Without `--stage`, run the full loop below.
 
 **Model selection (automatic):**
 - Default: `claude-sonnet-4-6` for all agents
-- If the task or PLAN.md item has a `flag:` field warning about complexity or risk, use `claude-opus-4-8` for the Engineer and Bug Fixer; keep Sonnet for Analyzer and Reviewer
+- If the task or PLAN.md item has a `flag:` field warning about complexity or risk, use `claude-opus-4-8` for the Engineer and Bug Fixer; keep Sonnet for the others
 
-## Run the Agents
+## Optional Prep
 
-For each selected agent, spawn an Agent using the prompt template below. Agents that edit the same worktree must run sequentially; wait for each to complete and read its report before spawning the next, so you can pass context forward.
+- **Unfamiliar or multi-file area** → run `dt-analyze` once before the loop so every agent shares one codebase map.
+- **Task has a user-facing surface** → plan to run `dt-ui` after the item passes its correctness gate (see below).
 
-Prompt template (fill in the pieces that apply):
+Tell the user which agents you'll use and why before spawning them.
 
-> Read `~/.claude/skills/dt-[AGENT]/skill.md` for your full instructions. Your task: [TASK]. Use model [MODEL].
+## Run the Convergence Loop
+
+Run the loop from `convergence-loop.md` for the item, with:
+- **gate mode: `tests`** — QA writes and runs tests; the verdict comes from those tests passing against the `done when:` criteria
+- **branch:** the first agent to run creates the worktree; pass its branch name to every later agent
+- **MAX_ATTEMPTS: 5**
+
+In short, each attempt: **Engineer** builds (or **Bug Fixer** patches on later attempts) → **QA** runs the tests and emits `VERDICT` → if FAIL, loop back to a fix; if PASS, the **Optimization Reviewer** reviews → if Critical/Important findings, Bug Fixer applies them and loop back → done when QA is PASS and review is clean.
+
+The Optimization Reviewer runs on the item on every pass where QA is green — an item is never marked done without a clean review.
+
+### Spawning each agent
+
+Spawn each with the `Agent` tool using this prompt template:
+
+> Read `~/.claude/skills/dt-[AGENT]/skill.md` for your full instructions. Your task: [TASK + `done when:` criteria]. Use model [MODEL].
+> [QA only:] Gate mode: tests.
+> [After the first agent:] Work on existing branch [branch-name] — do NOT create a new worktree.
 >
 > [For each teammate report that already exists, paste it:]
-> Here is the [analyze/engineer/review/ui] report from a teammate who already ran — use it instead of re-deriving that context:
+> Here is the [analyze/engineer/qa/review/fix] report from a teammate who already ran this loop — use it instead of re-deriving that context:
 > [REPORT content]
 
-After each agent completes, read its report from `.claude/dev-team/` before spawning the next one.
+After each agent finishes, read its report from `.claude/dev-team/` before spawning the next. Agents editing the same worktree run sequentially.
 
-Ordering rules (the only hard constraints):
-- Bug Fixer requires an existing review report — run the Reviewer first if there isn't one
-- If multiple agents will edit code for the same task, they share one worktree: whichever runs first creates it, and you pass the branch name forward via the reports
+### UI Specialist (when the task has a user-facing surface)
 
-## After the Agents Finish
+Once the item first reaches a passing correctness gate (QA PASS), run `dt-ui` on the frontend before the final review pass, then let the Reviewer cover the UI changes too. Fold any `dt-ui` **Backend Flags** back to the Engineer inside the loop.
 
-When all selected agents are complete, summarize for the user:
-- Which agents ran and in what order
-- Branch name (from the engineer or ui report)
-- Count of review findings and how many were fixed (from fix report, if applicable)
-- Any disputed or deferred findings, and any Backend Flags from the UI Specialist
-- Next step: `git merge [branch]` to bring the work into main when satisfied
+## After the Loop
+
+Report to the user:
+- **Outcome:** DONE or BLOCKED, and how many attempts it took
+- **Branch name** (from the engineer/ui report) and the final QA `VERDICT`
+- **Review findings:** count by severity and how many were fixed
+- **If BLOCKED:** which `done when:` criteria are still unmet and the last Root Cause hint
+- Any disputed/deferred findings and any UI Backend Flags
+- **Next step:** `git merge [branch]` to bring the work into the current branch when satisfied
 
 Do not merge automatically. The user reviews and merges.

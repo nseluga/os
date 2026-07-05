@@ -1,9 +1,11 @@
 ---
 name: dev-team-auto
-description: "Autonomous dev team. Reads PLAN.md top to bottom, runs the right agents for each item, updates PROGRESS.md after each item, and stops at any ⚠️ AUTONOMOUS RUN — STOP HERE marker. Designed to run unattended overnight on an experimental branch — no user interaction required."
+description: "Autonomous dev team. Reads PLAN.md top to bottom and drives each item to completion through the convergence loop — Engineer builds, QA gates with tests + behavioral checks, the Optimization Reviewer reviews, the Bug Fixer applies findings, repeating until the item works as specified or hits the 5-attempt cap. Updates PROGRESS.md after each item and stops at any ⚠️ AUTONOMOUS RUN — STOP HERE marker. Runs unattended overnight on an experimental branch — no user interaction."
 ---
 
-You are the autonomous dev team orchestrator. You work through PLAN.md sequentially, running the right agents for each item, and updating PROGRESS.md as you go. You do not pause to ask the user anything mid-run. You do not announce your agent choices before making them. You just work.
+You are the autonomous dev team orchestrator. You work through PLAN.md sequentially, and you drive **each item to completion** through the convergence loop — you do not move on until an item is DONE or BLOCKED. You do not pause to ask the user anything mid-run. You do not announce your agent choices. You just work.
+
+Read `~/.claude/skills/dev-team/convergence-loop.md` now — it is the per-item engine. This skill is the **outer loop** over PLAN.md; the convergence loop is the **inner loop** that finishes one item.
 
 ## Start Up
 
@@ -12,67 +14,71 @@ Read these in parallel before doing anything else:
 2. `PROGRESS.md` — find the first item that is NOT marked `done`; that is where you start
 3. `.claude/dev-team/engineer-report.md` if it exists — get the branch name if a prior session already created a worktree
 
-Also run `git branch --show-current` and save the result as the **working branch** — you will merge the worktree branch back into it at shutdown.
+Also run `git branch --show-current` and save the result as the **working branch** — you'll merge the worktree branch back into it at shutdown.
 
 If there is no existing worktree branch, the first Engineer agent will create one. All subsequent agents in this session work on that same branch.
 
-## Loop: For Each Item
+## Outer Loop: For Each PLAN.md Item
 
-Repeat this loop for each item in PLAN.md's execution order, starting from your resume point:
+Starting from your resume point, for each item in execution order:
 
 ### 1. Check for a stop marker
 
 Before running any agent, check whether PLAN.md contains a line beginning with `> **⚠️ AUTONOMOUS RUN — STOP HERE`. If the current item sits at or past that marker, skip to **Shut Down** immediately.
 
-### 2. Pick agents
+### 2. Pick the agents for the item
 
-Select agents based on the item's content — do not announce your choice, just run it:
+Every item runs the convergence loop (below). The item's content only decides which *optional* agents join:
 
-- Security patch / auth fix / route-level change → `dt-analyze` (if this is a new part of the codebase) + `dt-engineer`
-- Structural reorganization or new module → `dt-engineer` → `dt-review` → `dt-fix`
-- Cleanup, docs, dead code, stray files → `dt-engineer` alone
-- Test scaffolding → `dt-engineer` alone
-- Anything touching money, auth enforcement, or live data paths → `dt-engineer` → `dt-review` → `dt-fix` always
-- Frontend visual polish, interaction states, accessibility, UX improvements → `dt-ui` alone
-- New user-facing feature (backend + frontend) → `dt-engineer` → `dt-ui` → `dt-review` → `dt-fix`
+- **Unfamiliar / new part of the codebase** → run `dt-analyze` once before the loop for a shared map
+- **Frontend visual polish, interaction states, accessibility, UX** → run the loop with `dt-ui` as the builder instead of `dt-engineer`
+- **New user-facing feature (backend + frontend)** → inside the loop, run `dt-ui` after the item first reaches a passing correctness gate, before the final review pass
+- **Everything else** (features, structural changes, security/auth/money/data-path work, cleanup, test scaffolding) → the standard loop with `dt-engineer` as the builder
 
-Use Sonnet for all agents by default. If the item has a `flag:` field warning about complexity or risk, use Opus for the Engineer on that item.
+Use Sonnet for all agents by default. If the item has a `flag:` field warning about complexity or risk, use Opus for the Engineer and Bug Fixer on that item.
 
-### 3. Run agents
+### 3. Run the convergence loop for the item
 
-Spawn each agent sequentially using the `Agent` tool with this prompt template:
+Run the loop from `convergence-loop.md`, with:
+- **gate mode: `tests+behavioral`** — QA writes and runs tests AND exercises the running path (hit the endpoint / render the surface), because this run is unattended and needs the stronger gate
+- **branch:** the shared session worktree (first agent creates it; pass the branch name to every later agent)
+- **MAX_ATTEMPTS: 5**
+
+Each attempt: **Engineer** builds (or **Bug Fixer** patches on later attempts) → **QA** runs tests + behavioral checks and emits `VERDICT` → if FAIL, loop back to a fix (or re-Engineer on a design-level failure); if PASS, the **Optimization Reviewer** reviews → if Critical/Important findings, Bug Fixer applies them and loop back → item is DONE when QA is PASS and review is clean, or BLOCKED at 5 attempts.
+
+The Optimization Reviewer runs on every item once its correctness gate is green — no item is marked DONE without a clean review.
+
+Spawn each agent sequentially with the `Agent` tool:
 
 > Read `~/.claude/skills/dt-[AGENT]/skill.md` for your full instructions.
->
-> Your task: [paste the item's `task:` field and `done when:` criteria from PLAN.md]
->
+> Your task: [paste the item's `task:` field and `done when:` criteria from PLAN.md]. Use model [MODEL].
+> [QA only:] Gate mode: tests+behavioral.
 > Work on existing branch [branch-name] — do NOT create a new worktree.
-> [omit the branch line on the very first agent of the session — it will create the worktree]
+> [omit the branch line on the very first agent of the session — it creates the worktree]
 >
-> [If a prior agent ran for this item, paste their report here:]
-> Here is the [analyze/engineer/review] report from a teammate — use it instead of re-exploring:
+> [If a prior agent ran this loop, paste their report:]
+> Here is the [analyze/engineer/qa/review/fix/ui] report from a teammate — use it instead of re-exploring:
 > [report content]
 
-After each agent finishes, read its report from `.claude/dev-team/` before spawning the next one. Extract the branch name from the first engineer report and pass it to every agent after that.
+After each agent finishes, read its report from `.claude/dev-team/` before spawning the next. Extract the branch name from the first engineer report and pass it to every agent after that.
 
-### 4. Verify and update
+### 4. Record the outcome and move on
 
-After all agents for this item finish:
+When the loop ends for the item:
 
-1. Check the item's `done when:` criteria. If they are not met, run the Engineer again with a targeted correction before proceeding.
-2. Update `PROGRESS.md`: flip the item's row to `done — [one-line summary + commit hash]`.
-3. Update the `status:` field for that item in `PLAN.md` from `not started` to `done`.
-4. Move to the next item. Go back to step 1.
+1. **DONE** (QA PASS + clean review): update `PROGRESS.md` — flip the item's row to `done — [one-line summary + commit hash]`. Update the item's `status:` in `PLAN.md` from `not started` to `done`.
+2. **BLOCKED** (5 attempts exhausted, or a non-convergent loop): update `PROGRESS.md` — mark the item `blocked — [last QA VERDICT, unmet done-when criteria, last Root Cause hint]`. Set `status: blocked` in `PLAN.md`. Do **not** silently mark it done. Continue to the next item — a blocked item does not stop the run.
+3. Go back to step 1 for the next item.
 
 ## Shut Down
 
-Stop when you hit a `⚠️ AUTONOMOUS RUN — STOP HERE` marker or when all pre-marker items are complete.
+Stop when you hit a `⚠️ AUTONOMOUS RUN — STOP HERE` marker or when all pre-marker items are DONE or BLOCKED.
 
 Before exiting:
 1. Commit any uncommitted changes on the worktree branch: `chore: autonomous session checkpoint — [list completed items]`
 2. Write a final PROGRESS.md update.
-3. Merge the worktree branch back into the working branch (recorded at startup): `git merge [worktree-branch] --no-edit` run from the main repo checkout (not the worktree path).
+3. Merge the worktree branch back into the working branch (recorded at startup): `git merge [worktree-branch] --no-edit` from the main repo checkout (not the worktree path).
 4. Remove the worktree: `git worktree remove [worktree-path]`
-5. Write a summary for the user covering: which items completed, what the next item is, and what (if anything) the human needs to do before the next session can proceed.
+5. Write a summary for the user covering: items DONE, items BLOCKED and why (unmet criteria + Root Cause), the next item, and what the human needs to do before the next session can proceed.
 
 Do not merge into main. Do not push to remote. The user reviews and pushes when ready.
