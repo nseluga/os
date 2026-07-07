@@ -12,13 +12,13 @@ Think of it as a bookshelf, not a briefing.
 
 This repo is **public**, and reading material is often copyrighted. So the
 actual document files live **local-only**: `.gitignore` excludes everything
-under `library/` *except* markdown (`README.md`, `NOTES.md`) and `.gitkeep`.
-That means:
+under `library/` *except* markdown (`.md` files) and `.gitkeep`. That means:
 
 - Drop a PDF here and it just works locally — git ignores it, no risk of
   pushing a copyrighted paper to a public repo.
-- The folder **structure** and your **notes** (`NOTES.md`) still get committed,
-  so the shape of your library and why-it's-here context is versioned.
+- The folder **structure** and your **notes** (`.md` files) still get
+  committed, so the shape of your library and why-it's-here context is
+  versioned.
 - Trade-off: the files themselves are **not backed up by GitHub** and **don't
   travel** to other clones or cloud agents. Make sure they're covered by Time
   Machine / iCloud if they matter. (If you ever want them versioned + backed up,
@@ -39,28 +39,45 @@ re-reading.
 
 ## Layout
 
-Group by topic. One folder per subject; drop the file(s) in, optionally with a
-`NOTES.md` capturing what matters and why you keep it.
+Group by topic. One folder per subject. Each paper gets its own `.md` notes
+file named to match the PDF (`author-year-topic.md`).
 
 ```
 library/
-├── _inbox/                     # unsorted drops — triage into a topic folder
-├── pitching-biomechanics/
-│   ├── fleisig-2009-kinetics.pdf   # local-only (gitignored)
-│   └── NOTES.md                    # committed: summary, why it's here, key pages
-└── shot-value-models/
-    └── some-paper.pdf              # local-only (gitignored)
+├── _inbox/                                   # unsorted drops — triage into a topic folder
+└── baseball-research/
+    ├── alcorn-2018-batter-pitcher2vec.pdf         # local-only (gitignored)
+    ├── alcorn-2018-batter-pitcher2vec.md          # committed: questions, model, insights
+    ├── heaton-2022-player-form-embeddings.pdf
+    ├── heaton-2022-player-form-embeddings.md
+    ├── heaton-2023-contextual-event-embeddings.pdf
+    ├── heaton-2023-contextual-event-embeddings.md
+    ├── melville-2023-game-theory-pitch-sequencing.pdf
+    ├── melville-2023-game-theory-pitch-sequencing.md
+    ├── melville-2024-fielder-positioning.pdf
+    ├── melville-2024-fielder-positioning.md
+    ├── anon-2025-ai-manager-strategies.pdf
+    ├── anon-2025-ai-manager-strategies.md
+    ├── anon-2025-transformer-pitch-outcome.pdf
+    └── anon-2025-transformer-pitch-outcome.md
 ```
 
-Naming: `author-year-topic.pdf` (e.g. `fleisig-2009-kinetics.pdf`) keeps files
-sortable and citable. Keep the original title in `NOTES.md` if you rename.
+Naming: `author-year-topic.pdf` / `.md` (e.g. `heaton-2022-player-form-embeddings.pdf`)
+keeps files sortable and citable. Keep the original title as the H1 of the notes file.
+
+Each notes file follows the same structure: questions answered, models used,
+methodology notes, baseball insights, and a "why it's on the shelf" section
+pointing at specific reuse value. Notes cross-link with `[[slug]]` wikilinks.
 
 ## How to reference it in a task
 
 Just point at the path:
 
-> "Read `knowledge/library/pitching-biomechanics/fleisig-2009-kinetics.pdf`
-> before working on the injury-risk features."
+> "Read `knowledge/library/baseball-research/heaton-2022-player-form-embeddings.pdf`
+> before working on the form-embedding features."
+
+The `.md` notes files are designed to be read instead of the PDF when you need
+a quick orientation; point at the PDF when you need full detail.
 
 Claude Code's Read tool opens PDFs directly (paged), so no conversion needed.
 
@@ -68,6 +85,8 @@ Claude Code's Read tool opens PDFs directly (paged), so no conversion needed.
 
 1. Drop the file in `_inbox/` (or straight into a topic folder if you know it).
    It's ignored by git automatically — nothing to configure.
-2. Optionally add/append a `NOTES.md` with a one-line why-it's-here. That file
-   *does* get committed, so it's your public-safe index of what's on the shelf.
-3. `git add` picks up only the markdown/structure; the documents stay local.
+2. Add a matching `author-year-topic.md` with: questions answered, model/method
+   summary, baseball insights, and a "why it's on the shelf" note pointing at
+   specific reuse value. That file *does* get committed.
+3. Update this README's layout tree to include the new entry.
+4. `git add` picks up only the markdown; the documents stay local.
