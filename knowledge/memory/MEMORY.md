@@ -5,3 +5,4 @@
 - [Surface tradeoffs proactively](feedback-surface-tradeoffs-proactively.md) — Include risks/tradeoffs with any config recommendation; user had to ask "are there drawbacks?" before I volunteered them
 - [User is learning Claude Code tooling](user-learning-claude-code.md) — Peer-level on the codebase, but building fluency on hooks/skills/agents/memory — explain those as new unless shown otherwise
 - [Library notes format](feedback-library-notes-format.md) — one file per document, never a combined NOTES.md; never write stubs before reading the source
+- [Proactive token efficiency](feedback-proactive-token-efficiency.md) — apply the efficiency playbook (Read-over-Bash, no re-reads, right-sized models, batching, delegation) automatically, without being reminded

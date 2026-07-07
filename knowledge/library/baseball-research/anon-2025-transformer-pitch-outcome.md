@@ -2,7 +2,8 @@
 
 **File:** `anon-2025-transformer-pitch-outcome.pdf`
 **Authors:** anonymized submission (ID 20251439, ~2025). Explicitly builds on
-Heaton & Mitra's contextual event embeddings and positions itself against
+Heaton & Mitra's [[heaton-2023-contextual-event-embeddings]] and positions
+itself against
 [[melville-2023-game-theory-pitch-sequencing]]'s game-theoretic approach.
 
 ## Questions answered
