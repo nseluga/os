@@ -26,14 +26,27 @@ Starting from your resume point, for each item in execution order:
 
 Before running any agent, check whether PLAN.md contains a line beginning with `> **⚠️ AUTONOMOUS RUN — STOP HERE`. If the current item sits at or past that marker, skip to **Shut Down** immediately.
 
-### 2. Pick the agents for the item
+### 2. Pick the track and agents for the item
 
-Every item runs the convergence loop (below). The item's content only decides which *optional* agents join:
+First decide **how much of the team runs** (rigor), then which *optional* agents join.
 
+**Rigor:**
+- If the item declares `track:` (`trivial` | `light` | `full`), obey it.
+- Otherwise classify from the item's content:
+  - `trivial` — only copy/text, docs, static config values, version bumps, or comments; no control-flow or data changes
+  - `light` — logic confined to one file/function; no new module boundary, no schema/API/auth/money/data-path touch
+  - `full` — everything else, and always for multi-file changes, new endpoints/schema/migrations, auth, money, or a `flag:` item
+- **This run is unattended: round *up* on any uncertainty** — an under-gated change ships overnight with no human to catch it.
+- Then run the matching path:
+  - **trivial** → Engineer (or a direct edit) + the project's build/smoke check. No QA suite, no review, no fix loop.
+  - **light** → Engineer → QA (`tests+behavioral`) → fix-if-fail, with **MAX_ATTEMPTS 2** and **no review pass**.
+  - **full** → the convergence loop (step 3), unchanged (MAX_ATTEMPTS 5).
+
+**Optional agents (compose with any track above `trivial`):**
 - **Unfamiliar / new part of the codebase** → run `dt-analyze` once before the loop for a shared map
 - **Frontend visual polish, interaction states, accessibility, UX** → run the loop with `dt-ui` as the builder instead of `dt-engineer`
 - **New user-facing feature (backend + frontend)** → inside the loop, run `dt-ui` after the item first reaches a passing correctness gate, before the final review pass
-- **Everything else** (features, structural changes, security/auth/money/data-path work, cleanup, test scaffolding) → the standard loop with `dt-engineer` as the builder
+- **Everything else** (features, structural changes, security/auth/money/data-path work, cleanup, test scaffolding) → `dt-engineer` as the builder
 
 Use Sonnet for all agents by default. If the item has a `flag:` field warning about complexity or risk, use Opus for the Engineer and Bug Fixer on that item.
 
@@ -56,17 +69,15 @@ Spawn each agent sequentially with the `Agent` tool:
 > Work on existing branch [branch-name] — do NOT create a new worktree.
 > [omit the branch line on the very first agent of the session — it creates the worktree]
 >
-> [If a prior agent ran this loop, paste their report:]
-> Here is the [analyze/engineer/qa/review/fix/ui] report from a teammate — use it instead of re-exploring:
-> [report content]
+> Prior teammates' reports are in `.claude/dev-team/` — read the ones your skill lists as inputs instead of re-exploring. Reports present so far: [list existing filenames].
 
-After each agent finishes, read its report from `.claude/dev-team/` before spawning the next. Extract the branch name from the first engineer report and pass it to every agent after that.
+After each agent finishes, route on its report from `.claude/dev-team/` before spawning the next: read only the `VERDICT`/`Branch`/severity lines needed to pick the next step. Extract the branch name from the first engineer report and pass it to every agent after that.
 
 ### 4. Record the outcome and move on
 
 When the loop ends for the item:
 
-1. **DONE** (QA PASS + clean review): update `PROGRESS.md` — flip the item's row to `done — [one-line summary + commit hash]`. Update the item's `status:` in `PLAN.md` from `not started` to `done`.
+1. **DONE** (QA PASS + clean review, or a passing build/smoke check for a `trivial` item): update `PROGRESS.md` — flip the item's row to `done [track] — [one-line summary + commit hash]`, recording which track ran so the rigor is auditable. Update the item's `status:` in `PLAN.md` from `not started` to `done`.
 2. **BLOCKED** (5 attempts exhausted, or a non-convergent loop): update `PROGRESS.md` — mark the item `blocked — [last QA VERDICT, unmet done-when criteria, last Root Cause hint]`. Set `status: blocked` in `PLAN.md`. Do **not** silently mark it done. Continue to the next item — a blocked item does not stop the run.
 3. Go back to step 1 for the next item.
 

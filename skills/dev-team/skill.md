@@ -17,12 +17,26 @@ Read `~/.claude/skills/dev-team/convergence-loop.md` now — it is the engine yo
 - Default: `claude-sonnet-4-6` for all agents
 - If the task or PLAN.md item has a `flag:` field warning about complexity or risk, use `claude-opus-4-8` for the Engineer and Bug Fixer; keep Sonnet for the others
 
+**Rigor selection (per item):** decide how much of the team runs before touching an item.
+- If the item declares `track:` (`trivial` | `light` | `full`), obey it.
+- Otherwise classify from the item's content:
+  - `trivial` — only copy/text, docs, static config values, version bumps, or comments; no control-flow or data changes
+  - `light` — logic confined to one file/function; no new module boundary, no schema/API/auth/money/data-path touch
+  - `full` — everything else, and always for multi-file changes, new endpoints/schema/migrations, auth, money, or a `flag:` item
+  - When between two tracks, choose the heavier one.
+- Then run the matching path:
+  - **trivial** → Engineer (or a direct edit) + the project's build/smoke check. No QA suite, no review, no fix loop.
+  - **light** → Engineer → QA (`tests`) → fix-if-fail, with **MAX_ATTEMPTS 2** and **no review pass**.
+  - **full** → the convergence loop below, unchanged (MAX_ATTEMPTS 5).
+
+`flag:` (Opus escalation) and the `dt-analyze`/`dt-ui` modifiers compose with any track.
+
 ## Optional Prep
 
 - **Unfamiliar or multi-file area** → run `dt-analyze` once before the loop so every agent shares one codebase map.
 - **Task has a user-facing surface** → plan to run `dt-ui` after the item passes its correctness gate (see below).
 
-Tell the user which agents you'll use and why before spawning them.
+Tell the user the chosen track and which agents you'll use, and why, before spawning them.
 
 ## Run the Convergence Loop
 
@@ -43,11 +57,9 @@ Spawn each with the `Agent` tool using this prompt template:
 > [QA only:] Gate mode: tests.
 > [After the first agent:] Work on existing branch [branch-name] — do NOT create a new worktree.
 >
-> [For each teammate report that already exists, paste it:]
-> Here is the [analyze/engineer/qa/review/fix] report from a teammate who already ran this loop — use it instead of re-deriving that context:
-> [REPORT content]
+> Prior teammates' reports are in `.claude/dev-team/` — read the ones your skill lists as inputs instead of re-deriving that context. Reports present so far: [list the filenames that exist, e.g. analyze-report.md, engineer-report.md, qa-report.md].
 
-After each agent finishes, read its report from `.claude/dev-team/` before spawning the next. Agents editing the same worktree run sequentially.
+After each agent finishes, route on its report from `.claude/dev-team/` before spawning the next: read only the `VERDICT`/`Branch`/severity lines you need to pick the next step. Agents editing the same worktree run sequentially.
 
 ### UI Specialist (when the task has a user-facing surface)
 

@@ -2,6 +2,8 @@
 
 The shared engine behind `/dev-team` and `/dev-team-auto`. A plan item is **done only when the QA gate passes** — the loop hammers one item until it works as specified or the attempt cap is hit. This file is the single source of truth for the loop; both orchestrators reference it so they behave identically.
 
+This file defines the **`full`-track** engine. The orchestrators also run lighter tracks (`trivial` = build/smoke check only; `light` = Engineer → QA → fix-if-fail, cap 2, no review) that do **not** enter this loop — see the rigor selection in each orchestrator skill. Everything below applies only to `full`.
+
 ## Inputs
 
 - **item** — the task text plus its `done when:` acceptance criteria (from PLAN.md, TASK.md, or the inline arg)
