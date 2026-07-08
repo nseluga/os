@@ -6,3 +6,4 @@
 - [User is learning Claude Code tooling](user-learning-claude-code.md) — Peer-level on the codebase, but building fluency on hooks/skills/agents/memory — explain those as new unless shown otherwise
 - [Library notes format](feedback-library-notes-format.md) — one file per document, never a combined NOTES.md; never write stubs before reading the source
 - [Proactive token efficiency](feedback-proactive-token-efficiency.md) — apply the efficiency playbook (Read-over-Bash, no re-reads, right-sized models, batching, delegation) automatically, without being reminded
+- [Portfolio style guide](reference-portfolio-style-guide.md) — `~/os/knowledge/library/style_reference/Project_Writeup.pdf`; specific/evidence-driven voice, no marketing language — read before any portfolio writing
