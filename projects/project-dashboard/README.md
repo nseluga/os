@@ -10,15 +10,4 @@ summary: "Local dashboard that shows the state of every active project, sourced 
 tags: [tooling, frontend]
 ---
 
-# Project Dashboard
-
-**Repo:** `~/project-dashboard`  
-**GitHub:** https://github.com/nseluga/project-dashboard  
-**Status:** in progress — planning complete (`plan.md` + `progress.md`), app not yet built.
-
-One-line purpose: A single, local dashboard for tracking active projects — status, staleness, next step, due dates — plus a weekly digest and a quick-capture inbox. Reads project status from the READMEs in `~/os/projects/`.
-
-**Stack:** Astro + Tailwind + TypeScript (SSR via `@astrojs/node`), local-only.  
-**Next:** Build the app by running `dev-team-auto` against `progress.md` in the repo.
-
-_This is an index entry, not the codebase. Work happens in the repo above._
+Planning complete (`plan.md` + `progress.md`). Stack: Astro + Tailwind + TypeScript with `@astrojs/node` SSR, local-only. Reads project status from `~/os/projects/` READMEs.

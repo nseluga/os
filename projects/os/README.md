@@ -10,14 +10,4 @@ summary: "Personal operating system — knowledge, skills, and project index; th
 tags: [meta, tooling]
 ---
 
-# os
-
-**Repo:** `~/os`  
-**GitHub:** https://github.com/nseluga/os  
-**Status:** active — ongoing, continuously improved (no discrete next step)
-
-One-line purpose: Nate's personal operating system — a single home for what he knows (`knowledge/`), what he can do (`skills/`), and what he's building (`projects/`); also the real, on-disk source of truth for Claude Code's global skills and memory.
-
-**Subset:** [os-evals](../os-evals/README.md) is an extension of this project — an ablation ladder that measures which layers of the ~/os setup earn their keep.
-
-_This is an index entry, not the codebase. Work happens in the repo above._
+**Related:** [os-evals](../os-evals/README.md) measures which layers of this setup earn their keep via ablation.
