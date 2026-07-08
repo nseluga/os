@@ -11,14 +11,29 @@ The task is any argument passed to this skill; otherwise read `PLAN.md`, then `T
 
 ## Explore the Codebase
 
-Explore efficiently:
-- Issue all independent reads and greps in parallel — never serial
-- Find every file, function, class, and pattern relevant to the task
-- Trace data flows: what calls what, where data enters, where it exits
-- Identify the patterns already in use that the Engineer must follow (naming, structure, error handling style, DB access patterns)
-- Note which files are most likely to need changes and which are read-only dependencies
+Pick the exploration tier by the size of the area you must map:
+
+- **Default (single-context):** for a focused area — one or a few modules — explore yourself. Issue all independent reads and greps in parallel, never serial. This is cheaper than fanning out: a subagent cold-starts and re-reads context, so don't spawn one just to save yourself a handful of reads.
+- **Fan-out (parallel subagents):** only for a large or unfamiliar area spanning many modules — where a single context would either miss areas or fill up — split the exploration across parallel `Explore` subagents, one per facet (see below), then synthesize their findings into one report.
+
+Either way, cover:
+- Every file, function, class, and pattern relevant to the task
+- Data flows: what calls what, where data enters, where it exits
+- The patterns already in use that the Engineer must follow (naming, structure, error handling style, DB access patterns)
+- Which files are most likely to need changes and which are read-only dependencies
 
 Do not implement anything. Do not suggest solutions. Map only.
+
+### Fan-out exploration (large areas only)
+
+Spawn these `Explore` subagents **in parallel, in a single message**, each on model `claude-haiku-4-5` — exploration is mechanical search, so a cheap model is the right fit and keeps the fan-out inexpensive:
+
+- **Data flow** — trace entry points → processing → storage → response for the task
+- **Conventions & patterns** — naming, structure, error handling, DB access, response shapes the Engineer must match
+- **Risks & dependencies** — hidden coupling, things likely to break, external calls, gotchas
+- **Test infrastructure** — where tests live, how they run, the runner and fixtures in use
+
+Give each subagent the task plus its single facet and tell it to report terse bullets, not prose. When they return, you (the Analyzer, on your own model) synthesize their bullets into the one report below — dedupe overlaps, resolve contradictions, and drop anything not relevant to the task. You own the synthesis; the subagents only gather.
 
 ## Write the Report
 

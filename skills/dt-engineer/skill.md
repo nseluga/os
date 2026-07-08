@@ -25,6 +25,8 @@ If no analyze report exists, do a focused exploration pass first: find the relev
 
 Before writing code, make the large-scale decisions explicitly. Read `~/.claude/skills/dev-team/system-standards.md` — the API Design, Data Modeling, Service & Module Boundaries, and Deployment & Operational Safety sections are your design standards.
 
+If the orchestrator handed you a **winning design sketch** (a `flag:` item that went through design exploration), adopt that approach as your starting design — refine the details, but don't re-litigate the chosen architecture. Otherwise make these decisions yourself.
+
 Decide and record:
 - **Architecture**: which layers/modules the change lives in, what new boundaries (if any) are introduced, and why the boundary goes there
 - **API design**: endpoint shapes, request/response contracts, error contract, status codes, versioning implications

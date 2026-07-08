@@ -26,6 +26,16 @@ Before running anything, pick a rigor track per item — how much of the team ru
 - Default: `claude-sonnet-4-6` for all agents.
 - If the item has a `flag:` field warning about complexity or risk, use `claude-opus-4-8` for the Engineer and Bug Fixer; keep Sonnet for the others.
 
+## Design exploration (flag: items only)
+
+For a `flag:` item — the complex/critical ones that already escalate to Opus — the right architecture is worth proving before it's built. **Before the first Engineer build only:**
+
+1. Spawn 2–3 **design-only** subagents in parallel (model `claude-opus-4-8`), each producing a short design sketch for the item — architecture, key interfaces, data model, and the efficiency, reliability, and scalability tradeoffs of that approach. No code, no worktree.
+2. Pick the winning sketch on the item's priorities — efficiency, reliability, and scalability first — and record the choice and why in one line.
+3. Hand the winning sketch to the Engineer as the design to implement; it builds that one approach.
+
+Non-`flag:` items skip this entirely — the Engineer designs and builds directly, as today. If the chosen design later fails QA at the design level, the loop's existing alternative-engineer fork (below) is the fallback.
+
 ## Spawn template (shared)
 
 Spawn each agent with the `Agent` tool using this prompt:
@@ -62,7 +72,11 @@ loop:
   # 1+2. BUILD + CORRECTNESS GATE (paired together)
 
   if attempt == 1:
-      run dt-engineer            # implements the item
+      if item has a flag: field:
+          run design exploration → winning sketch   # see "Design exploration (flag: items only)"
+          run dt-engineer with the winning sketch   # builds the chosen approach
+      else:
+          run dt-engineer        # designs and implements the item
       run dt-qa                  # writes qa-report.md with VERDICT
 
   else if latest qa-report Root Cause is design-level (wrong approach / structural gap):
