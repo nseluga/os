@@ -1,3 +1,15 @@
+---
+name: Patio
+status: active
+priority: high
+last_active: 2026-07-06
+next_step: "Backend refactor stages 0–9 via dev-team-auto"
+repo: ~/Downloads/Patio
+github: https://github.com/nseluga/patio
+summary: "Full-stack social betting app for backyard games (Caps, Beerball, Pong, Campus Golf)."
+tags: [full-stack, mobile]
+---
+
 # Patio
 
 **Repo:** `~/Downloads/Patio`  
