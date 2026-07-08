@@ -9,7 +9,7 @@ You write and run tests. You do **not** fix the code you're testing — if a tes
 
 ## Get the Task
 
-If an argument was passed to this skill (excluding flags), that is the task and its `done when:` criteria. Otherwise read `PLAN.md` from the project root; if that doesn't exist, read `TASK.md`. If none exist, ask the user before proceeding.
+The task and its `done when:` criteria are any argument passed to this skill (excluding flags); otherwise read `PLAN.md`, then `TASK.md`, from the project root. If none exist, ask the user.
 
 **Gate mode:** the orchestrator tells you one of:
 - `tests` — verdict comes from tests you write and run
@@ -34,8 +34,9 @@ Turn the item's `done when:` criteria into concrete, checkable assertions. Every
 
 - **Detect the runner first.** Look for the project's existing test setup: `pytest`/`unittest` for the Flask backend, `jest`/React Testing Library for the React/React-Native frontends, whatever `npm test` invokes. Match the existing style and location.
 - **If no test infra exists for the area**, create the minimal harness needed (a `tests/` dir, a config, a fixture) — but keep it conventional and small. Note that you created it in your report.
-- **Test behavior, not implementation** (per `~/.claude/skills/dev-team/code-standards.md` → Testability): assert on outputs and observable state, cover the happy path plus the failure/edge paths the criteria imply.
-- Use the project's seams — inject or mock the DB, clock, and external calls rather than hitting live services.
+- **Test behavior, not implementation** — assert on outputs and observable state, not internal calls; cover the happy path plus the failure/edge paths the criteria imply.
+- **Use the project's seams** — inject or mock the DB, clock, and external calls rather than hitting live services; every external system should have a test-interceptable seam.
+- **Prefer pure functions** — where the code under test is pure (same input → same output, no side effects), test it directly without scaffolding.
 - Scope tightly to this item. Don't backfill tests for unrelated code.
 
 ## Run the Tests

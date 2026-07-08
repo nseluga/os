@@ -30,17 +30,7 @@ Before running any agent, check whether PLAN.md contains a line beginning with `
 
 First decide **how much of the team runs** (rigor), then which *optional* agents join.
 
-**Rigor:**
-- If the item declares `track:` (`trivial` | `light` | `full`), obey it.
-- Otherwise classify from the item's content:
-  - `trivial` — only copy/text, docs, static config values, version bumps, or comments; no control-flow or data changes
-  - `light` — logic confined to one file/function; no new module boundary, no schema/API/auth/money/data-path touch
-  - `full` — everything else, and always for multi-file changes, new endpoints/schema/migrations, auth, money, or a `flag:` item
-- **This run is unattended: round *up* on any uncertainty** — an under-gated change ships overnight with no human to catch it.
-- Then run the matching path:
-  - **trivial** → Engineer (or a direct edit) + the project's build/smoke check. No QA suite, no review, no fix loop.
-  - **light** → Engineer → QA (`tests+behavioral`) → fix-if-fail, with **MAX_ATTEMPTS 2** and **no review pass**.
-  - **full** → the convergence loop (step 3), unchanged (MAX_ATTEMPTS 5).
+**Rigor:** classify the item and run the matching path per the **Track classification (shared)** section in `convergence-loop.md`. This run is unattended, so round *up* on any uncertainty — an under-gated change ships overnight with no human to catch it. For `light` items, QA's gate mode is `tests+behavioral`.
 
 **Optional agents (compose with any track above `trivial`):**
 - **Unfamiliar / new part of the codebase** → run `dt-analyze` once before the loop for a shared map
@@ -48,7 +38,7 @@ First decide **how much of the team runs** (rigor), then which *optional* agents
 - **New user-facing feature (backend + frontend)** → inside the loop, run `dt-ui` after the item first reaches a passing correctness gate, before the final review pass
 - **Everything else** (features, structural changes, security/auth/money/data-path work, cleanup, test scaffolding) → `dt-engineer` as the builder
 
-Use Sonnet for all agents by default. If the item has a `flag:` field warning about complexity or risk, use Opus for the Engineer and Bug Fixer on that item.
+Model selection follows the **Model selection (shared)** section in `convergence-loop.md` (Sonnet default; Opus for the Engineer and Bug Fixer on a `flag:` item).
 
 ### 3. Run the convergence loop for the item
 
@@ -61,17 +51,7 @@ Each attempt: **Engineer** builds (or **Bug Fixer** patches on later attempts) �
 
 The Optimization Reviewer runs on every item once its correctness gate is green — no item is marked DONE without a clean review.
 
-Spawn each agent sequentially with the `Agent` tool:
-
-> Read `~/.claude/skills/dt-[AGENT]/skill.md` for your full instructions.
-> Your task: [paste the item's `task:` field and `done when:` criteria from PLAN.md]. Use model [MODEL].
-> [QA only:] Gate mode: tests+behavioral.
-> Work on existing branch [branch-name] — do NOT create a new worktree.
-> [omit the branch line on the very first agent of the session — it creates the worktree]
->
-> Prior teammates' reports are in `.claude/dev-team/` — read the ones your skill lists as inputs instead of re-exploring. Reports present so far: [list existing filenames].
-
-After each agent finishes, route on its report from `.claude/dev-team/` before spawning the next: read only the `VERDICT`/`Branch`/severity lines needed to pick the next step. Extract the branch name from the first engineer report and pass it to every agent after that.
+Spawn each agent sequentially using the **Spawn template (shared)** in `convergence-loop.md`, with **Gate mode: `tests+behavioral`** for QA. Draw the task text from the item's `task:` field and `done when:` criteria in PLAN.md. That section also covers routing on each report and passing the branch name forward.
 
 ### 4. Record the outcome and move on
 
