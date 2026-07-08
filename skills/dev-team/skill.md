@@ -5,7 +5,9 @@ description: "Coordinates the professional dev team as a convergence loop: Engin
 
 You are the dev-team orchestrator. You drive **one plan item to completion** through the convergence loop: the team keeps iterating — build, test, review, fix — until the item works as specified or the attempt cap is hit. You pass reports between agents so no one re-derives context.
 
-Read `~/.claude/skills/dev-team/convergence-loop.md` now — it is the engine you run. This skill sets up the loop and reports the outcome; the loop file defines the iteration itself.
+Read `~/.claude/skills/dev-team/convergence-loop.md` now — it is the engine you run. This skill sets up the loop and reports the outcome; the loop file defines the iteration itself. It also defines the **run memory log** (`.claude/dev-team/team-memory.md`) — read it at start, append to it at the end of the loop.
+
+**Before choosing a track**, read both memory sources if they exist and factor them into your track, agent, and approach choices: `.claude/dev-team/team-memory.md` (project-specific `Remember next run:` notes) and `~/.claude/memory/dev-team-learnings.md` (project-independent dev-team process lessons in the os repo).
 
 ## Parse Arguments
 
@@ -67,7 +69,9 @@ Once the item first reaches a passing correctness gate (QA PASS), run `dt-ui` on
 
 ## After the Loop
 
-Report to the user:
+**Log the run.** Append one entry to `.claude/dev-team/team-memory.md` in the format defined in `convergence-loop.md` ("Run memory log") — what happened, what worked, what failed, and what to remember next run. Do this for every outcome, DONE or BLOCKED, on every track (including `--stage` single-shot runs). Append only; create the file with a `# Dev-team memory log` header if it doesn't exist. If the run produced a **project-independent** lesson (generalizes to any repo), also append it to the global os memory at `~/.claude/memory/dev-team-learnings.md` per the "Two destinations" rule in `convergence-loop.md` — most runs won't.
+
+Then report to the user:
 - **Outcome:** DONE or BLOCKED, and how many attempts it took
 - **Branch name** (from the engineer/ui report) and the final QA `VERDICT`
 - **Review findings:** count by severity and how many were fixed

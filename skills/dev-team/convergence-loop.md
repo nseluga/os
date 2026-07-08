@@ -84,3 +84,50 @@ Each item ends in exactly one of:
 
 - **DONE** — QA PASS + no Critical/Important review findings. Record the commit hash and a one-line summary.
 - **BLOCKED** — attempt cap hit, or a non-convergent loop detected. Record: the last QA `VERDICT`, which `done when:` criteria are still unmet, and the last Root Cause hint so a human (or the next session) can pick it up.
+
+## Run memory log (read at start, append at end)
+
+The team keeps a persistent, cross-run memory at **`.claude/dev-team/team-memory.md`** in the working repo. Unlike the per-run `*-report.md` files (overwritten each item), this file **accumulates** — it is how the next run learns from this one.
+
+- **At the start of a run**, both orchestrators read this file if it exists and factor its `Remember next run:` notes into track/agent choices (e.g. a flaky test suite, a build command that needs a flag, an approach that failed before). If it does not exist, create it with a `# Dev-team memory log` header on first write.
+- **At the end of every loop** — for *every* item and *every* track, DONE or BLOCKED — append one entry. This is the log of "what happened, what worked, what failed, and what to remember." Append only; never rewrite prior entries.
+
+Entry format:
+
+```
+## <YYYY-MM-DD HH:MM> — <dev-team | dev-team-auto> — <item title>
+- **Outcome:** DONE | BLOCKED — <N attempts, track, branch, commit hash if DONE>
+- **What happened:** <1–3 lines: what was built and how the loop went>
+- **What worked:** <techniques/tests/approaches that converged — or "nothing notable">
+- **What failed:** <QA failures, review findings, dead-end approaches, wasted attempts — or "none">
+- **Remember next run:** <concrete, reusable notes for the next session: gotchas, commands, flaky areas, approaches to avoid or repeat — or "nothing">
+```
+
+Keep each entry tight — it is a lesson, not a transcript. The `*-report.md` files hold the detail; this file holds the takeaway.
+
+### Two destinations: project-specific vs. project-independent
+
+Every loop's takeaway splits into two kinds of lesson. Route each to the right place:
+
+- **Project-specific findings → `.claude/dev-team/team-memory.md`** (the log above, in the working repo). Anything tied to *this* codebase: a flaky suite, a build/test command with a needed flag, a module's quirks, an approach that failed *here*. This is the default; when in doubt, keep it project-local.
+- **Project-independent learnings → the global os memory at `~/.claude/memory/dev-team-learnings.md`.** Only lessons that generalize to the dev-team process in *any* repo: orchestration patterns, when a track/model choice paid off or backfired, QA/test or review tactics that reliably converge, agent-prompting improvements, recurring failure modes of the loop itself. These make the *team* better everywhere, not just this repo.
+
+Writing the global file (follow the memory system's format — one managed fact file, appended over time):
+
+- **At start of a run**, read `~/.claude/memory/dev-team-learnings.md` if it exists and apply its lessons to your track/model/approach choices. (Its one-line pointer is already in the auto-loaded `MEMORY.md` index, but the detail lives in the fact file — read it.)
+- **At end of a loop**, if the run produced a genuinely generalizable lesson, append a dated bullet to that file. If the file doesn't exist, create it with this frontmatter and add a one-line pointer to `~/.claude/memory/MEMORY.md`:
+
+  ```
+  ---
+  name: dev-team-learnings
+  description: Generalizable /dev-team + /dev-team-auto process learnings — orchestration, track/model, QA/test, and review patterns that apply across any repo
+  metadata:
+    type: reference
+  ---
+
+  Cross-project lessons from dev-team runs. Project-specific findings stay in each repo's `.claude/dev-team/team-memory.md`.
+
+  - <YYYY-MM-DD> <lesson> — **Why:** <what it prevents/enables>. **How to apply:** <what to do next time>.
+  ```
+
+  Be conservative: most loops yield *no* global learning — only append when the lesson would change how a future run behaves in a different repo. Don't duplicate an existing bullet; sharpen it instead. Never dump project-specific detail here.

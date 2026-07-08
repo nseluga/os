@@ -13,6 +13,8 @@ Read these in parallel before doing anything else:
 1. `PLAN.md` — the full plan, execution order, and any stop markers
 2. `PROGRESS.md` — find the first item that is NOT marked `done`; that is where you start
 3. `.claude/dev-team/engineer-report.md` if it exists — get the branch name if a prior session already created a worktree
+4. `.claude/dev-team/team-memory.md` if it exists — the project-specific cross-run log; factor its `Remember next run:` notes into your track and approach choices (flaky suites, build flags, dead-end approaches to avoid, etc.)
+5. `~/.claude/memory/dev-team-learnings.md` if it exists — the project-independent dev-team process lessons in the os repo; apply them to your track/model/approach choices for any repo
 
 Also run `git branch --show-current` and save the result as the **working branch** — you'll merge the worktree branch back into it at shutdown.
 
@@ -79,7 +81,8 @@ When the loop ends for the item:
 
 1. **DONE** (QA PASS + clean review, or a passing build/smoke check for a `trivial` item): update `PROGRESS.md` — flip the item's row to `done [track] — [one-line summary + commit hash]`, recording which track ran so the rigor is auditable. Update the item's `status:` in `PLAN.md` from `not started` to `done`.
 2. **BLOCKED** (5 attempts exhausted, or a non-convergent loop): update `PROGRESS.md` — mark the item `blocked — [last QA VERDICT, unmet done-when criteria, last Root Cause hint]`. Set `status: blocked` in `PLAN.md`. Do **not** silently mark it done. Continue to the next item — a blocked item does not stop the run.
-3. Go back to step 1 for the next item.
+3. **Log the loop.** Append one entry to `.claude/dev-team/team-memory.md` in the format defined in `convergence-loop.md` ("Run memory log") — what happened, what worked, what failed, and what to remember next run. Do this for every item and every track (DONE or BLOCKED). Append only; create the file with a `# Dev-team memory log` header if it doesn't exist. This is what lets the next overnight run learn from this one. If the item surfaced a **project-independent** lesson (generalizes to any repo), also append it to the global os memory at `~/.claude/memory/dev-team-learnings.md` per the "Two destinations" rule in `convergence-loop.md` — be conservative; most items won't.
+4. Go back to step 1 for the next item.
 
 ## Shut Down
 
