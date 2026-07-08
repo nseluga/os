@@ -17,7 +17,7 @@ os/
 │   ├── audience/          # people/orgs I write or build for
 │   ├── library/           # reference docs to read on demand (files local-only/gitignored)
 │   ├── raw/               # inbox: unprocessed dumps, triage into the above
-│   └── memory/            # Claude Code's managed memory (MEMORY.md + facts)
+│   └── memory/            # Claude Code's managed memory — session facts + cross-run dev-team learnings
 ├── skills/                # all Claude Code skills (real bodies) + skills.md template
 └── projects/              # one folder per project — index entries, not the code
     ├── portfolio-website/     # -> ~/portfolio
@@ -60,9 +60,18 @@ to this repo:
 
 Implications:
 - Editing a skill or memory file here changes it everywhere, immediately.
-- Memory (`knowledge/memory/`) is **managed by Claude Code** — it rewrites
-  `MEMORY.md` and adds fact files automatically. Don't hand-edit its format;
-  put your own notes in `knowledge/me/` instead.
+- Memory (`knowledge/memory/`) serves two purposes:
+  1. **Session-scoped facts** — managed by Claude Code; `MEMORY.md` index + fact
+     files for Nate's preferences, role, projects, etc. Don't hand-edit the
+     format; put your own notes in `knowledge/me/` instead.
+  2. **Cross-run process learnings** — skills like `/dev-team` and
+     `/dev-team-auto` append generalizable lessons to `dev-team-learnings.md`
+     (e.g., "when Opus pays off", "a QA tactic that reliably converges"). These
+     live here and are read by every dev-team run to improve orchestration
+     across *any* repo. Project-specific findings (flaky suite, build flags,
+     this codebase's quirks) stay in each target repo's
+     `.claude/dev-team/team-memory.md` — the split rule is defined in
+     `skills/dev-team/convergence-loop.md`.
 - The links are absolute, so **don't move or rename `~/os`** without re-pointing
   them, or skills and memory will silently stop loading.
 - Health check: `ls -L ~/.claude/skills/grilling` should resolve. If it errors,
