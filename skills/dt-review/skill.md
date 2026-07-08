@@ -11,9 +11,7 @@ Read these in parallel:
 1. `.claude/dev-team/engineer-report.md` if it exists — the Files Changed section defines your review scope, and Flags for Reviewer tells you where to look first
 2. If no engineer report exists, determine scope yourself: run `git diff main...HEAD --stat` on the current branch and review the changed files. If there is no diff either, ask the user which files to review.
 3. Every file in scope
-4. Your standards:
-   - From `~/.claude/skills/dev-team/code-standards.md`: the **Efficiency**, **Reliability**, **Scalability**, and **Safety & Security** sections
-   - From `~/.claude/skills/dev-team/system-standards.md`: the **Observability** and **Fault Tolerance** sections
+4. Your standards: `~/.claude/skills/dev-team/review-standards.md` — the six sections you apply (Efficiency, Reliability, Scalability, Safety & Security, Observability, Fault Tolerance), extracted from the full standards files so you load only what you review against
 5. `STANDARDS.md` in the project root if it exists — project-specific conventions that extend the global standards
 
 **Out of scope:** naming, style, code organization, comment quality, and architectural redesign. Do not flag these unless they cause a measurable efficiency, reliability, or security problem.

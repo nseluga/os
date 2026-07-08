@@ -2,7 +2,41 @@
 
 The shared engine behind `/dev-team` and `/dev-team-auto`. A plan item is **done only when the QA gate passes** — the loop hammers one item until it works as specified or the attempt cap is hit. This file is the single source of truth for the loop; both orchestrators reference it so they behave identically.
 
-This file defines the **`full`-track** engine. The orchestrators also run lighter tracks (`trivial` = build/smoke check only; `light` = Engineer → QA → fix-if-fail, cap 2, no review) that do **not** enter this loop — see the rigor selection in each orchestrator skill. Everything below applies only to `full`.
+The sections below marked **(shared)** — track classification, model selection, and the spawn template — are identical for both orchestrators; each orchestrator references them here instead of restating them, and adds only its own divergent parameters (interactivity, gate mode, PROGRESS.md handling). **The loop** and everything after it define the **`full`-track** engine only; the lighter tracks defined under Track classification do not enter it.
+
+## Track classification (shared)
+
+Before running anything, pick a rigor track per item — how much of the team runs:
+
+- If the item declares `track:` (`trivial` | `light` | `full`), obey it.
+- Otherwise classify from the item's content:
+  - `trivial` — only copy/text, docs, static config values, version bumps, or comments; no control-flow or data changes
+  - `light` — logic confined to one file/function; no new module boundary, no schema/API/auth/money/data-path touch
+  - `full` — everything else, and always for multi-file changes, new endpoints/schema/migrations, auth, money, or a `flag:` item
+- When between two tracks, choose the heavier one. (An unattended run rounds *up* on any uncertainty — an under-gated change ships with no human to catch it.)
+- Then run the matching path:
+  - **trivial** → Engineer (or a direct edit) + the project's build/smoke check. No QA suite, no review, no fix loop.
+  - **light** → Engineer → QA → fix-if-fail, with **MAX_ATTEMPTS 2** and **no review pass**. The orchestrator sets QA's gate mode.
+  - **full** → the loop below, unchanged (MAX_ATTEMPTS 5).
+
+`flag:` (Opus escalation) and the `dt-analyze`/`dt-ui` modifiers compose with any track above `trivial`.
+
+## Model selection (shared)
+
+- Default: `claude-sonnet-4-6` for all agents.
+- If the item has a `flag:` field warning about complexity or risk, use `claude-opus-4-8` for the Engineer and Bug Fixer; keep Sonnet for the others.
+
+## Spawn template (shared)
+
+Spawn each agent with the `Agent` tool using this prompt:
+
+> Read `~/.claude/skills/dt-[AGENT]/skill.md` for your full instructions. Your task: [TASK + `done when:` criteria]. Use model [MODEL].
+> [QA only:] Gate mode: [GATE MODE].
+> [After the first agent:] Work on existing branch [branch-name] — do NOT create a new worktree. [Omit this line on the very first agent of the session — it creates the worktree.]
+>
+> Prior teammates' reports are in `.claude/dev-team/` — read the ones your skill lists as inputs instead of re-deriving that context. Reports present so far: [list the filenames that exist].
+
+After each agent finishes, route on its report from `.claude/dev-team/` before spawning the next: read only the `VERDICT`/`Branch`/severity lines you need to pick the next step. Extract the branch name from the first engineer report and pass it to every later agent. Agents editing the same worktree run sequentially.
 
 ## Inputs
 
