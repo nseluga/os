@@ -35,17 +35,17 @@ First decide **how much of the team runs** (rigor), then which *optional* agents
 **Rigor:** classify the item and run the matching path per the **Track classification (shared)** section in `convergence-loop.md`. This run is unattended, so round *up* on any uncertainty — an under-gated change ships overnight with no human to catch it. For `light` items, QA's gate mode is `tests+behavioral`.
 
 **Optional agents (compose with any track above `trivial`):**
-- **Unfamiliar / new part of the codebase** → run `dt-analyze` once before the loop for a shared map
+- **Multi-file `full`-track item, or any unfamiliar area** → run `dt-analyze` once before the loop for a shared map. This is the **default** for multi-file items — its `analyze-report.md` is injected into every agent so none of them re-explore the codebase (see `convergence-loop.md` → Spawn template). Skip it only for single-file items.
 - **Frontend visual polish, interaction states, accessibility, UX** → run the loop with `dt-ui` as the builder instead of `dt-engineer`
 - **New user-facing feature (backend + frontend)** → inside the loop, run `dt-ui` after the item first reaches a passing correctness gate, before the final review pass
 - **Everything else** (features, structural changes, security/auth/money/data-path work, cleanup, test scaffolding) → `dt-engineer` as the builder
 
-Model selection follows the **Model selection (shared)** section in `convergence-loop.md` (Sonnet default; Opus for the Engineer and Bug Fixer on a `flag:` item).
+Model and effort per agent follow the **Model & effort selection (shared)** table in `convergence-loop.md` (Sonnet default; full-track engineer high-effort; QA medium; review high-effort — Opus on the engineer, fixer, and review for `flag:` items).
 
 ### 3. Run the convergence loop for the item
 
 Run the loop from `convergence-loop.md`, with:
-- **gate mode: `tests+behavioral`** — QA writes and runs tests AND exercises the running path (hit the endpoint / render the surface), because this run is unattended and needs the stronger gate
+- **gate mode: `tests+behavioral`** — QA writes and runs tests AND exercises the running path (hit the endpoint / render the surface), plus a **live smoke pass** against a real server + real dev DB (not mocks) for any item touching routes/models/migrations/serialization. This run is unattended with no human to catch a mocked-green/live-broken gap, so the un-mocked smoke pass is required.
 - **branch:** the shared session worktree (first agent creates it; pass the branch name to every later agent)
 - **MAX_ATTEMPTS: 5**
 
@@ -57,12 +57,13 @@ Spawn each agent sequentially using the **Spawn template (shared)** in `converge
 
 ### 4. Record the outcome and move on
 
-When the loop ends for the item:
+When the loop ends for the item, record its outcome as **one action with two writes** — do both before touching the next item, never batch them to shutdown:
 
-1. **DONE** (QA PASS + clean review, or a passing build/smoke check for a `trivial` item): update `PROGRESS.md` — flip the item's row to `done [track] — [one-line summary + commit hash]`, recording which track ran so the rigor is auditable. Update the item's `status:` in `PLAN.md` from `not started` to `done`.
-2. **BLOCKED** (5 attempts exhausted, or a non-convergent loop): update `PROGRESS.md` — mark the item `blocked — [last QA VERDICT, unmet done-when criteria, last Root Cause hint]`. Set `status: blocked` in `PLAN.md`. Do **not** silently mark it done. Continue to the next item — a blocked item does not stop the run.
-3. **Log the loop.** Append one entry to `.claude/dev-team/team-memory.md` in the format defined in `convergence-loop.md` ("Run memory log") — what happened, what worked, what failed, and what to remember next run. Do this for every item and every track (DONE or BLOCKED). Append only; create the file with a `# Dev-team memory log` header if it doesn't exist. This is what lets the next overnight run learn from this one. If the item surfaced a **project-independent** lesson (generalizes to any repo), also append it to the global os memory at `~/.claude/memory/dev-team-learnings.md` per the "Two destinations" rule in `convergence-loop.md` — be conservative; most items won't.
-4. Go back to step 1 for the next item.
+1. **Write the outcome:**
+   - **DONE** (QA PASS + clean review, or a passing build/smoke check for a `trivial` item): update `PROGRESS.md` — flip the item's row to `done [track] — [one-line summary + commit hash]`, recording which track ran so the rigor is auditable. Update the item's `status:` in `PLAN.md` from `not started` to `done`.
+   - **BLOCKED** (5 attempts exhausted, or a non-convergent loop): update `PROGRESS.md` — mark the item `blocked — [last QA VERDICT, unmet done-when criteria, last Root Cause hint]`. Set `status: blocked` in `PLAN.md`. Do **not** silently mark it done. A blocked item does not stop the run.
+2. **In the same step, append the team-memory entry.** Immediately after the PROGRESS.md write — same item, before moving on — append one entry to `.claude/dev-team/team-memory.md` in the `convergence-loop.md` ("Run memory log") format: what happened, what worked, what failed, what to remember next run. Every item, every track, DONE or BLOCKED. Append only; create the file with a `# Dev-team memory log` header if it doesn't exist. This is what lets the next overnight run learn from this one — and it only happens if it rides on the PROGRESS.md write above, so treat the two as inseparable. If the item surfaced a **project-independent** lesson (generalizes to any repo), also append it to the global os memory at `~/.claude/memory/dev-team-learnings.md` per the "Two destinations" rule in `convergence-loop.md` — be conservative; most items won't.
+3. Go back to step 1 for the next item.
 
 ## Shut Down
 

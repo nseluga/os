@@ -35,7 +35,7 @@ Turn the item's `done when:` criteria into concrete, checkable assertions. Every
 - **Detect the runner first.** Look for the project's existing test setup: `pytest`/`unittest` for the Flask backend, `jest`/React Testing Library for the React/React-Native frontends, whatever `npm test` invokes. Match the existing style and location.
 - **If no test infra exists for the area**, create the minimal harness needed (a `tests/` dir, a config, a fixture) — but keep it conventional and small. Note that you created it in your report.
 - **Test behavior, not implementation** — assert on outputs and observable state, not internal calls; cover the happy path plus the failure/edge paths the criteria imply.
-- **Use the project's seams** — inject or mock the DB, clock, and external calls rather than hitting live services; every external system should have a test-interceptable seam.
+- **Use the project's seams** — inject or mock the DB, clock, and external calls rather than hitting live services; every external system should have a test-interceptable seam. (This applies to the unit suite; the live smoke pass below deliberately does **not** mock — it is the un-mocked complement that catches what mocks hide.)
 - **Prefer pure functions** — where the code under test is pure (same input → same output, no side effects), test it directly without scaffolding.
 - Scope tightly to this item. Don't backfill tests for unrelated code.
 
@@ -47,6 +47,15 @@ Execute the suite (or the targeted subset for this item) and capture the real re
 - Backend: start the app (or use its test client) and hit the affected endpoint(s); assert status codes and response shape against the criteria.
 - Frontend: render the affected component/screen in the test environment and assert the criteria-relevant output; if a full render isn't feasible headless, say so and fall back to the unit assertions.
 - Keep every check non-interactive and reproducible. Do not trigger blocking dialogs or manual steps.
+
+### Live smoke pass (required when the item touches routes, DB models, migrations, or serialization)
+
+Test-client + mocked-DB checks pass while whole classes of real breakage slip through — schema/column-name mismatches, missing migrations, wiring/config errors, serialization bugs. A green mocked suite over a live app that 500s is the failure this catches. So once the mocked checks pass, run **one un-mocked pass against reality**:
+
+- **Start the app the way the project actually runs it** — the run/start command from `analyze-report.md` or the project's start script (e.g. `flask run`, `npm start`), **not** the test client — against a **real dev/test database**, not mocks or in-memory fakes. If the run command or DB isn't known, find it in the codebase (start scripts, `Procfile`, `README`, compose files); record what you used in your report so the next run reuses it. If it genuinely cannot be determined, say so and mark the affected criteria **Not Verifiable** — do **not** pass them on the mocked suite alone.
+- **Hit each core read path and the item's critical write path** with real requests; assert 2xx status and a sane response shape. This is a "does the real thing fall over" check, not detailed business assertions — those stay in the unit suite.
+- **Tear down cleanly** — stop the server, roll back or isolate any test data. Non-interactive and reproducible throughout.
+- **A live smoke failure is a real FAIL** with a `bug` or `design-level` Root Cause like any other. A green mocked suite never overrides a red live smoke.
 
 ## Decide the Verdict
 

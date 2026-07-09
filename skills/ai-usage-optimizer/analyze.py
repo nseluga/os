@@ -8,6 +8,7 @@ ai-usage-optimizer skill.
 """
 
 import json
+import re
 import sys
 from collections import Counter, defaultdict
 from pathlib import Path
@@ -18,6 +19,18 @@ SKILLS_DIR = CLAUDE_DIR / "skills"   # symlink → ~/os/skills
 
 AGENT_TOOL = "Agent"
 SKILL_TOOL = "Skill"
+
+# A skill launch surfaces in the transcript three ways, two of which the old
+# leading-"/" check missed — undercounting dev-team-auto and any prompt-box
+# invocation, which then showed up as "skills: null" cost outliers:
+#   1. the assistant's `Skill` tool call            (already handled below)
+#   2. a slash command typed in the prompt box, recorded inside <command-name>
+#      tags — NOT as a leading "/"
+#   3. the injected skill body, which always begins
+#      "Base directory for this skill: .../skills/<name>"
+# These patterns recover (2) and (3).
+COMMAND_NAME_RE = re.compile(r"<command-name>\s*/?([\w.-]+(?::[\w.-]+)?)\s*</command-name>")
+SKILL_BODY_RE = re.compile(r"Base directory for this skill:\s*\S*/skills/([\w.-]+)")
 
 # Weighted cost proxy. These are the standard Anthropic price ratios relative to
 # base input tokens (cache reads ~0.1x, cache writes ~1.25x, output ~5x) and are
@@ -99,6 +112,11 @@ def load_skill_catalog():
     return catalog
 
 
+# Catalog as a set for O(1) membership — used to reject built-in slash commands
+# (/model, /compact, /clear) that appear in <command-name> tags but aren't skills.
+SKILL_CATALOG = set(load_skill_catalog())
+
+
 def friendly_project(dir_name):
     """Decode an encoded cwd dir name into a readable project label."""
     name = dir_name
@@ -157,6 +175,24 @@ def parse_jsonl(path, project):
     model_task_pairs = []   # (model, complexity, task_preview)
     last_user_text = ""
 
+    session_skills = set()
+
+    def mark_skill(raw, trusted=True):
+        # One logical invocation can surface through several transcript signals
+        # (tool call + <command-name> tag + injected body). Count each distinct
+        # skill once per session so adoption/presence and per-session cost
+        # attribution stay correct instead of double-counting the same run.
+        # `trusted` signals (Skill tool, injected body) are always real skills;
+        # untrusted ones (a bare slash command / <command-name> tag) must match
+        # the catalog, else built-in CLI commands (/model, /compact) leak in.
+        name = str(raw).split(":")[-1].strip()
+        if not name or name in session_skills:
+            return
+        if not trusted and name not in SKILL_CATALOG:
+            return
+        session_skills.add(name)
+        skill_invocations[name] += 1
+
     for event in events:
         etype = event.get("type")
 
@@ -169,13 +205,15 @@ def parse_jsonl(path, project):
                          if isinstance(b, dict) and b.get("type") == "text"]
                 last_user_text = " ".join(texts)
 
-            # Catch manually typed slash-commands (/skill-name ...)
+            # Detect skill launches through every signal (see regexes above):
+            # injected body, <command-name> tag, and a leading "/skill-name".
+            for m in SKILL_BODY_RE.finditer(last_user_text):
+                mark_skill(m.group(1))
+            for m in COMMAND_NAME_RE.finditer(last_user_text):
+                mark_skill(m.group(1), trusted=False)
             stripped = last_user_text.strip()
-            if stripped.startswith("/"):
-                token = stripped[1:].split()[0] if len(stripped) > 1 else ""
-                token = token.split(":")[-1]  # strip plugin: namespace
-                if token:
-                    skill_invocations[token] += 1
+            if stripped.startswith("/") and len(stripped) > 1:
+                mark_skill(stripped[1:].split()[0], trusted=False)
 
         elif etype == "assistant":
             content = event.get("message", {}).get("content", [])
@@ -206,7 +244,7 @@ def parse_jsonl(path, project):
                 elif name == SKILL_TOOL:
                     sk = inp.get("skill")
                     if sk:
-                        skill_invocations[str(sk).split(":")[-1]] += 1
+                        mark_skill(sk)
                 elif name == "Write" and "memory" in str(inp.get("file_path", "")):
                     memory_writes += 1
 

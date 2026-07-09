@@ -19,12 +19,29 @@ Before running anything, pick a rigor track per item — how much of the team ru
   - **light** → Engineer → QA → fix-if-fail, with **MAX_ATTEMPTS 2** and **no review pass**. The orchestrator sets QA's gate mode.
   - **full** → the loop below, unchanged (MAX_ATTEMPTS 5).
 
-`flag:` (Opus escalation) and the `dt-analyze`/`dt-ui` modifiers compose with any track above `trivial`.
+`flag:` (Opus escalation) and the `dt-ui` modifier compose with any track above `trivial`.
 
-## Model selection (shared)
+**`dt-analyze` runs by default, once, before the loop for any `full`-track item that spans multiple files** (and for any unfamiliar area on any track). Skip it only for single-file items. Its `analyze-report.md` map is then injected into every agent (see Spawn template) so no agent re-explores the codebase — each spawned agent otherwise cold-starts and re-derives structure from scratch, which is the dominant hidden cost of a multi-agent run. One shared map amortizes that exploration across the whole team.
 
-- Default: `claude-sonnet-4-6` for all agents.
-- If the item has a `flag:` field warning about complexity or risk, use `claude-opus-4-8` for the Engineer and Bug Fixer; keep Sonnet for the others.
+## Model & effort selection (shared)
+
+Every agent is spawned with a **model** and an **effort** level. Model goes in the spawn template's `[MODEL]` slot. Effort is not a spawn parameter, so express it in the agent's prompt as a reasoning-depth directive / thinking keyword: **minimal** (none — mechanical work), **medium** (`think` — proportionate reasoning), **high** (`think hard` — reason through edge cases, alternatives, and failure modes first). Spend the capable-model / high-effort budget only where a mistake is expensive or hard to catch downstream; keep the cheap default everywhere else.
+
+Starting model + effort by role (the escalation ramp in Efficiency rules raises these on repeated failure — they are starting points, not ceilings):
+
+| Agent | Model | Effort | Why |
+|---|---|---|---|
+| `dt-analyze` | Sonnet (Haiku for its `Explore` fan-out, per its skill) | medium | broad mapping, not deep reasoning |
+| `dt-engineer` — **light** track | Sonnet | medium | one file, bounded blast radius |
+| `dt-engineer` — **full** track | Sonnet | **high** | build quality sets how many review/fix cycles you pay for later |
+| `dt-engineer` / `dt-fix` — **`flag:`** item | Opus | high | security / money / data-path — worth the top tier |
+| `dt-qa` | Sonnet | medium | keep the gate on a reasoning model: it judges coverage and classifies bug vs design-level (which steers the whole loop). **Never below Sonnet** — a weak gate passes broken code with false confidence. |
+| `dt-review` — **full**, non-`flag:` | Sonnet | high | highest-value gate; on Patio, Sonnet review already caught the unauth endpoint, the TOCTOU race, and the table dump that QA passed |
+| `dt-review` — **`flag:`** item | Opus | high | maximum scrutiny where a missed defect is catastrophic |
+| `dt-fix` — bug-class fix | Sonnet | medium | applying an already-diagnosed fix |
+| `dt-fix` — applying Critical/Important findings, or `flag:` | Opus | high | sensitive changes; match the builder tier |
+
+Review runs only on `full`-track items, so its spend is self-limiting to the items that earn it.
 
 ## Design exploration (flag: items only)
 
@@ -40,11 +57,13 @@ Non-`flag:` items skip this entirely — the Engineer designs and builds directl
 
 Spawn each agent with the `Agent` tool using this prompt:
 
-> Read `~/.claude/skills/dt-[AGENT]/skill.md` for your full instructions. Your task: [TASK + `done when:` criteria]. Use model [MODEL].
+> Read `~/.claude/skills/dt-[AGENT]/skill.md` for your full instructions. Your task: [TASK + `done when:` criteria]. Use model [MODEL] at [EFFORT] effort (pick both from "Model & effort selection"; set effort with the thinking keyword — medium = `think`, high = `think hard`, minimal = none).
 > [QA only:] Gate mode: [GATE MODE].
 > [After the first agent:] Work on existing branch [branch-name] — do NOT create a new worktree. [Omit this line on the very first agent of the session — it creates the worktree.]
 >
 > Prior teammates' reports are in `.claude/dev-team/` — read the ones your skill lists as inputs instead of re-deriving that context. Reports present so far: [list the filenames that exist].
+> [If dt-analyze ran:] The shared codebase map is `.claude/dev-team/analyze-report.md` — treat its file locations, data flows, and patterns as ground truth. Do NOT re-explore what it already covers; only open the files it points you to.
+> Report discipline: your report is the next agent's context — lead with the machine-readable lines (VERDICT/Branch/severity), findings-only, one line each, ≤40 lines, no narration. Full rules: Efficiency rules → "Report discipline" in `convergence-loop.md`.
 
 After each agent finishes, route on its report from `.claude/dev-team/` before spawning the next: read only the `VERDICT`/`Branch`/severity lines you need to pick the next step. Extract the branch name from the first engineer report and pass it to every later agent. Agents editing the same worktree run sequentially.
 
@@ -53,7 +72,7 @@ After each agent finishes, route on its report from `.claude/dev-team/` before s
 - **item** — the task text plus its `done when:` acceptance criteria (from PLAN.md, TASK.md, or the inline arg)
 - **gate mode** — one of:
   - `tests` — QA verdict comes from written + executed tests (used by `/dev-team`)
-  - `tests+behavioral` — QA runs tests AND exercises the running path (used by `/dev-team-auto`)
+  - `tests+behavioral` — QA runs tests AND exercises the running path, including a **live smoke pass** (real server + real dev DB, not mocks) for any item touching routes/models/migrations/serialization (used by `/dev-team-auto`; see dt-qa)
 - **branch** — the shared worktree branch every agent for this item edits
 - **MAX_ATTEMPTS = 5** — after this many build cycles without a passing gate, the item is marked BLOCKED
 
@@ -123,6 +142,17 @@ loop:
 ## Efficiency rules
 
 - **Pass reports forward.** Every agent receives the existing `.claude/dev-team/*.md` reports so it never re-derives context already established this loop.
+- **Report discipline (output tokens are the expensive class — ~5× input).** Each agent's report is the context bridge to the next agent: make it dense, not long. Every `dt-*` report must follow this shape (the dt-* skills' own report templates already match it — this is the shared enforcement):
+  - **Machine-readable lines first.** Lead with exactly the lines the orchestrator routes on — `## VERDICT: PASS|FAIL`, `**Branch:** …`, findings tagged by severity — so routing never has to scan prose.
+  - **Findings only.** No restating the task, no narrating steps taken, no pasting code or diffs the reader already has in the worktree. State conclusions, not the path to them.
+  - **One line per item.** Each finding / file / criterion is a single line, e.g. `SEVERITY — path:line — what's wrong — the fix`. No paragraphs, no sub-bullets.
+  - **Hard cap: ≤40 lines** (excluding the required header lines). Over cap: keep the highest-severity items, drop the rest, and end with `(N more Minor omitted)`.
+  - **No preamble or sign-off.** No "I analyzed…", "In summary…", or closing notes.
+- **Escalate before you loop (effort → model → stop).** Read the QA Root Cause each attempt and compare it to the previous one. When the same Root Cause survives a fix, do not just re-run the same build at the same power:
+  1. **First recurrence** → re-run the builder (`dt-fix`/`dt-engineer`) at **one higher effort** on the same model (raise `think` → `think hard`).
+  2. **Still the same cause, or a design-level cause** → escalate the builder **one model tier** (Sonnet → Opus) for the next build.
+  3. **Already at Opus and the same cause persists** → mark **BLOCKED** now; attempts at the ceiling won't converge.
+  This turns a blind retry into a capability ramp, and composes with the hard floor below.
 - **Detect a stuck loop.** If a BUILD step reports "nothing to change" yet QA still FAILs, the loop cannot converge — mark BLOCKED immediately rather than burning the remaining attempts.
 - **One worktree per item (normally).** Whichever agent runs first creates the worktree. On a design-level failure, each alternative gets its own branch forked from the current item branch (e.g. `feat/x-alt-1`, `feat/x-alt-2`) — failed alternative branches can be left or deleted, but the original and the winning branch must be kept. After an alternative passes, pass `winning_branch` to every later agent instead of the original branch name.
 
@@ -133,12 +163,12 @@ Each item ends in exactly one of:
 - **DONE** — QA PASS + no Critical/Important review findings. Record the commit hash and a one-line summary.
 - **BLOCKED** — attempt cap hit, or a non-convergent loop detected. Record: the last QA `VERDICT`, which `done when:` criteria are still unmet, and the last Root Cause hint so a human (or the next session) can pick it up.
 
-## Run memory log (read at start, append at end)
+## Run memory log (read at start, append the moment each item resolves)
 
 The team keeps a persistent, cross-run memory at **`.claude/dev-team/team-memory.md`** in the working repo. Unlike the per-run `*-report.md` files (overwritten each item), this file **accumulates** — it is how the next run learns from this one.
 
 - **At the start of a run**, both orchestrators read this file if it exists and factor its `Remember next run:` notes into track/agent choices (e.g. a flaky test suite, a build command that needs a flag, an approach that failed before). If it does not exist, create it with a `# Dev-team memory log` header on first write.
-- **At the end of every loop** — for *every* item and *every* track, DONE or BLOCKED — append one entry. This is the log of "what happened, what worked, what failed, and what to remember." Append only; never rewrite prior entries.
+- **The moment an item resolves** — DONE or BLOCKED, *every* item, *every* track — append one entry **in the same step that records the item's outcome** (the PROGRESS.md write for `/dev-team-auto`; the final report for `/dev-team`). Ride it on the outcome-recording action that already fires reliably every item — do **not** defer it to shutdown. Deferred, it does not get written: by end of run the orchestrator is hundreds of lines past this instruction, which is why past runs left no `team-memory.md` at all. Append only; never rewrite prior entries.
 
 Entry format:
 
