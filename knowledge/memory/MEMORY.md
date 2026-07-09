@@ -8,3 +8,4 @@
 - [Library notes format](feedback-library-notes-format.md) — one file per document, never a combined NOTES.md; never write stubs before reading the source
 - [Proactive token efficiency](feedback-proactive-token-efficiency.md) — apply the efficiency playbook (Read-over-Bash, no re-reads, right-sized models, batching, delegation) automatically, without being reminded
 - [Portfolio style guide](reference-portfolio-style-guide.md) — `~/os/knowledge/library/style_reference/Project_Writeup.pdf`; specific/evidence-driven voice, no marketing language — read before any portfolio writing
+- [Tool-building efficiency principle](feedback_tool_building_efficiency.md) — Tier by need, gate on explicit signals, cheap models for mechanical/read-only only; reasoning roles need Sonnet+. Proactive fan-out only beats reactive when wrong-first-approach cost > fan-out cost.
