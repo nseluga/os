@@ -45,6 +45,13 @@ file named to match the PDF (`author-year-topic.md`).
 ```
 library/
 ├── _inbox/                                   # unsorted drops — triage into a topic folder
+├── style_reference/                          # Nate's voice and writing style (see README.md inside)
+│   ├── README.md                                  # how to use this folder — read first
+│   ├── Project_Writeup.pdf                        # local-only (gitignored); structural/rhythm ref
+│   ├── seluga-project-writeup.md                  # notes: style standards, evidence-driven voice
+│   ├── Seluga Final Paper.pdf                     # local-only (gitignored); rhythm + transitions ref
+│   ├── seluga-final-paper.md                      # notes: sentence rhythm, word choices, structure
+│   └── seluga-personal-[description].*            # voice calibration examples (add as available)
 └── baseball-research/
     ├── alcorn-2018-batter-pitcher2vec.pdf         # local-only (gitignored)
     ├── alcorn-2018-batter-pitcher2vec.md          # committed: questions, model, insights

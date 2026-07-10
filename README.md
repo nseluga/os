@@ -1,8 +1,10 @@
 # OS — Personal Operating System
 
-A single home for knowledge, skills, and projects. This repo contains Nate's personal "operating system"—a unified knowledge base, reusable tools and workflows (skills), and project indexes that integrate with **Claude Code** to streamline software engineering, data science, and analytics work.
+A single home for knowledge, skills, and projects. Built on top of Claude Code: **48 custom skills**, a structured project-tracking system covering **8 active projects**, and a persistent memory layer with **10 fact files** auto-injected into every session.
 
-This is a public repository, but some reference materials in `knowledge/library/` are kept locally only (see `.gitignore`).
+The system compounds — each skill added makes the next session more capable, and the memory layer means Claude Code never starts cold. All AI-assisted work on [nateseluga.com](https://nateseluga.com) was built with this as infrastructure.
+
+This is a public repository. Reference materials in `knowledge/library/` are kept locally only (see `.gitignore`).
 
 ---
 
@@ -18,20 +20,23 @@ os/
 │   ├── memory/            # Claude Code's managed memory (auto-updated by Claude)
 │   ├── library/           # Reference docs (read on-demand; kept local-only)
 │   └── raw/               # Inbox for new materials (triaged into above)
-├── skills/                # Claude Code skills — reusable workflows and tools
-├── projects/              # Index entries for active projects
+├── skills/                # 48 Claude Code skills — reusable workflows and tools
+├── projects/              # Index entries for 8 active projects
 │   ├── pitcher-injury-risk/
 │   ├── batting-average-ability/
-│   ├── patio/
 │   ├── nba-shot-value/
-│   └── portfolio-website/
+│   ├── patio/
+│   ├── portfolio-website/
+│   ├── project-dashboard/
+│   ├── os/
+│   └── os-evals/
 └── scripts/               # Utility scripts
+```
 
 **Guiding split:**
 - **knowledge** = nouns (facts, references, context)
 - **skills** = verbs (workflows, tools, automation)
 - **projects** = pointers (indexes to actual codebases elsewhere)
-```
 
 ---
 
@@ -66,30 +71,44 @@ Reference materials kept on-disk (read when the task clearly matches):
 - **Note:** Files here are gitignored; this is a local-only reference store
 
 ### `knowledge/memory/`
-Claude Code's managed memory system — automatically updated:
-- `MEMORY.md` — index of remembered facts
-- Fact files — specific things Claude learned and should remember in future conversations
+Claude Code's managed memory system — automatically updated across sessions:
+- `MEMORY.md` — index of remembered facts (auto-loaded every session)
+- 10 fact files — specific things Claude learned and should remember:
   - `user_*.md` — facts about who you are, your preferences, knowledge
-  - `feedback_*.md` — guidance you've given on how to approach work
+  - `feedback_*.md` — guidance on how to approach work (corrections + confirmations)
   - `project_*.md` — ongoing work, goals, initiatives, deadlines
   - `reference_*.md` — pointers to external resources and systems
 
 Don't hand-edit the format here; Claude Code maintains it. Add your own notes to `knowledge/me/` instead.
 
 ### `skills/`
-Claude Code reusable workflows — custom agents, tools, and automations:
-- One folder per skill (e.g., `skills/dev-team/`, `skills/baseball-research-advisor/`)
-- Each contains a `SKILL.md` file with frontmatter and implementation
-- Skills are invoked via `/skill-name` in Claude Code (or via the Agent tool)
-- Examples: dev-team loop, code review, domain modeling, testing frameworks
+48 Claude Code reusable workflows — custom agents, tools, and automations. Highlights:
+
+| Skill | What it does |
+|---|---|
+| `dev-team-auto` | Autonomous multi-agent convergence loop — runs overnight unattended, drives items to DONE against rubrics |
+| `career-advisor` | Portfolio rubric — evaluates accuracy, clarity, credibility, and recruiter impact |
+| `baseball-research-advisor` | Skeptical analytics peer reviewer — methodology defensibility, honest ceilings |
+| `ai-usage-optimizer` | Reviews AI tool use for real compounding leverage vs. cosmetic use |
+| `dt-engineer` / `dt-qa` / `dt-review` | Engineer, QA, and Optimization Reviewer agents in the dev-team loop |
+| `grilling` / `grill-me` | Interview preparation and self-assessment |
+| `writing-great-skills` | Teaches the skill-writing pattern itself |
+
+Each skill lives in `skills/<name>/SKILL.md` with frontmatter (name, description, triggers) and an implementation body. Invoked via `/skill-name` in Claude Code.
 
 ### `projects/`
-Index entries for active projects. Each is a pointer to a real repository elsewhere:
-- Not the actual codebase — just an index
-- Contains repo path, GitHub link, status, and purpose
-- Used to quickly find and context-switch into a project
+Index entries for 8 active projects. Each is a pointer to a real repository elsewhere — not the actual codebase, just metadata (repo path, GitHub link, status, next step, priority). Used to context-switch quickly without re-explaining state.
 
-Actual codebases live at the paths listed (e.g., `~/Downloads/Patio`, `~/Pitcher-Injury-Risk`, etc.).
+| Project | What it is |
+|---|---|
+| `pitcher-injury-risk` | Multi-model MLB pitcher injury prediction (Statcast 2015–2024, survival models, IR+ composite) |
+| `batting-average-ability` | Same-season skill isolation metric with mixed-effects modeling and ICC |
+| `nba-shot-value` | 4-model ML comparison on NBA shot probability and expected value by zone |
+| `patio` | Full-stack social betting app (React 19 + Flask + scipy house-odds engine) |
+| `portfolio-website` | This portfolio — Astro + Tailwind + MDX, built with this OS as infrastructure |
+| `project-dashboard` | Local Astro SSR dashboard that reads these README files to show project status |
+| `os` | This repo |
+| `os-evals` | Evaluation framework for Claude Code skill and workflow quality |
 
 ---
 
@@ -145,6 +164,6 @@ Editing a skill or memory file here changes it everywhere immediately.
 
 **Nate Seluga**  
 Harvey Mudd College, Class of 2027  
-Software engineering • ML/AI • Data science • Baseball analytics
+Software engineering · ML/AI · Data science · Baseball analytics
 
 See `knowledge/me/README.md` for full bio and working style.
