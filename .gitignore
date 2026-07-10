@@ -1,6 +1,9 @@
 .DS_Store
 *.swp
 
-# knowledge/library: reference documents live LOCAL-ONLY (repo is public).
-knowledge/library/
-!knowledge/library/.gitkeep
+# knowledge/library: reference docs local-only (repo is public); README is tracked.
+knowledge/library/*
+!knowledge/library/README.md
+
+# Claude Code worktree scratch dirs
+.claude/worktrees/
