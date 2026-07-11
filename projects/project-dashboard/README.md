@@ -3,7 +3,7 @@ name: Project Dashboard
 status: active
 priority: low
 last_active: 2026-07-09
-next_step: "Fix 3 pre-existing test baseline failures (board/projects count mismatch from os-evals); push to remote."
+next_step: "1 test failing (tailwind.config.cjs content glob — tsx not included); push to remote."
 repo: ~/project-dashboard
 github: https://github.com/nseluga/project-dashboard
 summary: "Local dashboard showing state of every active project — sourced from os/projects READMEs. Includes weekly digest, momentum view, what-to-work-on-next recommendation, smart notepad, and auto Claude token tracking pulled from ~/.claude/projects/ JSONL logs."

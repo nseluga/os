@@ -3,7 +3,7 @@ name: Portfolio Website
 status: in-progress
 priority: high
 last_active: 2026-07-09
-next_step: "Add voice examples to ~/os/knowledge/library/style_reference/, then run /dev-team-auto for V8 (voice pass). After that: launch V9 visual polish from Claude app with Fable."
+next_step: "V8 voice pass in progress on branch content/v8-voice-pass (MDX pages modified). After merge: launch V9 visual polish from Claude app with Fable."
 repo: ~/portfolio
 github: https://github.com/nseluga/portfolio
 summary: "Personal portfolio site — software engineering, sports analytics, AI tooling, and about."
