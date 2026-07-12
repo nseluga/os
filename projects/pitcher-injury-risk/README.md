@@ -10,3 +10,17 @@ summary: "MLB pitcher health modeling platform — injury probability, severity,
 tags: [ml, baseball]
 ---
 
+## Where it stands
+
+On hold. Models pitcher injury probability, severity, and time-to-injury (survival models) into a composite Injury Risk+ score, with a Streamlit dashboard. Honest finding: AUC ~0.57 — a genuine information ceiling, framed as a domain result. Notebooks, models, and reports are committed; last run 2026-06-27. Next work is presentation polish, not new modeling.
+
+## Run / verify
+
+    cd ~/Pitcher-Injury-Risk && ./run_project.sh    # autonomous notebook loop (fix → critique → improve → dashboard)
+    # env: requirements.txt / environment.yml
+
+## Key files
+
+- **claude_instructions.md** — project conventions.
+- **audit.md** (in this os folder) — prior code audit.
+- `src/`, `notebooks/`, `models/`, `reports/`, `dashboard/` in the repo.

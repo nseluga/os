@@ -10,8 +10,16 @@ summary: "Software studio marketing site + monorepo scaffold for building custom
 tags: [full-stack, startup, next.js]
 ---
 
-pnpm + Turborepo monorepo scaffolded 2026-07-09. Build passes lint/typecheck/build.
+## Where it stands
 
-Stack: Next.js 14 App Router, shared `@acme-labs/ui` component package, shared config package, Tailwind, Vercel-ready.
+pnpm + Turborepo monorepo scaffolded 2026-07-09; passes lint/typecheck/build. Next.js 14 App Router, shared `@acme-labs/ui` component package + shared config package, Tailwind, Vercel-ready. Business name is still the `acme-labs` placeholder — nothing renamed yet, and no marketing content written.
 
-Business name TBD — `RENAME.md` in the repo root documents all three string forms (`@acme-labs/`, `acme-labs`, `Acme Labs`) to replace once the real name is chosen. Do not rename piecemeal; the file lists a one-liner for repo-wide replacement.
+## Run / verify
+
+    cd ~/acme-labs && pnpm install && pnpm dev      # dev server
+    pnpm lint && pnpm typecheck && pnpm build       # full check
+
+## Key files
+
+- **RENAME.md** (repo root) — documents all three string forms (`@acme-labs/`, `acme-labs`, `Acme Labs`) with a one-liner for repo-wide replacement once the real name is chosen. Do not rename piecemeal.
+- Not on GitHub yet (`github: null`).

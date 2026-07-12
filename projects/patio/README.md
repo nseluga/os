@@ -13,6 +13,17 @@ backend_url: https://patio-backend-y4ft.onrender.com
 web_url: https://patio-nu.vercel.app
 ---
 
-React Native/Expo conversion complete (M.1–M.3). Mobile: Expo SDK 54. Backend on Render; web frontend on Vercel (reference only until mobile fully verified).
+## Where it stands
 
-Backend refactor stages 0–3 complete (2026-07-09): security fixes (0.1–0.8), `@token_required` decorator (1.1), app-factory + blueprints (2.1), error handlers + rate limiting (2.2), input validation (2.3), sport module collapse into `bet_generation.py` with SportConfig seam (3.1). 334 backend tests. Next: 4.1 SQLAlchemy migration (live DB stamp requires human sign-off).
+React Native/Expo conversion complete (M.1–M.3, Expo SDK 54). Backend refactor stages 0–3 complete (2026-07-09): security fixes (0.1–0.8), `@token_required` decorator, app-factory + blueprints, error handlers + rate limiting, input validation, sport-module collapse into `bet_generation.py` with a SportConfig seam. 334 backend tests passing. Backend on Render; the old CRA web frontend on Vercel is reference-only until mobile is fully verified. Next: stage 4.1 SQLAlchemy + Flask-Migrate — the live DB stamp against Supabase needs human sign-off.
+
+## Run / verify
+
+    cd ~/Downloads/Patio/mobile && npx expo start      # mobile app
+    cd ~/Downloads/Patio/backend && pytest             # 334 backend tests
+
+## Key files
+
+- **PLAN.md / PROGRESS.md** (repo root) — local, gitignored trackers (execution plan + what's landed).
+- **DATABASE.md** — trusted Supabase schema reference (`models.py` is stale/untrusted).
+- **STANDARDS.md**, **CLAUDE.md** — conventions; read before writing code.
