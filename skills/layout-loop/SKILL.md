@@ -15,7 +15,7 @@ You read two things and merge them every run:
    Nate's *invariant* taste: his convictions about hierarchy, whitespace, restraint, density, intuitiveness, and what "aesthetically pleasing" means to him. Principles (prose) + tokens (concrete values). This applies to **every** run regardless of brand. It is the "uniquely Nate" signal.
 
 2. **Brand layer** — `~/os/knowledge/library/design-language/brands/<brand>.md`
-   The *swappable* skin for the active context: palette, type, voice, imagery. Hand-authored (from online research + example screenshots/URLs). Portfolio, acme-labs, or a specific client each get their own file.
+   The *swappable* skin for the active context: palette, type, voice, imagery. Hand-authored (from online research + example screenshots/URLs). Portfolio, bcns, or a specific client each get their own file.
 
 **Merge rule:** craft principles steer taste and judgment; brand tokens supply the concrete look. On any conflict, craft governs *craft* concerns (spacing rhythm, hierarchy, restraint) and brand governs *brand* concerns (color, type, voice).
 
@@ -27,7 +27,7 @@ You are always launched while Nate is present. Do a short confirm-then-detach ex
 
 1. **Target queue** — the ordered list of pages/routes to improve tonight. Each gets its own full loop. Single page = a queue of one.
 2. **Brand** — which brand file to load. Propose the one inferred from the project; Nate confirms/corrects (never guess brand for client work).
-3. **Launch** — the dev-server command + URL. Propose defaults discovered from `package.json` (e.g. `pnpm dev` → `localhost:3000`; for the Acme Turborepo, `pnpm --filter <app> dev`). Nate confirms/corrects.
+3. **Launch** — the dev-server command + URL. Propose defaults discovered from `package.json` (e.g. `pnpm dev` → `localhost:3000`; for the bcns Turborepo, `pnpm --filter <app> dev`). Nate confirms/corrects.
 
 Power-user shortcut: if these are passed as args (`target=`, `brand=`, `launch=`, `url=`), skip the confirmation and go straight to autonomous.
 

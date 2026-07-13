@@ -1,6 +1,6 @@
 # Brand file template — a swappable skin for `layout-loop`
 
-One file per brand/context (portfolio, acme-labs, or a specific client). Hand-authored from
+One file per brand/context (portfolio, bcns, or a specific client). Hand-authored from
 online research + example screenshots/URLs. This is the *swappable* layer; it supplies the
 concrete look. Nate's invariant craft lives in `craft.md` and is merged on top — do **not**
 restate craft principles here.
@@ -33,5 +33,5 @@ Final home: `~/os/knowledge/library/design-language/brands/<brand>.md`
 ## Reference examples
 
 - URLs / screenshots that define this brand, each with a one-line note on what it demonstrates.
-  Store screenshots alongside this file. (For acme-labs' own brand, the live tokens may also
-  live in the `@acme-labs/ui` package — note that here.)
+  Store screenshots alongside this file. (For bcns' own brand, the live tokens may also
+  live in the `@bcns/ui` package — note that here.)
