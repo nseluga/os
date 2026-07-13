@@ -23,6 +23,7 @@ Two-layer architecture:
 - **Layer 1 Architecture Plan (v2):** `~/os/knowledge/library/baseball-research/Layer1_Architecture_Plan_v2.md` — canonical specification, frozen decision log (§5.13), non-negotiable rules (§2)
 - **Project Handoff (v2):** `~/os/knowledge/library/baseball-research/` — framing, Layer 2 scope, cross-layer open items
 - **Claude Code Context:** `/Users/nateseluga/hitter-embedding/docs/` and this project index
+- **Research Manifest:** `~/hitter-embedding/docs/research-manifest.md` — config for `/research-partner` and `/research-review` (staged copy in [research-manifest.md](research-manifest.md) until moved into the repo)
 
 ## Non-Negotiable Rules
 

@@ -25,7 +25,8 @@ free-handing it.
 | A hard bug or perf regression | `/diagnosing-bugs` |
 | Building a feature test-first | `/tdd` |
 | Portfolio / writing / project pages | `/career-advisor`, `/writing-*`, `/edit-article` |
-| Baseball analytics methodology review | `/baseball-research-advisor` |
+| Hands-on research build session | `/research-partner <project>` (pair with a technical skill) |
+| Reviewing finished research work | `/research-review <project>` |
 | Reviewing a branch or diff | `/review`, `/code-review` |
 | Filing bugs conversationally | `/qa` |
 | Planning a refactor into safe commits | `/request-refactor-plan` |

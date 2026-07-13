@@ -88,7 +88,7 @@ Don't hand-edit the format here; Claude Code maintains it. Add your own notes to
 |---|---|
 | `dev-team-auto` | Autonomous multi-agent convergence loop — runs overnight unattended, drives items to DONE against rubrics |
 | `career-advisor` | Portfolio rubric — evaluates accuracy, clarity, credibility, and recruiter impact |
-| `baseball-research-advisor` | Skeptical analytics peer reviewer — methodology defensibility, honest ceilings |
+| `research-partner` / `research-review` | Build-time research teammate (mandated pushback, teach-as-we-build) and skeptical peer review of finished work — both driven by `knowledge/frameworks/research-standards.md` |
 | `ai-usage-optimizer` | Reviews AI tool use for real compounding leverage vs. cosmetic use |
 | `dt-engineer` / `dt-qa` / `dt-review` | Engineer, QA, and Optimization Reviewer agents in the dev-team loop |
 | `grilling` / `grill-me` | Interview preparation and self-assessment |
