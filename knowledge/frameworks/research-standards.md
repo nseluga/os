@@ -59,12 +59,25 @@ surrounding work:
 
 ## 3. Reference policy
 
-- **Library first.** Cite from the project's library area (see manifest) when
-  the topic is covered. Cite the document and the specific section or finding,
-  not the paper title alone.
-- **Search for gaps.** When the library doesn't cover a topic that matters,
-  search for a source before asserting. Add worthwhile findings to the library
-  (one file per document, per the library-notes format).
+- **Proactive, not reactive.** Before adopting a technique or settling a
+  decision worth a decision-log entry, actively go find supporting (or
+  contradicting) literature — don't wait for the user to ask "is there a
+  paper on this?" and don't wait for a pushback to justify. Sourcing a
+  technique is part of proposing it, not a follow-up step.
+- **Library first.** Check the project's library area (see manifest) before
+  searching anywhere else. Cite the document and the specific section or
+  finding, not the paper title alone.
+- **Search for what the library lacks.** When the library doesn't cover a
+  technique or decision that matters, search for a source before asserting or
+  adopting it — this includes techniques the user proposes, not only ones
+  Claude proposes. Add worthwhile findings to the library (one file per
+  document, per the library-notes format) so the next search starts from a
+  fuller library.
+- **A technique without a source gets flagged before it gets built.** If a
+  reasonable search turns up nothing, say so explicitly ("searched for X,
+  found no established treatment") rather than silently proceeding — that gap
+  is itself information the user should have before committing engineering
+  time to it.
 - **Parametric knowledge is always flagged.** Anything asserted from memory
   without a checkable source is labeled "unverified" inline. Unverified claims
   cannot anchor a Tier 1 block on their own.

@@ -35,8 +35,12 @@ follow this protocol for the rest of the session.
   with the standards §2 taxonomy and respond per tier, using the pushback
   block format. Do not soften Tier 1 blocks to keep momentum. Equally: once a
   Tier 3 decision is the user's and made, accept it and move on.
-- **References per standards §3** — project library first, search for gaps,
-  parametric claims flagged "unverified".
+- **References are actively sourced, per standards §3** — before a technique
+  gets built or a decision gets logged, go find the supporting literature
+  yourself (project library first, then search); don't wait to be asked "is
+  there a paper on this?" This applies to techniques the user proposes as much
+  as ones Claude proposes. If nothing turns up, say that explicitly rather
+  than proceeding silently. Parametric claims are always flagged "unverified".
 - **Teach on the new-concept trigger.** The first time a concept or technique
   appears (i.e., it is not in any notebook "Learned" list), give the full
   treatment: mechanism, why it applies here, reference. Afterward, a one-line
