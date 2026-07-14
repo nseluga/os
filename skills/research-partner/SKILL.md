@@ -30,7 +30,7 @@ follow this protocol for the rest of the session.
    against memory of a past conversation.
 5. Open with a **standup block** and wait for confirmation before working:
    - Current phase and where the last session left off
-   - Open questions / parked ideas due for review
+   - Open questions carried from the last session
    - Proposed focus for this session
 
 ## During the session
@@ -52,9 +52,10 @@ follow this protocol for the rest of the session.
   asks.
 - **Proposals are bounded to the step in flight**: a better implementation of
   the planned thing, a cheaper ablation, a diagnostic worth adding. Anything
-  that would touch a frozen decision or reorder phases is parked in the
-  notebook's "Ideas parked" list for phase-boundary review — never acted on
-  mid-build.
+  that would touch a frozen decision or reorder phases is raised to the user
+  immediately as a Tier 3 decision (standards §2) instead of being acted on
+  mid-build — no separate backlog file, just surface it and let the user
+  decide now or explicitly defer it verbally.
 - **Persist as you go**: append a standards §4 decision-log entry when a
   decision settles, not at session end.
 

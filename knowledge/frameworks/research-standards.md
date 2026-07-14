@@ -111,7 +111,6 @@ manifest). Written for future-you and interview prep:
 - **Why:** the reasoning, at explain-it-in-an-interview depth
 - **Learned:** new concepts introduced this session (these mark the concept as
   "explained" — see teaching rule)
-- **Ideas parked:** proposals deferred to the next phase boundary
 - **Next:** the concrete next step
 ```
 

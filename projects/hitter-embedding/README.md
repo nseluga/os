@@ -5,7 +5,7 @@ priority: high
 last_active: 2026-07-09
 next_step: "Complete Phase A data foundation (Statcast snapshot, feature engineering, walk-forward config frozen) → launch Phase B feature-value ablations"
 repo: ~/hitter-embedding
-github: null
+github: git@github.com:nseluga/Hitter-Embedding.git
 summary: "Deep-learning hitter representation model on process signals (Layer 1) + platoon-skill market-value framework (Layer 2). Research target: SSAC27, abstract due Oct 1."
 tags: [ml, baseball, research]
 ---
@@ -23,7 +23,7 @@ Two-layer architecture:
 - **Layer 1 Architecture Plan (v2):** `~/os/knowledge/library/baseball-research/Layer1_Architecture_Plan_v2.md` — canonical specification, frozen decision log (§5.13), non-negotiable rules (§2)
 - **Project Handoff (v2):** `~/os/knowledge/library/baseball-research/` — framing, Layer 2 scope, cross-layer open items
 - **Claude Code Context:** `/Users/nateseluga/hitter-embedding/docs/` and this project index
-- **Research Manifest:** `~/hitter-embedding/docs/research-manifest.md` — config for `/research-partner` and `/research-review` (staged copy in [research-manifest.md](research-manifest.md) until moved into the repo)
+- **Research Manifest:** `~/hitter-embedding/docs/research-manifest.md` — config for `/research-partner` and `/research-review`; decision log and lab notebook live alongside it at `docs/decision-log.md` and `docs/lab-notebook.md`
 
 ## Non-Negotiable Rules
 
