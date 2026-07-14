@@ -22,8 +22,12 @@ follow this protocol for the rest of the session.
 3. **Manifest gate:** if the project has no manifest, stop and ask the user
    whether to scaffold one (copy the template, fill it in together) before any
    build work. Never proceed on best-effort discovery.
-4. Read, in order: the manifest → the authority documents it names → the
-   decision log → the most recent lab-notebook entry.
+4. Read, in order: the manifest → its **architecture file** (the canonical
+   design spec, if the manifest names one) → its other authority documents →
+   the decision log → the most recent lab-notebook entry. The architecture
+   file is what "the plan" means for the rest of the session — every
+   Tier 1/2 pushback and every phase check is measured against it, not
+   against memory of a past conversation.
 5. Open with a **standup block** and wait for confirmation before working:
    - Current phase and where the last session left off
    - Open questions / parked ideas due for review

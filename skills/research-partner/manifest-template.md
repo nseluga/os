@@ -10,9 +10,18 @@ Both /research-partner and /research-review require this file and stop to
 ask before working without it.
 -->
 
+## Architecture file
+<!-- The single canonical architecture/design spec for this project, if one
+     exists (usually in ~/os/knowledge/library/<area>/). Read at the start of
+     every /research-partner session alongside the decision log and notebook
+     — it's what "the plan" means when the partner references it. Omit this
+     section if the project has no standalone architecture doc. -->
+- `<path>` — <what it governs>
+
 ## Authority documents
-<!-- The canonical specs. Repo-relative or absolute paths, one per line, with a
-     one-phrase note on what each governs. -->
+<!-- Other canonical specs (handoff docs, framing docs, etc.) beyond the
+     architecture file above. Repo-relative or absolute paths, one per line,
+     with a one-phrase note on what each governs. -->
 - `<path>` — <what it governs>
 
 ## Frozen rules

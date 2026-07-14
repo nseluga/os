@@ -5,8 +5,10 @@
      travels with the code), then delete this staged copy and leave only the
      pointer in this project's README. -->
 
-## Authority documents
+## Architecture file
 - `~/os/knowledge/library/baseball-research/Layer1_Architecture_Plan_v2.md` — canonical Layer 1 spec; frozen decision log (§5.13), non-negotiable rules (§2)
+
+## Authority documents
 - `~/os/knowledge/library/baseball-research/` (Project Handoff v2) — framing, Layer 2 scope, cross-layer open items
 - `~/hitter-embedding/docs/` — Claude Code project context
 
@@ -17,10 +19,10 @@
 4. **No luck/price/salary leakage into Layer 1:** never train on outcome luck or market prices
 
 ## Decision log
-- Path: `docs/decision-log.md` (in ~/hitter-embedding; seed it from the Architecture Plan's §5.13 frozen decisions)
+- Path: `docs/decision-log.md` (in ~/hitter-embedding; staged template at [decision-log.md](decision-log.md) until moved — seed it from the Architecture Plan's §5.13 frozen decisions)
 
 ## Lab notebook
-- Path: `docs/lab-notebook.md` (in ~/hitter-embedding)
+- Path: `docs/lab-notebook.md` (in ~/hitter-embedding; staged template at [lab-notebook.md](lab-notebook.md) until moved)
 
 ## Library area
 - Path: `~/os/knowledge/library/baseball-research/`
