@@ -2,8 +2,8 @@
 name: os-evals
 status: active
 priority: medium
-last_active: 2026-07-11
-next_step: "Run full iterations to measure ablation ladder effectiveness"
+last_active: 2026-07-13
+next_step: "Interpret ablation sign-test results (most comparisons are ties — decide whether to prune rungs or redesign low-signal tasks)"
 repo: ~/os-evals
 github: https://github.com/nseluga/os-evals
 summary: "Ablation ladder that measures which layers of ~/os (CLAUDE.md, memory, skills) earn their keep."
@@ -14,7 +14,7 @@ tags: [meta, testing]
 
 ## Where it stands
 
-An optimization loop measuring the value stack: bare Claude → + CLAUDE.md → + memory → + skills. Two-sided check validation gate and exit-code convention (1 = fail, 2 = infra) in place. Active — most recent work is eval-harness fixes (meta.yaml parser).
+Full 14-task × 4-rung suite running. Latest scorecard (2026-07-13, SHA b612249, 60 runs): rung pass rates are 14/16, 12/14, 12/14, 15/16. Hard tasks batch #1 (pathguard-resolver, rangestats-engine) promoted from draft and passing. Persistent failures: `coding/dashboard-digest` fails all rungs; `writing/portfolio-writeup` is inconsistent (rung1/rung3 fail). Sign-test shows most ablation comparisons are ties (≤1 non-tie win per ladder step), suggesting individual layers add minimal marginal value on the current task set — the signal question is whether to redesign tasks or prune rungs.
 
 ## Run / verify
 
