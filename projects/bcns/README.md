@@ -1,25 +1,27 @@
 ---
 name: bcns
 status: active
-priority: medium
-last_active: 2026-07-12
-next_step: "Write real marketing content: swap placeholder use-cases for real case studies, add Privacy/Terms pages, confirm domain + support email in site.ts"
+priority: high
+last_active: 2026-07-13
+next_step: "Grill session to produce PLAN.md + PROGRESS.md, then fill real marketing content (use-cases, domain/email, Privacy/Terms pages, contact form backend) before first deploy"
 repo: ~/bcns
-github: null
-summary: "bcns — software studio marketing site + monorepo scaffold for building custom software for local small businesses. Marketing content still largely placeholder."
-tags: [full-stack, startup, next.js]
+github: https://github.com/nseluga/bcns
+summary: "Software studio monorepo — landing website + scaffold for building custom software for local small businesses."
+tags: [full-stack, next.js, startup]
 ---
 
 ## Where it stands
 
-pnpm + Turborepo monorepo (Next.js 14 App Router, shared `@bcns/ui` component package + shared config package, Tailwind, Vercel-ready). Passes lint/typecheck/build. Marketing content is still largely placeholder.
+pnpm + Turborepo monorepo (Next.js 14 App Router, shared `@bcns/ui` component library, shared `@bcns/config` package, Tailwind, Vercel-ready). Lint, typecheck, and build all pass. All landing page sections exist (hero, problem/solution, how-it-works, delivery models, use-cases, contact form) but marketing content is largely placeholder. Not yet deployed. PLAN.md and PROGRESS.md don't exist yet — planned for creation via a grill session.
 
 ## Run / verify
 
-    cd ~/bcns && pnpm install && pnpm dev      # dev server
-    pnpm lint && pnpm typecheck && pnpm build  # full check
+    cd ~/bcns && pnpm install && pnpm dev        # dev server at localhost:3000
+    pnpm lint && pnpm typecheck && pnpm build    # full check
 
 ## Key files
 
-- Real-content gaps are grep-able via `TODO`: `apps/web/lib/site.ts` (domain/email), `apps/web/components/use-cases.tsx` (case studies), `apps/web/components/site-footer.tsx` (Privacy/Terms).
-- Not on GitHub yet (`github: null`).
+- **Detailed trackers (local, gitignored):** `PLAN.md` (what's next) · `PROGRESS.md` (what landed) — not yet created
+- **Real-content gaps:** `apps/web/lib/site.ts` (domain/email TODOs) · `apps/web/components/use-cases.tsx` (placeholder case studies) · `apps/web/components/site-footer.tsx` (Privacy/Terms links)
+- **Monorepo config:** `turbo.json` · `pnpm-workspace.yaml` · `vercel.json`
+- **Shared packages:** `packages/ui/` (@bcns/ui) · `packages/config/` (@bcns/config)
