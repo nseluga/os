@@ -24,7 +24,9 @@ follow this protocol for the rest of the session.
    build work. Never proceed on best-effort discovery.
 4. Read, in order: the manifest → its **architecture file** (the canonical
    design spec, if the manifest names one) → its other authority documents →
-   the decision log → the most recent lab-notebook entry. The architecture
+   the decision log → the most recent lab-notebook entry →
+   `~/os/knowledge/frameworks/notebook-code-standards.md` (the shared coding
+   standards for all notebook work — apply these for the rest of the session). The architecture
    file is what "the plan" means for the rest of the session — every
    Tier 1/2 pushback and every phase check is measured against it, not
    against memory of a past conversation.
@@ -56,8 +58,10 @@ follow this protocol for the rest of the session.
   immediately as a Tier 3 decision (standards §2) instead of being acted on
   mid-build — no separate backlog file, just surface it and let the user
   decide now or explicitly defer it verbally.
-- **Persist as you go**: append a standards §4 decision-log entry when a
-  decision settles, not at session end.
+- **Flag decisions as they settle**: when a decision closes (user accepts a
+  recommendation, a Tier 3 call is made, a frozen rule is confirmed), say so
+  explicitly and offer to append the standards §4 decision-log entry. Don't
+  write it silently; wait for the user to confirm.
 
 ## Composition with technical skills
 
@@ -79,8 +83,11 @@ phase starts.
 
 ## Session end
 
-Append the standards §5 lab-notebook entry. If the session changed the
-project's status or next step, offer to update its os README.
+Offer to append the standards §5 lab-notebook entry — summarize what you'd
+write (phase progress, what was learned, open questions, next session focus)
+so the user can confirm or redirect before anything is written. If the
+session changed the project's status or next step, offer to update its os
+README as well.
 
 ## Do NOT use when
 

@@ -2,8 +2,8 @@
 name: os-evals
 status: active
 priority: medium
-last_active: 2026-07-13
-next_step: "Interpret ablation sign-test results (most comparisons are ties — decide whether to prune rungs or redesign low-signal tasks)"
+last_active: 2026-07-14
+next_step: "Run iteration 3 (./run.sh) and verify: ~73 runs, dashboard-digest in Difficulty Anchors only, portfolio-writeup rung3 passes, (K/3) annotations for noisy tasks"
 repo: ~/os-evals
 github: https://github.com/nseluga/os-evals
 summary: "Ablation ladder that measures which layers of ~/os (CLAUDE.md, memory, skills) earn their keep."
@@ -14,7 +14,7 @@ tags: [meta, testing]
 
 ## Where it stands
 
-Full 14-task × 4-rung suite running. Latest scorecard (2026-07-13, SHA b612249, 60 runs): rung pass rates are 14/16, 12/14, 12/14, 15/16. Hard tasks batch #1 (pathguard-resolver, rangestats-engine) promoted from draft and passing. Persistent failures: `coding/dashboard-digest` fails all rungs; `writing/portfolio-writeup` is inconsistent (rung1/rung3 fail). Sign-test shows most ablation comparisons are ties (≤1 non-tie win per ladder step), suggesting individual layers add minimal marginal value on the current task set — the signal question is whether to redesign tasks or prune rungs.
+All five iteration-2 defects fixed (2026-07-14, main @ 7184de4): stale transcript cleanup, `dashboard-digest` sentinel (rung-1 only + Difficulty Anchors scorecard section), portfolio-writeup `"elevate"` false positive removed, `repeat: 3` majority-vote for noisy tasks (`portfolio-writeup`, `pir-workload-feature`), and unit tests for three harness pure functions. Iteration 3 will be the first clean run: expected ~73 transcripts (13 tasks × 4 rungs + 2 noisy tasks × 2 extra repeats × 4 rungs), `dashboard-digest` absent from main table, `portfolio-writeup` rung3 expected to pass.
 
 ## Run / verify
 

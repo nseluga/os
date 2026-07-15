@@ -43,6 +43,8 @@ When a session starts in this repo, orient yourself in this order:
    task calls for a method or a target reader. Read documents in
    `knowledge/library/` only when a task points at them (or the topic clearly
    matches) — it's optional reference material, nothing there auto-loads.
+   - Specifically: when creating or updating a `PLAN.md`, read `knowledge/frameworks/plan-md.md`.
+     When creating or updating a `PROGRESS.md`, read `knowledge/frameworks/progress-md.md`.
 5. New unsorted input lands in `knowledge/raw/`; triage it into `me/`,
    `frameworks/`, `audience/`, or a project — don't let it pile up.
 
