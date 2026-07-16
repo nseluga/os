@@ -13,3 +13,4 @@
 - [os-evals standards](project-os-evals-standards.md) — Two-sided check validation gate, exit code convention (1=fail, 2=infra), and 2026-07-09 eval result verdict
 - [Offer README updates post-session](feedback-project-readme-updates.md) — after a meaningful change, offer to update the project's os README to the `projects/_TEMPLATE.md` shape; daily synthesis cloud routine retired 2026-07-11
 - [Claude-in-Chrome limits](reference-claude-in-chrome-limits.md) — extension only sees tabs in its own window (drag tabs in); `file://` URLs blocked (use python3 http.server instead)
+- [Local automation ≠ cloud schedule](reference-local-automation-not-cloud-schedule.md) — repeatable jobs touching local files/apps can't use cloud routines/cowork; must run on-machine via launchd/cron

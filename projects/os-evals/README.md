@@ -2,8 +2,8 @@
 name: os-evals
 status: active
 priority: medium
-last_active: 2026-07-14
-next_step: "Run iteration 3 (./run.sh) and verify: ~73 runs, dashboard-digest in Difficulty Anchors only, portfolio-writeup rung3 passes, (K/3) annotations for noisy tasks"
+last_active: 2026-07-15
+next_step: "Promote validated draft tasks (memory-notes-format, claude-md-comment-gate) from _draft/ into live suite, then run ./run.sh for iteration 4 to see if discrimination is restored"
 repo: ~/os-evals
 github: https://github.com/nseluga/os-evals
 summary: "Ablation ladder that measures which layers of ~/os (CLAUDE.md, memory, skills) earn their keep."
@@ -14,11 +14,11 @@ tags: [meta, testing]
 
 ## Where it stands
 
-All five iteration-2 defects fixed (2026-07-14, main @ 7184de4): stale transcript cleanup, `dashboard-digest` sentinel (rung-1 only + Difficulty Anchors scorecard section), portfolio-writeup `"elevate"` false positive removed, `repeat: 3` majority-vote for noisy tasks (`portfolio-writeup`, `pir-workload-feature`), and unit tests for three harness pure functions. Iteration 3 will be the first clean run: expected ~73 transcripts (13 tasks × 4 rungs + 2 noisy tasks × 2 extra repeats × 4 rungs), `dashboard-digest` absent from main table, `portfolio-writeup` rung3 expected to pass.
+Iteration 3 (2026-07-15, main @ 64218dd) **flatlined** — all 13 tasks pass at every rung, zero discriminating signal, +0 layer attribution across all four rung pairs. Bare Sonnet 4.6 passes everything. Batch-2 dev-team-auto session landed four fixes: `pir-workload-feature` rung1 timeout fixed (`multi_turn: true` + 900s), Opus spot check wired by default (`OPUS_SPOTCHECK=1`), loud ⚠️ no-signal verdict added to `stats.py`, and two validated discriminating task drafts in `tasks/_draft/knowledge/` (`memory-notes-format` and `claude-md-comment-gate` — both rung1→rung2 discriminating; `memory-tradeoffs-reflex` cut for non-discrimination). The two validated drafts need user promotion into the live suite before running iteration 4.
 
 ## Run / verify
 
-    cd ~/os-evals && ./run.sh      # 72 runs across 12 tasks × 4 rungs, plus an Opus-tier spot check
+    cd ~/os-evals && ./run.sh      # full matrix: Sonnet rungs 1-4 + Opus spot check (rungs 1,4)
 
 ## Key files
 

@@ -2,8 +2,8 @@
 name: Hitter Embedding
 status: active
 priority: high
-last_active: 2026-07-13
-next_step: "Start Phase A — pull Statcast 2015–2025 via pybaseball, verify batted-ball spin field availability, build pitch-event table"
+last_active: 2026-07-15
+next_step: "Phase A: freeze the walk-forward split config, then build the label and feature-derivation module. Cleaning pipeline complete."
 repo: ~/hitter-embedding
 github: https://github.com/nseluga/Hitter-Embedding
 summary: "Conditional-query hitter embedding on Statcast process signals targeting platoon-skill identification and market mispricing; research target SSAC27, abstract due Oct 1."
@@ -12,7 +12,7 @@ tags: [ml, baseball, research]
 
 ## Where it stands
 
-Research scaffolding complete: repo initialized, `.gitignore`, root README, and `docs/` in place (decision-log and lab-notebook as blank templates). No code or data yet. Phase A is the immediate next step — pull the Statcast snapshot, verify batted-ball spin availability, build the pitch-event table, and freeze the walk-forward split config. Phases B (feature ablations) and C (baselines) follow before any model training begins.
+Phase A is underway. The 2015–2025 Statcast snapshot is pulled and frozen to versioned parquet (7.80M pitches); batted-ball spin was verified unavailable, so the contact-quality space is EV/LA/spray; and the cleaning pipeline is built and unit-tested, producing a 7.35M-pitch modeling table. Remaining in Phase A: freeze the walk-forward split config and build the label and feature-derivation module. Phases B (feature ablations) and C (baselines) follow before any model training begins.
 
 ## Key files
 

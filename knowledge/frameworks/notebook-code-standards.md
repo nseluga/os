@@ -6,6 +6,29 @@ top-to-bottom, not performance or terseness.
 
 ---
 
+## Headings
+
+Use a Markdown heading to name each logical group of cells. Follow the heading
+immediately with 1-2 sentences in plain English describing what the group does.
+A reader skimming the notebook should know what is happening and why without
+reading the code.
+
+Rules:
+- Do not use em-dashes or parentheses in headings or their descriptions.
+- Keep descriptions to 1-2 sentences.
+- Name the section after what it produces or decides, not after the technique it uses.
+
+Example:
+
+```markdown
+## Load and filter play-by-play data
+Read the raw Statcast CSV files and drop rows that are missing release speed or
+plate location. These rows account for under 1 percent of pitches and cannot be
+imputed reliably.
+```
+
+---
+
 ## Output formatting
 
 Print results as plain labeled lines, not styled banners or dividers:
