@@ -2,8 +2,8 @@
 name: Hitter Embedding
 status: active
 priority: high
-last_active: 2026-07-17
-next_step: "Phase A complete. Run /research-review on Phase A, then start Phase B (feature-value stage: stabilization, GBM screening, bat-tracking placement, outcome-dimension ablations)."
+last_active: 2026-07-20
+next_step: "Phase B underway (B.1 stabilization done). Next: scaffold notebooks/02_feature_value.ipynb (common PA axis, clipped-spray check, signal-per-PA ranking), then B.2 GBM screening. Phase A /research-review still deferred — run before logging any Phase B finding."
 repo: ~/hitter-embedding
 github: https://github.com/nseluga/Hitter-Embedding
 summary: "Conditional-query hitter embedding on Statcast process signals targeting platoon-skill identification and market mispricing; research target SSAC27, abstract due Oct 1."
