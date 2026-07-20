@@ -12,7 +12,7 @@ tags: [ml, baseball, research]
 
 ## Where it stands
 
-Phase A is complete. The 2015–2025 Statcast snapshot is pulled and frozen to versioned parquet (7.80M pitches); batted-ball spin was verified unavailable, so the contact-quality space is EV/LA/spray; the cleaning pipeline produces a 7.35M-pitch modeling table; the label module derives the swing/contact/quality process-head targets (in-play-only quality masking, three-source-sourced spray angle) into pitch_events_labeled.parquet; and the walk-forward split (train 2015–2023 / val 2024 / test 2025) is frozen and validated in config. Next: /research-review on Phase A, then Phase B (feature ablations), then Phase C (baselines) before any model training begins.
+Phase A is complete and Phase B (feature-value stage) is underway; bat-tracking is excluded from v1. Phase A froze the 7.35M-pitch modeling table, the swing/contact/quality labels, and the walk-forward split. Phase B so far: the 48-dim context vectorizer (train-only fit), the complete-source wOBA eval-target table (FanGraphs weights sourced + reconciled to published league wOBA within ±0.0005), and the split-half stabilization estimator. B.1 result — process signals stabilize an order of magnitude faster than the outcome: whiff ~34 swings, EV ~34 BBIP, LA ~21 BBIP, spray ~77 BBIP vs side-specific wOBA ~407 PA. Next: write B.1 up in notebooks/02_feature_value.ipynb (common PA axis, clipped-spray check, signal-per-PA ranking), then B.2 GBM screening, then Phase C baselines before any model training. Note: the Phase A /research-review was deferred and must run before any Phase B result becomes a logged finding.
 
 ## Key files
 
