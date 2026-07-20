@@ -2,8 +2,8 @@
 name: bcns
 status: active
 priority: high
-last_active: 2026-07-15
-next_step: "End-to-end pipeline test: IMAP + LLM extractor against a test mailbox with real invoice PDFs, then build and smoke-test the Mac installer"
+last_active: 2026-07-17
+next_step: "Draft plan for Coventry Hills app (next client project); update bcns website (founder photos, Brandon's NYU details, first past-work entry)"
 repo: ~/bcns
 github: https://github.com/nseluga/bcns
 summary: "Software studio (Nate + Brandon Chung) — marketing site plus DeLuca's pizza shop revenue tracker (first client app, Electron desktop)."
@@ -12,7 +12,13 @@ tags: [full-stack, next.js, electron, startup]
 
 ## Where it stands
 
-Overnight run complete and merged to main (2026-07-15). Both products are built. bcns website: multi-page Next.js site with real copy (voice/content pass done, pricing and support model filled, two visual passes complete); remaining gaps are founder photos, Brandon's NYU details, and first real past-work entry. DeLuca's pizza app: Electron desktop tracker fully built through P6 (SQLite P&L, IMAP invoice ingestion, LLM extraction, drag-and-drop fallback, manual entry, backup rotation, Mac DMG + Windows installer); 133 tests green. Not yet tested end-to-end against a real mailbox or real invoice PDFs. Handoff blocked on confirming client's email provider (Gmail fine; Outlook/M365 = IMAP blocked, need drag-and-drop-primary variant).
+Both products are built and E2E validated (2026-07-17).
+
+**bcns website:** Multi-page Next.js site with real copy, two visual passes done. Remaining gaps: founder photos, Brandon's NYU details, first real past-work entry. Running at localhost:3000.
+
+**DeLuca's pizza app:** Electron desktop tracker fully built through P6 + E2E validated against real credentials (Gmail IMAP + Anthropic API). ~15 bugs found and fixed during E2E on branch `delucas-e2e`: model string updated to `claude-haiku-4-5`, Anthropic key now forwarded to SDK, PDF rendering fixed in 4 ways (pdfjs legacy build, Path2D/DOMMatrix globals via @napi-rs/canvas, FilesystemStandardFontDataFactory, process.getBuiltinModule polyfill). 133 tests green.
+
+**Remaining work:** S1 (revenue toggle on drag-drop confirm card), Section 3 packaging (DMG smoke-test — highest risk: pdfjs standard_fonts path inside asar may break), handoff. Handoff blocked on: client laptop OS (IMAP path vs. drag-drop-primary), Slice login (check for @slicelife.com emails), labor-app name. Slice API confirmed to be a fintech partner API — not a merchant sales data API; integration path decided at handoff.
 
 ## Run / verify
 

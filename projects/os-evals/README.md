@@ -1,7 +1,7 @@
 ---
 name: os-evals
-status: active
-priority: medium
+status: on-hold
+priority: low
 last_active: 2026-07-15
 next_step: "Promote validated draft tasks (memory-notes-format, claude-md-comment-gate) from _draft/ into live suite, then run ./run.sh for iteration 4 to see if discrimination is restored"
 repo: ~/os-evals
