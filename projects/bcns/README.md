@@ -3,7 +3,7 @@ name: bcns
 status: active
 priority: high
 last_active: 2026-07-20
-next_step: "Scope Coventry Hills (first hosted client) in a fresh session, then generate bcns-client-coventry-hills from the bcns-app-template Template Repo and build it. First live deploy (Hetzner/Coolify + Cloudflare + Neon + Clerk + Stripe) happens when it ships. Also: migrate the @nseluga/* package scope to a bcns org once it's no longer solo. Marketing-site copy gaps still open: founder photos, Brandon's NYU details, first past-work entry."
+next_step: "Visual pass on the marketing site (apps/web) — currently being planned; run it via /layout-loop against Nate's design language on an isolated branch. Client work now lives in its own project entries (bcns-client-coventry, bcns-client-delucas). Also: migrate the @nseluga/* package scope to a bcns org once it's no longer solo. Marketing-site copy gaps still open: founder photos, Brandon's NYU details, first past-work entry."
 repo: ~/bcns
 github: https://github.com/nseluga/bcns
 summary: "Software studio (Nate + Brandon Chung) — platform repo: marketing site plus shared @nseluga/* packages and the hosted-web client template. Client apps live in their own repos."
@@ -23,8 +23,16 @@ bump. The template `templates/hosted-web/` was extracted to a standalone GitHub
 **Template Repository**, `bcns-app-template`, so a new client repo is one click.
 **DeLuca's** (the first client, an Electron desktop app) was extracted to its own
 repo, `bcns-client-delucas`, with full history — and two long-standing
-recurring-rule bugs were fixed there. Next up is scoping and building **Coventry
-Hills**, the first *hosted-web* client, which also triggers the first live deploy.
+recurring-rule bugs were fixed there. The template was realigned (July 20, 2026)
+to the hosting-reference stack — Supabase (Postgres/auth/storage) + DigitalOcean
+droplet + PM2, Clerk/Neon/Stripe and Docker/Coolify removed, BCNS billing decided
+as central-never-in-app — and five platform defaults (pg-boss jobs, PM2 deploys,
+Twilio SMS, Supabase CLI migrations, template contract) were written into
+`~/os/knowledge/library/bcns/hosting-reference.md`. Per-client work is tracked
+in its own project entries — **bcns-client-coventry** (first hosted-web client,
+in scoping; client-specific overrides layered on the platform defaults) and
+**bcns-client-delucas** (maintenance). This entry now covers only the platform:
+shared packages, the template, and the marketing site.
 
 Two notes for future-me: the `@nseluga/*` package scope is temporary (GitHub
 Packages ties scope to the account owner) — migrate to a `bcns` org and rename to
