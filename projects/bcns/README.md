@@ -2,8 +2,8 @@
 name: bcns
 status: active
 priority: high
-last_active: 2026-07-20
-next_step: "Marketing-site visual/animation pass SHIPPED to main (2026-07-20, Bold+precision via /layout-loop). Follow-ups: (1) spot-check the new animations on a real mobile device + with prefers-reduced-motion emulation — neither was captured live in the run; (2) decide whether the always-on CTA glow-pulse and work-panel shimmer stay or dial back to hover-only. Copy gaps still open (out of layout fence): founder photos, Brandon's NYU details, first past-work entry, real testimonials. Also: migrate the @nseluga/* package scope to a bcns org once it's no longer solo."
+last_active: 2026-07-21
+next_step: "Platform hosting architecture LOCKED via grilling session (2026-07-21): per-client systemd isolation, CI artifact deploys, shadow-DB migration gate, contract backup to DO Spaces. Deployed code: bcns/infra/ (bootstrap + onboard scripts), unified deploy.yml pipeline in template + client repos, all propagated and committed. Next: provision the first real DO droplet with infra/bootstrap.sh, rehearse the rebuild-from-scratch flow, and test end-to-end before client one goes live. Outstanding: Supabase CLI flag names + GitHub Packages token scoping from client repos surface when you run infra/bootstrap.sh. Marketing site follow-ups still deferred: mobile/reduced-motion spot-check on layout-loop animations, copy gaps (founder photos, testimonials), @nseluga→@bcns org migration."
 repo: ~/bcns
 github: https://github.com/nseluga/bcns
 summary: "Software studio (Nate + Brandon Chung) — platform repo: marketing site plus shared @nseluga/* packages and the hosted-web client template. Client apps live in their own repos."

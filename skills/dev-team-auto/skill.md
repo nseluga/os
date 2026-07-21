@@ -40,7 +40,7 @@ First decide **how much of the team runs** (rigor), then which *optional* agents
 - **New user-facing feature (backend + frontend)** → inside the loop, run `dt-ui` after the item first reaches a passing correctness gate, before the final review pass
 - **Everything else** (features, structural changes, security/auth/money/data-path work, cleanup, test scaffolding) → `dt-engineer` as the builder
 
-Model and effort per agent follow the **Model & effort selection (shared)** table in `convergence-loop.md` (Sonnet default; full-track engineer high-effort; QA medium; review high-effort — Opus on the engineer, fixer, and review for `flag:` items).
+Model and effort per agent follow the **Model & effort selection (shared)** table in `convergence-loop.md` (Sonnet default; full-track engineer high-effort; QA medium; review high-effort — Opus on the engineer, fixer, and review for `flag:` items; Fable at medium effort for `critical:` items).
 
 ### 3. Run the convergence loop for the item
 

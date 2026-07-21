@@ -1,91 +1,88 @@
-# os — Nate's Internal Operating System
+# Global Claude Code Config — Nate's OS
 
-This repo is a personal "operating system": a single home for what I know
-(`knowledge/`), what I can do (`skills/`), and what I'm building
-(`projects/`). It is also the **real, on-disk source of truth for Claude
-Code's global skills and memory** — those live here and are symlinked back
-into `~/.claude` (see "Integration with Claude Code" below).
+`~/os` is Nate's personal operating system and the **source of truth for all
+Claude Code sessions** — skills, memory, knowledge, and project indexes all
+live here. Skills (`~/.claude/skills`) and memory (`~/.claude/memory`) are
+symlinked from it and load automatically.
 
 ## Structure
 
 ```
 os/
-├── CLAUDE.md              # this file
-├── knowledge/             # what I know
-│   ├── me/                # bio, roles, preferences, goals (hand-written)
+├── CLAUDE.md              # this file — loaded globally in every session
+├── knowledge/             # what Nate knows
+│   ├── me/                # bio, roles, preferences, goals
 │   ├── frameworks/        # mental models, methods, reusable thinking
-│   ├── audience/          # people/orgs I write or build for
-│   ├── library/           # reference docs to read on demand (files local-only/gitignored)
-│   ├── raw/               # inbox: unprocessed dumps, triage into the above
-│   └── memory/            # Claude Code's managed memory — session facts + cross-run dev-team learnings
-├── skills/                # all Claude Code skills (real bodies) + skills.md template
-└── projects/              # one folder per project — index entries, not the code
-    ├── portfolio-website/     # -> ~/portfolio
-    ├── patio/                 # -> ~/Downloads/Patio
-    ├── pitcher-injury-risk/   # -> ~/Pitcher-Injury-Risk
-    └── batting-average-ability/  # -> ~/Downloads/Batting Average Ability
+│   ├── audience/          # people/orgs to write or build for
+│   ├── library/           # reference docs (local-only/gitignored)
+│   ├── raw/               # inbox: unprocessed input to triage
+│   └── memory/            # Claude Code managed memory (auto-loaded via autoMemoryDirectory)
+├── skills/                # all Claude Code skills
+└── projects/              # one folder per project — indexes, not the code
 ```
 
-Guiding split: **knowledge = nouns, skills = verbs, projects = pointers.**
-The `projects/` READMEs are *indexes* — the actual codebases live at the
-paths listed in each README, not here.
+## What's in ~/os and when to use it
 
-## Start here (context initialization)
+| Path | What it is | When to read it |
+|------|-----------|-----------------|
+| `knowledge/me/README.md` | Bio, job targets, projects, working style | When you need background on Nate — role, goals, how he works |
+| `knowledge/frameworks/` | Mental models and decision methods | When the task calls for a structured approach or framework |
+| `knowledge/audience/` | Notes on target readers/users | When writing, designing UX, or tailoring communication |
+| `knowledge/library/` | Reference docs (gitignored) | Only when the task clearly matches a specific doc's topic |
+| `projects/<name>/README.md` | Per-project index — real repo path, goals, context | When working on or discussing a named project |
+| `knowledge/memory/MEMORY.md` | Index of remembered facts and preferences | Auto-loaded every session (via `autoMemoryDirectory`); relevant fact files are auto-injected as `<system-reminder>`s. Follow links when a fact seems relevant. |
 
-When a session starts in this repo, orient yourself in this order:
+Do not read these files automatically. Pull them on demand when a task makes
+the content clearly relevant.
 
-1. **Read `knowledge/memory/MEMORY.md`** — the index of everything Claude
-   already remembers about Nate. Follow links to specific facts as relevant.
-2. **Skim `knowledge/me/`** — who Nate is and how he likes to work.
-3. **Check `projects/`** — if the task concerns a specific project, open its
-   README to get the real repo path, then go work in that repo.
-4. **Pull in `knowledge/frameworks/` and `knowledge/audience/`** only when the
-   task calls for a method or a target reader. Read documents in
-   `knowledge/library/` only when a task points at them (or the topic clearly
-   matches) — it's optional reference material, nothing there auto-loads.
-   - Specifically: when creating or updating a `PLAN.md`, read `knowledge/frameworks/plan-md.md`.
-     When creating or updating a `PROGRESS.md`, read `knowledge/frameworks/progress-md.md`.
-5. New unsorted input lands in `knowledge/raw/`; triage it into `me/`,
-   `frameworks/`, `audience/`, or a project — don't let it pile up.
+**Exception — always for plan/progress files:** when creating or updating a
+`PLAN.md` or `PROGRESS.md` in *any* repo, first read
+`~/os/knowledge/frameworks/plan-md.md` /
+`~/os/knowledge/frameworks/progress-md.md` and follow that schema.
+
+## Flagging findings for the os repo
+
+When a turn produces something worth persisting — a preference, a repeatable
+process, or a pattern to reuse — say so explicitly and offer to save it:
+
+- **Memory** (preferences, facts about Nate, behavioral corrections) → write a
+  fact file in `~/os/knowledge/memory/` + a MEMORY.md index line.
+- **Reusable process/pattern** → a skill under `~/os/skills/`, or a framework
+  note in `knowledge/frameworks/`.
+
+Keep entries pointed and brief. Don't save what the repo, git history, or code
+already records. Flag; don't auto-write large changes without a nod.
+
+## Keeping project progress current
+
+When a session lands a significant change in a project's real repo — a feature
+shipped, a milestone hit, direction changed, or the obvious next step moved —
+offer to update that project's index in `~/os`.
+
+- **Which project:** match the repo against the `repo:` field in each
+  `~/os/projects/*/README.md`.
+- **What to update:** frontmatter — `last_active` (→ today's date),
+  `next_step`, and `status`/`priority` if they changed.
+- **What counts as significant:** merged feature, resolved blocker, phase
+  boundary, changed plan. Skip routine WIP and small fixes.
+
+Offer; don't auto-write. One line at the end of the turn is enough.
 
 ## Integration with Claude Code
 
-Skills and memory physically live in this repo and are exposed to Claude Code
-via **absolute symlinks**, and a global config file routes all sessions back
-to this repo:
+- `~/.claude/CLAUDE.md` → `~/os/CLAUDE.md` (this file — symlinked)
+- `~/.claude/skills`    → `~/os/skills`
+- `~/.agents/skills`    → `~/os/skills`
+- `~/.claude/memory`    → `~/os/knowledge/memory`
 
-- `~/.claude/CLAUDE.md` — global session config; tells Claude what's in `~/os`
-  and when to pull from each knowledge area (no auto-reads, on-demand only)
-- `~/.claude/skills`  → `~/os/skills`
-- `~/.agents/skills`  → `~/os/skills`
-- `~/.claude/memory`  → `~/os/knowledge/memory`
-
-Implications:
-- Editing a skill or memory file here changes it everywhere, immediately.
-- Memory (`knowledge/memory/`) serves two purposes:
-  1. **Session-scoped facts** — managed by Claude Code; `MEMORY.md` index + fact
-     files for Nate's preferences, role, projects, etc. Don't hand-edit the
-     format; put your own notes in `knowledge/me/` instead.
-  2. **Cross-run process learnings** — skills like `/dev-team` and
-     `/dev-team-auto` append generalizable lessons to `dev-team-learnings.md`
-     (e.g., "when Opus pays off", "a QA tactic that reliably converges"). These
-     live here and are read by every dev-team run to improve orchestration
-     across *any* repo. Project-specific findings (flaky suite, build flags,
-     this codebase's quirks) stay in each target repo's
-     `.claude/dev-team/team-memory.md` — the split rule is defined in
-     `skills/dev-team/convergence-loop.md`.
-- The links are absolute, so **don't move or rename `~/os`** without re-pointing
-  them, or skills and memory will silently stop loading.
-- Health check: `ls -L ~/.claude/skills/grilling` should resolve. If it errors,
-  the symlink chain is broken.
+Don't move or rename `~/os` without re-pointing these symlinks.
+Health check: `ls -L ~/.claude/skills/grilling` should resolve.
 
 ## Authoring a new skill
-
-Copy the template and fill it in:
 
 ```
 cp ~/os/skills/skills.md ~/os/skills/<skill-name>/SKILL.md
 ```
 
-The folder name, the `name:` frontmatter field, and how you invoke it must all
-match. `description:` is the router prompt — lead it with the trigger.
+The folder name, the `name:` frontmatter field, and the `/` invocation must
+all match. `description:` is the router prompt — lead it with the trigger.

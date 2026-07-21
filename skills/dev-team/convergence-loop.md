@@ -19,7 +19,7 @@ Before running anything, pick a rigor track per item — how much of the team ru
   - **light** → Engineer → QA → fix-if-fail, with **MAX_ATTEMPTS 2** and **no review pass**. The orchestrator sets QA's gate mode.
   - **full** → the loop below, unchanged (MAX_ATTEMPTS 5).
 
-`flag:` (Opus escalation) and the `dt-ui` modifier compose with any track above `trivial`.
+`flag:` (Opus escalation) and `critical:` (Fable escalation — for items where a defect is catastrophic or irreversible: auth systems, cryptography, authorization, PII/PHI handling, financial transactions, production data integrity) are item-level markers that compose with any track above `trivial`. Use `critical:` when the blast radius of a missed defect makes Opus insufficient. `dt-ui` also composes with any track above `trivial`.
 
 **`dt-analyze` runs by default, once, before the loop for any `full`-track item that spans multiple files** (and for any unfamiliar area on any track). Skip it only for single-file items. Its `analyze-report.md` map is then injected into every agent (see Spawn template) so no agent re-explores the codebase — each spawned agent otherwise cold-starts and re-derives structure from scratch, which is the dominant hidden cost of a multi-agent run. One shared map amortizes that exploration across the whole team.
 
@@ -35,23 +35,26 @@ Starting model + effort by role (the escalation ramp in Efficiency rules raises 
 | `dt-engineer` — **light** track | Sonnet | medium | one file, bounded blast radius |
 | `dt-engineer` — **full** track | Sonnet | **high** | build quality sets how many review/fix cycles you pay for later |
 | `dt-engineer` / `dt-fix` — **`flag:`** item | Opus | high | security / money / data-path — worth the top tier |
+| `dt-engineer` / `dt-fix` — **`critical:`** item | Fable | medium | catastrophic blast radius (auth, crypto, PII, financial, prod data integrity) — Fable's deeper reasoning catches subtle defects Opus misses; medium effort suffices given the model ceiling |
 | `dt-qa` | Sonnet | medium | keep the gate on a reasoning model: it judges coverage and classifies bug vs design-level (which steers the whole loop). **Never below Sonnet** — a weak gate passes broken code with false confidence. |
 | `dt-review` — **full**, non-`flag:` | Sonnet | high | highest-value gate; on Patio, Sonnet review already caught the unauth endpoint, the TOCTOU race, and the table dump that QA passed |
 | `dt-review` — **`flag:`** item | Opus | high | maximum scrutiny where a missed defect is catastrophic |
+| `dt-review` — **`critical:`** item | Fable | medium | irreversible defect risk — Fable for maximum security and reliability scrutiny; medium effort suffices given the model ceiling |
 | `dt-fix` — bug-class fix | Sonnet | medium | applying an already-diagnosed fix |
 | `dt-fix` — applying Critical/Important findings, or `flag:` | Opus | high | sensitive changes; match the builder tier |
+| `dt-fix` — applying findings on a **`critical:`** item | Fable | medium | match the builder tier on catastrophic-risk items |
 
 Review runs only on `full`-track items, so its spend is self-limiting to the items that earn it.
 
-## Design exploration (flag: items only)
+## Design exploration (flag: and critical: items)
 
-For a `flag:` item — the complex/critical ones that already escalate to Opus — the right architecture is worth proving before it's built. **Before the first Engineer build only:**
+For a `flag:` or `critical:` item, the right architecture is worth proving before it's built. **Before the first Engineer build only:**
 
-1. Spawn 2–3 **design-only** subagents in parallel (model `claude-opus-4-8`), each producing a short design sketch for the item — architecture, key interfaces, data model, and the efficiency, reliability, and scalability tradeoffs of that approach. No code, no worktree.
+1. Spawn 2–3 **design-only** subagents in parallel (`flag:` → `claude-opus-4-8`; `critical:` → `claude-fable-5`), each producing a short design sketch — architecture, key interfaces, data model, and the efficiency, reliability, and scalability tradeoffs of that approach. No code, no worktree.
 2. Pick the winning sketch on the item's priorities — efficiency, reliability, and scalability first — and record the choice and why in one line.
 3. Hand the winning sketch to the Engineer as the design to implement; it builds that one approach.
 
-Non-`flag:` items skip this entirely — the Engineer designs and builds directly, as today. If the chosen design later fails QA at the design level, the loop's existing alternative-engineer fork (below) is the fallback.
+Non-`flag:`/`critical:` items skip this entirely — the Engineer designs and builds directly, as today. If the chosen design later fails QA at the design level, the loop's existing alternative-engineer fork (below) is the fallback.
 
 ## Spawn template (shared)
 
@@ -151,7 +154,7 @@ loop:
 - **Escalate before you loop (effort → model → stop).** Read the QA Root Cause each attempt and compare it to the previous one. When the same Root Cause survives a fix, do not just re-run the same build at the same power:
   1. **First recurrence** → re-run the builder (`dt-fix`/`dt-engineer`) at **one higher effort** on the same model (raise `think` → `think hard`).
   2. **Still the same cause, or a design-level cause** → escalate the builder **one model tier** (Sonnet → Opus) for the next build.
-  3. **Already at Opus and the same cause persists** → mark **BLOCKED** now; attempts at the ceiling won't converge.
+  3. **Already at Opus and the same cause persists** → escalate to **Fable** for one final build attempt. If Fable also fails, mark **BLOCKED** — the ceiling is reached.
   This turns a blind retry into a capability ramp, and composes with the hard floor below.
 - **Detect a stuck loop.** If a BUILD step reports "nothing to change" yet QA still FAILs, the loop cannot converge — mark BLOCKED immediately rather than burning the remaining attempts.
 - **One worktree per item (normally).** Whichever agent runs first creates the worktree. On a design-level failure, each alternative gets its own branch forked from the current item branch (e.g. `feat/x-alt-1`, `feat/x-alt-2`) — failed alternative branches can be left or deleted, but the original and the winning branch must be kept. After an alternative passes, pass `winning_branch` to every later agent instead of the original branch name.

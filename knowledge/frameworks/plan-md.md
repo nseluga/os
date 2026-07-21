@@ -53,11 +53,18 @@ Do not change this manually mid-run.
 - `full` — everything else; multi-file; new endpoints/schema/auth/money. Full loop.
 When between tracks, choose the heavier one.
 
-**`flag:`** (optional) — marks the item for maximum scrutiny. Values: `security`,
+**`flag:`** (optional) — marks the item for elevated scrutiny. Values: `security`,
 `money`, `data-path`. Triggers: Opus model on the engineer + fixer + reviewer,
 design exploration (2–3 parallel architects before the first build), and the
 `tests+behavioral` gate including a live smoke pass. Use for auth, payments,
 migrations, or anything where a mistake is hard to reverse.
+
+**`critical:`** (optional) — marks the item for maximum scrutiny, one tier above
+`flag:`. Values: `security`, `reliability`, or any description. Triggers: **Fable
+at medium effort** on the engineer + fixer + reviewer, and design exploration with
+Fable architects. Use when a defect would be catastrophic or irreversible: auth
+systems, cryptography, authorization, PII/PHI handling, financial transactions,
+production data integrity. Composes with any track above `trivial`.
 
 ---
 
@@ -195,6 +202,14 @@ regression risk is real. Skip it for trivial items where it's obvious.
     - Existing passing tests remain passing
   status: not started
   flag: security
+
+- task: Rewrite session token signing to use HMAC-SHA256
+  done when:
+    - All tokens are signed with HMAC-SHA256 using a server-side secret
+    - A token with a tampered payload fails verification and returns 401
+    - Existing sessions are invalidated on deploy (no legacy unsigned tokens accepted)
+  status: not started
+  critical: security
 
 - task: Replace inline SQL in UserRepository with parameterized queries
   done when:
