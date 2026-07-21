@@ -3,7 +3,7 @@ name: bcns
 status: active
 priority: high
 last_active: 2026-07-20
-next_step: "Visual pass on the marketing site (apps/web) — currently being planned; run it via /layout-loop against Nate's design language on an isolated branch. Client work now lives in its own project entries (bcns-client-coventry, bcns-client-delucas). Also: migrate the @nseluga/* package scope to a bcns org once it's no longer solo. Marketing-site copy gaps still open: founder photos, Brandon's NYU details, first past-work entry."
+next_step: "Marketing-site visual/animation pass SHIPPED to main (2026-07-20, Bold+precision via /layout-loop). Follow-ups: (1) spot-check the new animations on a real mobile device + with prefers-reduced-motion emulation — neither was captured live in the run; (2) decide whether the always-on CTA glow-pulse and work-panel shimmer stay or dial back to hover-only. Copy gaps still open (out of layout fence): founder photos, Brandon's NYU details, first past-work entry, real testimonials. Also: migrate the @nseluga/* package scope to a bcns org once it's no longer solo."
 repo: ~/bcns
 github: https://github.com/nseluga/bcns
 summary: "Software studio (Nate + Brandon Chung) — platform repo: marketing site plus shared @nseluga/* packages and the hosted-web client template. Client apps live in their own repos."
@@ -33,6 +33,17 @@ in its own project entries — **bcns-client-coventry** (first hosted-web client
 in scoping; client-specific overrides layered on the platform defaults) and
 **bcns-client-delucas** (maintenance). This entry now covers only the platform:
 shared packages, the template, and the marketing site.
+
+The marketing site (`apps/web`) got a full **visual/animation pass** (2026-07-20,
+"Bold, executed with precision" via `/layout-loop`, merged to `main`): a Fraunces
+serif-italic accent word per section headline, springy scroll-in reveals + staggered
+entrances, richer card hovers (lift/scale/accent-glow), a scroll-fill node-badge
+process flow on `/services`, a FAQ accordion on `/pricing`, a pull-quote on `/about`,
+and character for the empty `/work` panels (drifting signature motif + shimmer
+skeletons). All presentation-only — no copy/data changed. Shared foundation lives in
+`components/reveal.tsx`, the Tailwind preset motion tokens, and `globals.css` hover
+utilities; see `LAYOUT_LOOP_REPORT.md` for the per-page breakdown and the two open
+review flags (mobile + reduced-motion spot-check).
 
 Two notes for future-me: the `@nseluga/*` package scope is temporary (GitHub
 Packages ties scope to the account owner) — migrate to a `bcns` org and rename to
