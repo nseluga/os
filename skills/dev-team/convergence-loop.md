@@ -46,10 +46,10 @@ Starting model + effort by role (the escalation ramp in Efficiency rules raises 
 
 For a `flag:` or `critical:` item, the right architecture is worth proving before it's built. **Before the first Engineer build only:**
 
-0. **Gauge the design space.** If the item has one clearly-shaped approach — constrained by existing patterns, an established interface, or a plan that already prescribes the architecture — spawn **one** design sketch. Reserve 2–3 parallel sketches for genuinely competing architectures (different data models, module boundaries, or consistency tradeoffs).
-1. Spawn the design-only subagent(s) per step 0 (`flag:` → `claude-opus-4-8`; `critical:` → `claude-fable-5`), each producing a short design sketch — architecture, key interfaces, data model, and the efficiency, reliability, and scalability tradeoffs of that approach. No code, no worktree.
-2. Pick the winning sketch on the item's priorities — efficiency, reliability, and scalability first — and record the choice and why in one line.
-3. Hand the winning sketch to the Engineer as the design to implement; it builds that one approach.
+0. **Gauge the design space.** One clearly-shaped approach (constrained by existing patterns, an established interface, or a plan-prescribed architecture) = **narrow**: skip separate design agents — the Engineer sketches its design then builds, one spawn. Genuinely competing architectures (different data models, module boundaries, or consistency tradeoffs) = **open**: continue below.
+1. Spawn 2–3 design-only subagents in parallel (`flag:` → `claude-opus-4-8`; `critical:` → `claude-fable-5`), each producing a sketch ≤40 lines — architecture, key interfaces, data model, tradeoffs. No code, no worktree.
+2. Pick the winner on the item's priorities — efficiency, reliability, scalability — record the choice in one line.
+3. Hand it to the Engineer to implement.
 
 Non-`flag:`/`critical:` items skip this entirely — the Engineer designs and builds directly, as today. If the chosen design later fails QA at the design level, the loop's existing alternative-engineer fork (below) is the fallback.
 
@@ -166,7 +166,7 @@ Each item ends in exactly one of:
 The team keeps a persistent, cross-run memory at **`.claude/dev-team/team-memory.md`** in the working repo. Unlike the per-run `*-report.md` files (overwritten each item), this file **accumulates** — it is how the next run learns from this one.
 
 - **At the start of a run**, both orchestrators read this file if it exists and factor its `Remember next run:` notes into track/agent choices (e.g. a flaky test suite, a build command that needs a flag, an approach that failed before). If it does not exist, create it with a `# Dev-team memory log` header on first write.
-- **The moment an item resolves** — DONE or BLOCKED, *every* item, *every* track — append one entry **in the same step that records the item's outcome** (the PROGRESS.md write for `/dev-team-auto`; the final report for `/dev-team`). Never defer it to shutdown — deferred, it does not get written. Append only; never rewrite prior entries (exception: compaction, below).
+- **The moment an item resolves** — DONE or BLOCKED, *every* item, *every* track — append one entry **in the same step that records the item's outcome** (for `/dev-team-auto`, the item orchestrator appends it as its loop ends; for `/dev-team`, with the final report). Never defer it to shutdown — deferred, it does not get written. Append only; never rewrite prior entries (exception: compaction, below).
 
 ### Compaction (at run start, orchestrator's discretion)
 

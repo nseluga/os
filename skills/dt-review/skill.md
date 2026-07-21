@@ -39,7 +39,7 @@ Do not suggest features beyond the scope of the task.
 
 ## Update STANDARDS.md
 
-After the review, update `STANDARDS.md` in the project root (create it if it doesn't exist) with any project-specific efficiency, reliability, or resilience conventions you observed that aren't in the global standards — how this codebase pools connections, paginates, handles retries, structures transactions, etc.
+Skip this section on scoped re-reviews. After a first review, update `STANDARDS.md` in the project root (create it if it doesn't exist) with any project-specific efficiency, reliability, or resilience conventions you observed that aren't in the global standards — how this codebase pools connections, paginates, handles retries, structures transactions, etc.
 
 Format for new entries:
   ## [Category]
