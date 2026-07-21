@@ -58,9 +58,13 @@ Non-`flag:`/`critical:` items skip this entirely — the Engineer designs and bu
 
 ## Spawn template (shared)
 
-Spawn each agent with the `Agent` tool using this prompt:
+Spawn each agent with the `Agent` tool, setting:
+- `subagent_type: "dt-[AGENT]"` — e.g. `"dt-engineer"`, `"dt-qa"`, `"dt-fix"`, `"dt-review"`, `"dt-analyze"`, `"dt-ui"` (the harness injects the agent's instructions automatically; no skill-file read needed in the prompt)
+- `model: "[MODEL]"` — from the "Model & effort selection" table above
 
-> Read `~/.claude/skills/dt-[AGENT]/skill.md` for your full instructions. Your task: [TASK + `done when:` criteria]. Use model [MODEL] at [EFFORT] effort (pick both from "Model & effort selection"; set effort with the thinking keyword — medium = `think`, high = `think hard`, minimal = none).
+Use this prompt:
+
+> Your task: [TASK + `done when:` criteria]. Effort: [EFFORT] (thinking keyword — medium = `think`, high = `think hard`, minimal = none).
 > [QA only:] Gate mode: [GATE MODE].
 > [After the first agent:] Work on existing branch [branch-name] — do NOT create a new worktree. [Omit this line on the very first agent of the session — it creates the worktree.]
 >

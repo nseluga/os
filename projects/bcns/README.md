@@ -3,7 +3,7 @@ name: bcns
 status: active
 priority: high
 last_active: 2026-07-21
-next_step: "Platform hosting architecture LOCKED via grilling session (2026-07-21): per-client systemd isolation, CI artifact deploys, shadow-DB migration gate, contract backup to DO Spaces. Deployed code: bcns/infra/ (bootstrap + onboard scripts), unified deploy.yml pipeline in template + client repos, all propagated and committed. Next: provision the first real DO droplet with infra/bootstrap.sh, rehearse the rebuild-from-scratch flow, and test end-to-end before client one goes live. Outstanding: Supabase CLI flag names + GitHub Packages token scoping from client repos surface when you run infra/bootstrap.sh. Marketing site follow-ups still deferred: mobile/reduced-motion spot-check on layout-loop animations, copy gaps (founder photos, testimonials), @nseluga→@bcns org migration."
+next_step: "Two branch sets await Nate. (1) Template split (2026-07-21): publish @nseluga/app-core@0.2.0 (agent permission-blocked), merge worktree-template-split (bcns) + skeleton-split-onmain (bcns-app-template), then refresh the template lockfile and smoke-test /new-client-repo with a throwaway slug. (2) Hosting architecture LOCKED same day: per-client systemd isolation, CI artifact deploys, shadow-DB migration gate, contract backup to DO Spaces — code in bcns/infra/ + unified deploy.yml, committed locally but UNPUSHED (gh token needs `gh auth refresh -s workflow` to push workflow files; SSH to GitHub blocked on this network — push via https URL). Next: provision the first real DO droplet with infra/bootstrap.sh and rehearse rebuild-from-scratch before client one goes live. Marketing site follow-ups still deferred: mobile/reduced-motion spot-check, copy gaps (founder photos, testimonials), @nseluga→@bcns org migration."
 repo: ~/bcns
 github: https://github.com/nseluga/bcns
 summary: "Software studio (Nate + Brandon Chung) — platform repo: marketing site plus shared @nseluga/* packages and the hosted-web client template. Client apps live in their own repos."
@@ -33,6 +33,15 @@ in its own project entries — **bcns-client-coventry** (first hosted-web client
 in scoping; client-specific overrides layered on the platform defaults) and
 **bcns-client-delucas** (maintenance). This entry now covers only the platform:
 shared packages, the template, and the marketing site.
+
+The template purpose split landed on branches (2026-07-21): **packages = all
+shared logic** (app-core 0.2.0 absorbed the template's health probe, webhook
+pipeline, storage interface, and AI opt-in gate — fixes now propagate by version
+bump), **template = pure runnable skeleton** with a `TEMPLATE.md` manifest of
+customization points, and the new **`/new-client-repo` skill**
+(`~/os/skills/new-client-repo/`) creates + stamps + verifies client repos from
+it. The stale in-repo `templates/hosted-web/` copy is deleted on that branch —
+`bcns-app-template` is canonical.
 
 The marketing site (`apps/web`) got a full **visual/animation pass** (2026-07-20,
 "Bold, executed with precision" via `/layout-loop`, merged to `main`): a Fraunces
