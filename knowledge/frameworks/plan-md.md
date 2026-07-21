@@ -107,6 +107,37 @@ Layout-loop updates this in place.
 
 ---
 
+## The preamble (context above the items)
+
+Everything above the first item block (`- task:` for dev-team, the plan-level
+`brand:`/`launch:`/`url:` metadata or first `- page:` for layout-loop) is an
+optional **preamble**: orientation the orchestrator reads for global guidance
+but does not execute as an item. Recommended by default for every file-based
+PLAN.md; the only thing that varies is depth. Skip it only for a throwaway
+inline/TASK.md task.
+
+The loop reads top-to-bottom and is LLM-driven, so a clearly-separated preamble
+is safe — but keep the items unambiguous: start each with the exact `- task:` /
+`- page:` block format, and never put an executable item inside the preamble.
+Close the preamble with a `---` rule before the first item.
+
+**Shape (all parts optional, scale to the plan):**
+- An H1 title.
+- A one-to-three-line **Status / where-it-stands** — what's done, what's next,
+  any blocker. Mirrors the project README's stance so a reader orients fast.
+- A short **Global rules / conventions** block: constraints that apply to *every*
+  item and that the agent must respect (stack limits, voice rules, "AI is
+  enhancement-only", accuracy rules). These are the rubric the loop carries into
+  each item — not per-item criteria.
+- A **pointer** to fuller context (`CLAUDE.md`, README, a reference file) rather
+  than duplicating it. The preamble is a lean orientation; the exhaustive spec
+  lives in the auto-loaded `CLAUDE.md` or the project README. Duplicated context
+  drifts — link, don't copy.
+
+The item list remains the contract; the preamble only frames it. Keep it short
+enough that it never competes with the items for attention. (The examples below
+omit the preamble for brevity — a real file should carry one.)
+
 ## The stop marker
 
 ```markdown

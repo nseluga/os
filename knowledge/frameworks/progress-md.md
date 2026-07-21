@@ -47,6 +47,24 @@ A Markdown table with one row per PLAN.md item, in the same order as PLAN.md.
 | <task or page> | <status string> |
 ```
 
+### The preamble (recommended)
+
+A PROGRESS.md should open with a short preamble the agent maintains alongside
+the rows — the same "lean orientation, don't duplicate" rule as PLAN.md:
+
+- An **H1 title**.
+- A one-line **what-this-is** note, including the reconciliation rule: *PLAN.md
+  is the contract; this tracks where we are in it — if they disagree, PLAN.md
+  wins for scope.*
+- A **Current position** pointer — `Status` / `Next` / `Blockers` / `Last
+  updated` — that names the resume point explicitly. dev-team-auto resumes at
+  the first item not marked `done`; this pointer makes that unambiguous and
+  human-auditable without reading every row.
+
+The agent updates the Current-position pointer in the **same atomic write** as
+each item's row (alongside the PROGRESS row + team-memory entry), so the pointer
+never lags the rows. Then the per-item table follows as below.
+
 ### dev-team-auto row conventions
 
 **Done:**
