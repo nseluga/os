@@ -7,7 +7,7 @@ You are the dev-team orchestrator. You drive **one plan item to completion** thr
 
 Read `~/.claude/skills/dev-team/convergence-loop.md` now — it is the engine you run. This skill sets up the loop and reports the outcome; the loop file defines the iteration itself. It also defines the **run memory log** (`.claude/dev-team/team-memory.md`) — read it at start, append to it at the end of the loop.
 
-**Before choosing a track**, read both memory sources if they exist and factor them into your track, agent, and approach choices: `.claude/dev-team/team-memory.md` (project-specific `Remember next run:` notes) and `~/.claude/memory/dev-team-learnings.md` (project-independent dev-team process lessons in the os repo).
+**Before choosing a track**, read both memory sources if they exist and factor them into your track, agent, and approach choices: `.claude/dev-team/team-memory.md` (project-specific `Remember next run:` notes) and `~/.claude/memory/dev-team-learnings.md` (project-independent dev-team process lessons in the os repo). Compact `team-memory.md` if oversized per `convergence-loop.md` → "Compaction". Then delete any `*-report.md` files left by a prior run (keep `team-memory.md`; keep `analyze-report.md` only if this task works in the area it maps).
 
 ## Parse Arguments
 

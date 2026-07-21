@@ -13,7 +13,7 @@ Read these in parallel before doing anything else:
 1. `PLAN.md` — the full plan, execution order, and any stop markers
 2. `PROGRESS.md` — find the first item that is NOT marked `done`; that is where you start
 3. `.claude/dev-team/engineer-report.md` if it exists — get the branch name if a prior session already created a worktree
-4. `.claude/dev-team/team-memory.md` if it exists — the project-specific cross-run log; factor its `Remember next run:` notes into your track and approach choices (flaky suites, build flags, dead-end approaches to avoid, etc.)
+4. `.claude/dev-team/team-memory.md` if it exists — the project-specific cross-run log; factor its `Remember next run:` notes into your track and approach choices (flaky suites, build flags, dead-end approaches to avoid, etc.). After reading, compact it if oversized per `convergence-loop.md` → "Compaction".
 5. `~/.claude/memory/dev-team-learnings.md` if it exists — the project-independent dev-team process lessons in the os repo; apply them to your track/model/approach choices for any repo
 
 Also run `git branch --show-current` and save the result as the **working branch** — you'll merge the worktree branch back into it at shutdown.
@@ -43,6 +43,8 @@ First decide **how much of the team runs** (rigor), then which *optional* agents
 Model and effort per agent follow the **Model & effort selection (shared)** table in `convergence-loop.md` (Sonnet default; full-track engineer high-effort; QA medium; review high-effort — Opus on the engineer, fixer, and review for `flag:` items; Fable at medium effort for `critical:` items).
 
 ### 3. Run the convergence loop for the item
+
+Before spawning the item's first agent, apply `convergence-loop.md` → "Report hygiene between items": delete the prior item's `*-report.md` files (keep `team-memory.md`; keep `analyze-report.md` only if this item works in the area it maps).
 
 Run the loop from `convergence-loop.md`, with:
 - **gate mode: `tests+behavioral`** — QA writes and runs tests AND exercises the running path (hit the endpoint / render the surface), plus a **live smoke pass** against a real server + real dev DB (not mocks) for any item touching routes/models/migrations/serialization. This run is unattended with no human to catch a mocked-green/live-broken gap, so the un-mocked smoke pass is required.

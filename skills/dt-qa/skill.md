@@ -43,6 +43,8 @@ Turn the item's `done when:` criteria into concrete, checkable assertions. Every
 
 Execute the suite (or the targeted subset for this item) and capture the real result — pass counts, failures, and the failing assertions verbatim. Never infer a result you didn't run.
 
+**Confirmation re-runs are scoped.** If the orchestrator gives you a scope (or a `fix-report.md` exists), run only the previously-failing checks plus tests covering the files in the fix report's Changes Made. Repeat the live smoke pass only if the fix touched routes, models, migrations, or serialization.
+
 **In `tests+behavioral` mode**, also exercise the live path in a scriptable, non-interactive way:
 - Backend: start the app (or use its test client) and hit the affected endpoint(s); assert status codes and response shape against the criteria.
 - Frontend: render the affected component/screen in the test environment and assert the criteria-relevant output; if a full render isn't feasible headless, say so and fall back to the unit assertions.

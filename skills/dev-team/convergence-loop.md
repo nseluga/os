@@ -1,8 +1,6 @@
 # Convergence Loop (per plan item)
 
-The shared engine behind `/dev-team` and `/dev-team-auto`. A plan item is **done only when the QA gate passes** — the loop hammers one item until it works as specified or the attempt cap is hit. This file is the single source of truth for the loop; both orchestrators reference it so they behave identically.
-
-The sections below marked **(shared)** — track classification, model selection, and the spawn template — are identical for both orchestrators; each orchestrator references them here instead of restating them, and adds only its own divergent parameters (interactivity, gate mode, PROGRESS.md handling). **The loop** and everything after it define the **`full`-track** engine only; the lighter tracks defined under Track classification do not enter it.
+The shared engine behind `/dev-team` and `/dev-team-auto`. A plan item is **done only when the QA gate passes** — the loop hammers one item until it works as specified or the attempt cap is hit. This file is the single source of truth for the loop. Sections marked **(shared)** apply to both orchestrators; **The loop** and everything after it define the `full`-track engine only.
 
 ## Track classification (shared)
 
@@ -21,11 +19,11 @@ Before running anything, pick a rigor track per item — how much of the team ru
 
 `flag:` (Opus escalation) and `critical:` (Fable escalation — for items where a defect is catastrophic or irreversible: auth systems, cryptography, authorization, PII/PHI handling, financial transactions, production data integrity) are item-level markers that compose with any track above `trivial`. Use `critical:` when the blast radius of a missed defect makes Opus insufficient. `dt-ui` also composes with any track above `trivial`.
 
-**`dt-analyze` runs by default, once, before the loop for any `full`-track item that spans multiple files** (and for any unfamiliar area on any track). Skip it only for single-file items. Its `analyze-report.md` map is then injected into every agent (see Spawn template) so no agent re-explores the codebase — each spawned agent otherwise cold-starts and re-derives structure from scratch, which is the dominant hidden cost of a multi-agent run. One shared map amortizes that exploration across the whole team.
+**`dt-analyze` runs by default, once, before the loop for any `full`-track item that spans multiple files** (and for any unfamiliar area on any track). Skip it only for single-file items. Its `analyze-report.md` map is then injected into every agent (see Spawn template) so no agent re-explores the codebase.
 
 ## Model & effort selection (shared)
 
-Every agent is spawned with a **model** and an **effort** level. Model goes in the spawn template's `[MODEL]` slot. Effort is not a spawn parameter, so express it in the agent's prompt as a reasoning-depth directive / thinking keyword: **minimal** (none — mechanical work), **medium** (`think` — proportionate reasoning), **high** (`think hard` — reason through edge cases, alternatives, and failure modes first). Spend the capable-model / high-effort budget only where a mistake is expensive or hard to catch downstream; keep the cheap default everywhere else.
+Every agent is spawned with a **model** and an **effort** level. Model goes in the spawn template's `[MODEL]` slot. Effort is not a spawn parameter, so express it in the agent's prompt as a reasoning-depth directive / thinking keyword: **minimal** (none — mechanical work), **medium** (`think` — proportionate reasoning), **high** (`think hard` — reason through edge cases, alternatives, and failure modes first).
 
 Starting model + effort by role (the escalation ramp in Efficiency rules raises these on repeated failure — they are starting points, not ceilings):
 
@@ -35,22 +33,21 @@ Starting model + effort by role (the escalation ramp in Efficiency rules raises 
 | `dt-engineer` — **light** track | Sonnet | medium | one file, bounded blast radius |
 | `dt-engineer` — **full** track | Sonnet | **high** | build quality sets how many review/fix cycles you pay for later |
 | `dt-engineer` / `dt-fix` — **`flag:`** item | Opus | high | security / money / data-path — worth the top tier |
-| `dt-engineer` / `dt-fix` — **`critical:`** item | Fable | medium | catastrophic blast radius (auth, crypto, PII, financial, prod data integrity) — Fable's deeper reasoning catches subtle defects Opus misses; medium effort suffices given the model ceiling |
+| `dt-engineer` / `dt-fix` — **`critical:`** item | Fable | medium | catastrophic blast radius (see `critical:` above) — Fable catches subtle defects Opus misses |
 | `dt-qa` | Sonnet | medium | keep the gate on a reasoning model: it judges coverage and classifies bug vs design-level (which steers the whole loop). **Never below Sonnet** — a weak gate passes broken code with false confidence. |
-| `dt-review` — **full**, non-`flag:` | Sonnet | high | highest-value gate; on Patio, Sonnet review already caught the unauth endpoint, the TOCTOU race, and the table dump that QA passed |
+| `dt-review` — **full**, non-`flag:` | Sonnet | high | highest-value gate |
 | `dt-review` — **`flag:`** item | Opus | high | maximum scrutiny where a missed defect is catastrophic |
-| `dt-review` — **`critical:`** item | Fable | medium | irreversible defect risk — Fable for maximum security and reliability scrutiny; medium effort suffices given the model ceiling |
+| `dt-review` — **`critical:`** item | Fable | medium | maximum scrutiny on irreversible defect risk |
 | `dt-fix` — bug-class fix | Sonnet | medium | applying an already-diagnosed fix |
 | `dt-fix` — applying Critical/Important findings, or `flag:` | Opus | high | sensitive changes; match the builder tier |
 | `dt-fix` — applying findings on a **`critical:`** item | Fable | medium | match the builder tier on catastrophic-risk items |
-
-Review runs only on `full`-track items, so its spend is self-limiting to the items that earn it.
 
 ## Design exploration (flag: and critical: items)
 
 For a `flag:` or `critical:` item, the right architecture is worth proving before it's built. **Before the first Engineer build only:**
 
-1. Spawn 2–3 **design-only** subagents in parallel (`flag:` → `claude-opus-4-8`; `critical:` → `claude-fable-5`), each producing a short design sketch — architecture, key interfaces, data model, and the efficiency, reliability, and scalability tradeoffs of that approach. No code, no worktree.
+0. **Gauge the design space.** If the item has one clearly-shaped approach — constrained by existing patterns, an established interface, or a plan that already prescribes the architecture — spawn **one** design sketch. Reserve 2–3 parallel sketches for genuinely competing architectures (different data models, module boundaries, or consistency tradeoffs).
+1. Spawn the design-only subagent(s) per step 0 (`flag:` → `claude-opus-4-8`; `critical:` → `claude-fable-5`), each producing a short design sketch — architecture, key interfaces, data model, and the efficiency, reliability, and scalability tradeoffs of that approach. No code, no worktree.
 2. Pick the winning sketch on the item's priorities — efficiency, reliability, and scalability first — and record the choice and why in one line.
 3. Hand the winning sketch to the Engineer as the design to implement; it builds that one approach.
 
@@ -135,32 +132,26 @@ loop:
       mark DONE; break
   else:
       run dt-fix                 # apply Critical + Important
+      if orchestrator judges every applied finding mechanical AND non-security:
+          run dt-qa (scoped)     # confirm on the fixed surfaces only — see Efficiency rules
+          if VERDICT == PASS: mark DONE; break    # no second full review pass
       attempt += 1
       if attempt > MAX_ATTEMPTS: mark BLOCKED; break
-      # loop back — the next pass re-runs QA to confirm the fixes hold
+      # loop back — the next pass re-runs QA and dt-review to confirm the fixes hold
 ```
 
-### Why this order
-
-- **Correctness before quality.** Never spend a `dt-review` pass optimizing code that doesn't pass QA — fix it until QA is green, then review once. This keeps the loop cheap.
-- **Fix vs. alternatives.** The Bug Fixer patches bugs and applies findings. On a design-level failure (the approach itself can't satisfy the criterion), spawn up to 2 additional engineers with different angles — they add/modify rather than wipe. If any alternative passes QA, the loop continues to the quality gate without consuming an attempt. If none pass, one attempt is consumed and the loop restarts.
-- **The gate is binary.** An item is DONE only when `dt-qa` reports `VERDICT: PASS` **and** `dt-review` finds nothing Critical or Important. Minor findings are applied but don't block the exit.
+**Mechanical-fix shortcut (orchestrator's call):** *mechanical* = the review prescribed the exact fix and applying it took no design judgment (add an index, add a timeout, hoist work out of a loop, paginate a fetch) — judge from the fix report's Changes Made. Any security finding, Critical, disputed/deferred finding, or fix that rippled beyond the cited lines → full loop-back with a fresh review. When unsure, loop back.
 
 ## Efficiency rules
 
-- **Pass reports forward.** Every agent receives the existing `.claude/dev-team/*.md` reports so it never re-derives context already established this loop.
-- **Report discipline (output tokens are the expensive class — ~5× input).** Each agent's report is the context bridge to the next agent: make it dense, not long. Every `dt-*` report must follow this shape (the dt-* skills' own report templates already match it — this is the shared enforcement):
-  - **Machine-readable lines first.** Lead with exactly the lines the orchestrator routes on — `## VERDICT: PASS|FAIL`, `**Branch:** …`, findings tagged by severity — so routing never has to scan prose.
-  - **Findings only.** No restating the task, no narrating steps taken, no pasting code or diffs the reader already has in the worktree. State conclusions, not the path to them.
-  - **One line per item.** Each finding / file / criterion is a single line, e.g. `SEVERITY — path:line — what's wrong — the fix`. No paragraphs, no sub-bullets.
-  - **Hard cap: ≤40 lines** (excluding the required header lines). Over cap: keep the highest-severity items, drop the rest, and end with `(N more Minor omitted)`.
-  - **No preamble or sign-off.** No "I analyzed…", "In summary…", or closing notes.
+- **Report discipline.** Every `dt-*` report: machine-readable lines first (`## VERDICT: PASS|FAIL`, `**Branch:** …`, severity-tagged findings), findings only, one line each (`SEVERITY — path:line — what's wrong — the fix`), **hard cap ≤40 lines** (over cap: keep highest severity, end with `(N more Minor omitted)`), no preamble/sign-off. The dt-* skills' own report templates already match this.
 - **Escalate before you loop (effort → model → stop).** Read the QA Root Cause each attempt and compare it to the previous one. When the same Root Cause survives a fix, do not just re-run the same build at the same power:
   1. **First recurrence** → re-run the builder (`dt-fix`/`dt-engineer`) at **one higher effort** on the same model (raise `think` → `think hard`).
   2. **Still the same cause, or a design-level cause** → escalate the builder **one model tier** (Sonnet → Opus) for the next build.
   3. **Already at Opus and the same cause persists** → escalate to **Fable** for one final build attempt. If Fable also fails, mark **BLOCKED** — the ceiling is reached.
-  This turns a blind retry into a capability ramp, and composes with the hard floor below.
 - **Detect a stuck loop.** If a BUILD step reports "nothing to change" yet QA still FAILs, the loop cannot converge — mark BLOCKED immediately rather than burning the remaining attempts.
+- **Scope QA confirmation passes to the fixed surfaces.** First-attempt QA runs the item's full check set. Re-gating after a fix runs only the previously-failing checks plus tests covering the files in the fix report's Changes Made; repeat the live smoke pass only if the fix touched routes/models/migrations/serialization. State the scope in QA's spawn prompt; widen it at your discretion if a fix looks like it could ripple.
+- **Report hygiene between items.** Before spawning the first agent of a new item, delete the previous item's `.claude/dev-team/*-report.md` files. Always keep `team-memory.md`; keep `analyze-report.md` only if the new item works in the area it maps. The spawn template's "Reports present so far" list names only current-item reports.
 - **One worktree per item (normally).** Whichever agent runs first creates the worktree. On a design-level failure, each alternative gets its own branch forked from the current item branch (e.g. `feat/x-alt-1`, `feat/x-alt-2`) — failed alternative branches can be left or deleted, but the original and the winning branch must be kept. After an alternative passes, pass `winning_branch` to every later agent instead of the original branch name.
 
 ## Outcomes
@@ -175,7 +166,16 @@ Each item ends in exactly one of:
 The team keeps a persistent, cross-run memory at **`.claude/dev-team/team-memory.md`** in the working repo. Unlike the per-run `*-report.md` files (overwritten each item), this file **accumulates** — it is how the next run learns from this one.
 
 - **At the start of a run**, both orchestrators read this file if it exists and factor its `Remember next run:` notes into track/agent choices (e.g. a flaky test suite, a build command that needs a flag, an approach that failed before). If it does not exist, create it with a `# Dev-team memory log` header on first write.
-- **The moment an item resolves** — DONE or BLOCKED, *every* item, *every* track — append one entry **in the same step that records the item's outcome** (the PROGRESS.md write for `/dev-team-auto`; the final report for `/dev-team`). Ride it on the outcome-recording action that already fires reliably every item — do **not** defer it to shutdown. Deferred, it does not get written: by end of run the orchestrator is hundreds of lines past this instruction, which is why past runs left no `team-memory.md` at all. Append only; never rewrite prior entries.
+- **The moment an item resolves** — DONE or BLOCKED, *every* item, *every* track — append one entry **in the same step that records the item's outcome** (the PROGRESS.md write for `/dev-team-auto`; the final report for `/dev-team`). Never defer it to shutdown — deferred, it does not get written. Append only; never rewrite prior entries (exception: compaction, below).
+
+### Compaction (at run start, orchestrator's discretion)
+
+At the start of a run, after reading the log, compact it if it has grown past what its content earns — roughly 12–15 entries, or sooner if many entries cover subjects unrelated to the current plan. To compact:
+
+1. Distill every entry's still-true `Remember next run:` notes into a deduplicated `## Standing notes` section at the top of the file (create if absent) — one bullet per fact (build flags, flaky suites, run commands, dead-end approaches). Drop notes that are obsolete or one-off.
+2. Keep the last ~5 raw entries under `## Recent runs`; delete the rest.
+
+Compaction rewrites the file — it is the only permitted rewrite.
 
 Entry format:
 
@@ -197,22 +197,7 @@ Every loop's takeaway splits into two kinds of lesson. Route each to the right p
 - **Project-specific findings → `.claude/dev-team/team-memory.md`** (the log above, in the working repo). Anything tied to *this* codebase: a flaky suite, a build/test command with a needed flag, a module's quirks, an approach that failed *here*. This is the default; when in doubt, keep it project-local.
 - **Project-independent learnings → the global os memory at `~/.claude/memory/dev-team-learnings.md`.** Only lessons that generalize to the dev-team process in *any* repo: orchestration patterns, when a track/model choice paid off or backfired, QA/test or review tactics that reliably converge, agent-prompting improvements, recurring failure modes of the loop itself. These make the *team* better everywhere, not just this repo.
 
-Writing the global file (follow the memory system's format — one managed fact file, appended over time):
+Writing the global file:
 
-- **At start of a run**, read `~/.claude/memory/dev-team-learnings.md` if it exists and apply its lessons to your track/model/approach choices. (Its one-line pointer is already in the auto-loaded `MEMORY.md` index, but the detail lives in the fact file — read it.)
-- **At end of a loop**, if the run produced a genuinely generalizable lesson, append a dated bullet to that file. If the file doesn't exist, create it with this frontmatter and add a one-line pointer to `~/.claude/memory/MEMORY.md`:
-
-  ```
-  ---
-  name: dev-team-learnings
-  description: Generalizable /dev-team + /dev-team-auto process learnings — orchestration, track/model, QA/test, and review patterns that apply across any repo
-  metadata:
-    type: reference
-  ---
-
-  Cross-project lessons from dev-team runs. Project-specific findings stay in each repo's `.claude/dev-team/team-memory.md`.
-
-  - <YYYY-MM-DD> <lesson> — **Why:** <what it prevents/enables>. **How to apply:** <what to do next time>.
-  ```
-
-  Be conservative: most loops yield *no* global learning — only append when the lesson would change how a future run behaves in a different repo. Don't duplicate an existing bullet; sharpen it instead. Never dump project-specific detail here.
+- **At start of a run**, read `~/.claude/memory/dev-team-learnings.md` and apply its lessons to your track/model/approach choices.
+- **At end of a loop**, if the run produced a genuinely generalizable lesson, append a dated bullet: `- <YYYY-MM-DD> <lesson> — **Why:** … **How to apply:** …`. Be conservative: most loops yield *no* global learning — only append when the lesson would change a future run in a *different* repo. Don't duplicate an existing bullet; sharpen it instead. If the file has grown past ~30 bullets, merge overlapping bullets and delete any invalidated ones while you're in it.

@@ -14,6 +14,8 @@ Read these in parallel:
 4. Your standards: `~/.claude/skills/dev-team/review-standards.md` — the six sections you apply (Efficiency, Reliability, Scalability, Safety & Security, Observability, Fault Tolerance), extracted from the full standards files so you load only what you review against
 5. `STANDARDS.md` in the project root if it exists — project-specific conventions that extend the global standards
 
+**Re-reviews are scoped:** if a `fix-report.md` exists and you have already reviewed this item, review only the files in its Changes Made — confirm the fixes, don't re-open the whole diff.
+
 **Out of scope:** naming, style, code organization, comment quality, and architectural redesign. Do not flag these unless they cause a measurable efficiency, reliability, or security problem.
 
 ## Review
