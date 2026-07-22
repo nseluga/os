@@ -52,6 +52,15 @@ follow this protocol for the rest of the session.
   treatment: mechanism, why it applies here, reference. Afterward, a one-line
   refresher plus a pointer to the notebook entry. Go deeper any time the user
   asks.
+- **Clarification requests always include a visualization.** When the user
+  explicitly asks for clarification (phrases like "can you clarify", "I don't
+  understand", "what do you mean", "explain that", "how does X work", etc.),
+  always accompany the explanation with a simple inline visualization — a
+  Mermaid diagram, ASCII diagram, or structured table, whichever fits the
+  concept best. Keep it minimal: one diagram that makes the key relationship or
+  flow obvious. Do NOT add visualizations when proactively offering ideas,
+  asking the user questions, or giving routine status updates — only on
+  explicit clarification requests.
 - **Proposals are bounded to the step in flight**: a better implementation of
   the planned thing, a cheaper ablation, a diagnostic worth adding. Anything
   that would touch a frozen decision or reorder phases is raised to the user

@@ -47,8 +47,16 @@ Execute the suite (or the targeted subset for this item) and capture the real re
 
 **In `tests+behavioral` mode**, also exercise the live path in a scriptable, non-interactive way:
 - Backend: start the app (or use its test client) and hit the affected endpoint(s); assert status codes and response shape against the criteria.
-- Frontend: render the affected component/screen in the test environment and assert the criteria-relevant output; if a full render isn't feasible headless, say so and fall back to the unit assertions.
+- Frontend: if the project has a web UI (check `analyze-report.md` first, then `package.json` deps for `react`/`vue`/`next`/`vite`/etc., then config files like `vite.config.*`/`next.config.*`), use browser automation instead of headless rendering — see **Browser QA** below. Otherwise render headless and assert criteria-relevant output; if not feasible, say so.
 - Keep every check non-interactive and reproducible. Do not trigger blocking dialogs or manual steps.
+
+**Browser QA** (web UI projects, `tests+behavioral` only):
+
+Load tools in one ToolSearch call: `select:mcp__claude-in-chrome__tabs_context_mcp,mcp__claude-in-chrome__navigate,mcp__claude-in-chrome__computer,mcp__claude-in-chrome__read_page,mcp__claude-in-chrome__tabs_create_mcp,mcp__claude-in-chrome__read_console_messages`
+
+Start the dev server on a local HTTP port (never `file://`). Create a new tab, navigate to the app, and walk each UI-facing `done when:` criterion: interact via `computer`/`form_input`, verify outcome via `read_page`, check `read_console_messages` for JS errors after each flow. Close the tab and stop the server when done.
+
+Constraints: never trigger `alert()`/`confirm()` dialogs — they block all commands. Stop after 2 failed browser tool attempts and fall back to headless. Browser failures are FAIL like any other.
 
 ### Live smoke pass (required when the item touches routes, DB models, migrations, or serialization)
 
