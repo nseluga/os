@@ -25,6 +25,7 @@ Hunt specifically for:
 - **Scalability**: unpaginated collection endpoints, per-request DB connections, global mutable state, slow synchronous work in request handlers, anything that degrades as users or data grow
 - **Reliability**: unhandled failure paths, missing timeouts on external calls, non-idempotent writes that may be retried, swallowed exceptions, unchecked return values, missing transaction boundaries around multi-step writes
 - **Security**: string-interpolated SQL, missing or late auth checks, unsanitized user content, secrets in code
+- **Over-engineering**: abstractions with one implementation, config for constants, new dependencies replaceable by a few lines, speculative generalization, dead flexibility. Always **Minor** — never gates the loop. A `ponytail:` comment on a line marks an explicitly accepted tradeoff; flag its ceiling as Minor only unless it violates Security or Reliability standards.
 
 For each finding:
 - Cite the exact file and line number

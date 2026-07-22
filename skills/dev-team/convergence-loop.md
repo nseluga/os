@@ -32,6 +32,7 @@ Starting model + effort by role (the escalation ramp in Efficiency rules raises 
 | `dt-analyze` | Sonnet (Haiku for its `Explore` fan-out, per its skill) | medium | broad mapping, not deep reasoning |
 | `dt-engineer` — **light** track | Sonnet | medium | one file, bounded blast radius |
 | `dt-engineer` — **full** track | Sonnet | **high** | build quality sets how many review/fix cycles you pay for later |
+| `dt-engineer` — **full** track, open design space | Opus sketch (1 agent) → Sonnet implement | high | Opus buys the design decisions; Sonnet types the code — see Design exploration Tier 1 |
 | `dt-engineer` / `dt-fix` — **`flag:`** item | Opus | high | security / money / data-path — worth the top tier |
 | `dt-engineer` / `dt-fix` — **`critical:`** item | Fable | medium | catastrophic blast radius (see `critical:` above) — Fable catches subtle defects Opus misses |
 | `dt-qa` | Sonnet | medium | keep the gate on a reasoning model: it judges coverage and classifies bug vs design-level (which steers the whole loop). **Never below Sonnet** — a weak gate passes broken code with false confidence. |
@@ -42,16 +43,19 @@ Starting model + effort by role (the escalation ramp in Efficiency rules raises 
 | `dt-fix` — applying Critical/Important findings, or `flag:` | Opus | high | sensitive changes; match the builder tier |
 | `dt-fix` — applying findings on a **`critical:`** item | Fable | medium | match the builder tier on catastrophic-risk items |
 
-## Design exploration (flag: and critical: items)
+## Design exploration
 
-For a `flag:` or `critical:` item, the right architecture is worth proving before it's built. **Before the first Engineer build only:**
+**Before the first Engineer build only.** Gauge first — run the matching tier only when design space is open.
 
-0. **Gauge the design space.** One clearly-shaped approach (constrained by existing patterns, an established interface, or a plan-prescribed architecture) = **narrow**: skip separate design agents — the Engineer sketches its design then builds, one spawn. Genuinely competing architectures (different data models, module boundaries, or consistency tradeoffs) = **open**: continue below.
-1. Spawn 2–3 design-only subagents in parallel (`flag:` → `claude-opus-4-8`; `critical:` → `claude-fable-5`), each producing a sketch ≤40 lines — architecture, key interfaces, data model, tradeoffs. No code, no worktree.
-2. Pick the winner on the item's priorities — efficiency, reliability, scalability — record the choice in one line.
-3. Hand it to the Engineer to implement.
+0. **Gauge the design space (all tiers).** One clearly-shaped approach (constrained by existing patterns, an established interface, or a plan-prescribed architecture) = **narrow**: skip exploration — the Engineer sketches and builds in one spawn, as today. Genuinely competing architectures (different data models, module boundaries, or consistency tradeoffs) = **open**: run the matching tier below.
 
-Non-`flag:`/`critical:` items skip this entirely — the Engineer designs and builds directly, as today. If the chosen design later fails QA at the design level, the loop's existing alternative-engineer fork (below) is the fallback.
+**Tier 1 — full-track, non-`flag:`/`critical:`, open design space:** spawn **one** design-only subagent on `claude-opus-4-8`, effort high; output a single sketch ≤30 lines — architecture, key interfaces, data model, tradeoffs, edge cases the implementation must handle. No code, no worktree. Hand the sketch to the Sonnet Engineer verbatim in its spawn prompt; the Engineer implements the sketch rather than re-deriving the design.
+
+**Tier 2 — `flag:`/`critical:` items, open design space:** spawn 2–3 design-only subagents in parallel (`flag:` → `claude-opus-4-8`; `critical:` → `claude-fable-5`), each producing a sketch ≤40 lines — architecture, key interfaces, data model, tradeoffs. No code, no worktree. Pick the winner on the item's priorities — efficiency, reliability, scalability — record the choice in one line. Hand it to the Engineer to implement.
+
+Light/trivial tracks: no design exploration.
+
+If the chosen design later fails QA at the design level, the loop's existing alternative-engineer fork (below) is the fallback.
 
 ## Spawn template (shared)
 
@@ -95,9 +99,12 @@ loop:
   # 1+2. BUILD + CORRECTNESS GATE (paired together)
 
   if attempt == 1:
-      if item has a flag: field:
-          run design exploration → winning sketch   # see "Design exploration (flag: items only)"
-          run dt-engineer with the winning sketch   # builds the chosen approach
+      if item has a flag: or critical: field:
+          run design exploration (Tier 2) → winning sketch   # see "Design exploration"
+          run dt-engineer with the winning sketch
+      else if full-track AND design space gauged open:
+          run design exploration (Tier 1) → one Opus sketch  # see "Design exploration"
+          run dt-engineer (Sonnet) with the sketch
       else:
           run dt-engineer        # designs and implements the item
       run dt-qa                  # writes qa-report.md with VERDICT

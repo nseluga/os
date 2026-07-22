@@ -45,7 +45,7 @@ Per target page, repeat:
 
 1. **Run** the app (start the dev server once per run; reuse it across iterations).
 2. **View** — screenshot the current rendered state in the browser.
-3. **Diagnose** — identify the *single biggest* gap versus craft+brand. One gap, not a shotgun.
+3. **Diagnose** — before naming the gap, set a spatial thesis: what is the primary reading or task path? What belongs together and what must separate? Which element leads, which supports? What density and spacing rhythm is intended? Then, with that framing, identify the *single biggest* gap versus craft+brand. One gap, not a shotgun.
 4. **Adjust** — make one focused change to fix it.
 5. **Re-view** — screenshot again; compare to the previous shot.
 6. **Log** — record what changed and why (this is the commit message).
@@ -59,14 +59,16 @@ Measure each page against Nate's four goals, made checkable:
 | Goal | Check (must cite visible evidence in the screenshot) |
 |---|---|
 | **Uniquely styled to Nate** | Uses craft principles + active brand tokens; no colors/spacing outside the defined scales; cohesive with the brand's reference examples |
-| **Intuitive** | Primary action is visually dominant; nav/structure legible at a glance; clear affordances |
-| **Simple** | Visual noise minimized; every element justified; restraint — one accent earning its place, generous whitespace |
-| **Aesthetically pleasing** | Alignment to a grid, consistent spacing rhythm, balanced composition, clear hierarchy |
+| **Intuitive** | Primary action is visually dominant; nav/structure legible at a glance; clear affordances; reading and task path remains clear at every supported size |
+| **Simple** | Visual noise minimized; every element justified; one accent earning its place. Does **not** use: gradient text, glass/blur as decoration, same-size card grids of icon+heading+text as a page structure, hero-metric templates, tracked uppercase eyebrows on every section, or colored `border-left` costumes on cards. These are AI defaults, not decisions. |
+| **Aesthetically pleasing** | Squint test: with detail blurred, the primary element, secondary element, and major groups are still legible in order. Related items are close; distinct groups are separated by generous space, not containers. Tight and generous intervals create deliberate rhythm — not one spacing value repeated throughout. Depth and shadow carry offset and blur; zero-offset colored halos are decoration. |
 
 **Objective gates (hard fails — must pass before "done" is even considered):**
-- Text contrast passes WCAG AA.
-- No overflow, overlap, or clipping.
+- Text contrast ≥4.5:1 body, ≥3:1 large text (WCAG AA). On colored surfaces, tint secondary text from that hue — never generic gray.
+- No overflow, overlap, or clipping at any documented breakpoint.
 - Layout holds at mobile **and** desktop breakpoints (resize and re-view).
+- Keyboard, touch, and tab order agree with visual order.
+- Long text, empty states, and dynamic content do not break the structure.
 
 Do not claim a rubric row is satisfied without pointing to the visual evidence. No self-grading by assertion.
 

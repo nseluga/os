@@ -19,6 +19,8 @@ Work on the branch where the reviewed changes live — check the engineer report
 
 Address QA **bug** failures first — a failing acceptance criterion blocks the item from ever passing the gate — then work review findings in severity order: Critical, Important, Minor.
 
+Apply only what the reports prescribe. Prefer the existing util/pattern that makes the fix a one-liner over new code; the smallest diff that closes the finding is the right diff. Mark deliberate tradeoffs with a `ponytail:` comment (ceiling + upgrade condition).
+
 For each finding:
 - Read the cited file at the cited line
 - Apply the fix described in the review report

@@ -5,6 +5,11 @@ The sections the Optimization Reviewer applies, extracted from `code-standards.m
 (Observability, Fault Tolerance). This is the reviewer's whole standards surface —
 read this instead of the two full files. Every finding cites the section + bullet name.
 
+> MAINTENANCE: manual extraction of code-standards.md (Efficiency, Reliability,
+> Scalability, Safety & Security) + system-standards.md (Observability, Fault
+> Tolerance). Editing either source file? Update this file to match — the
+> Reviewer reads only this one.
+
 ## Efficiency
 - **No N+1 Queries** — never query inside a loop; batch before, pass results in.
 - **O(1) Lookups** — repeated membership checks use a set/dict, not a list scan.
