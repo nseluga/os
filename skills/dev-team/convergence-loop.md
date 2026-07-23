@@ -88,7 +88,7 @@ After each agent finishes, route on its report from `.claude/dev-team/` before s
 
 - `dt-engineer` — builds the item on attempt 1; on a *design-level* QA failure, up to 2 additional engineers are spawned to try alternative approaches without wiping prior work
 - `dt-qa` — writes/runs the tests (and behavioral checks), emits the **VERDICT: PASS | FAIL** gate
-- `dt-review` — quality/optimization review, only after QA is green
+- `dt-review` — quality/optimization review; its findings gate DONE only after QA is green (may run in parallel with dt-qa on attempt 1 — see Efficiency rules)
 - `dt-fix` — applies QA failures and review findings on attempts 2+
 
 ## The loop
@@ -108,6 +108,9 @@ loop:
       else:
           run dt-engineer        # designs and implements the item
       run dt-qa                  # writes qa-report.md with VERDICT
+      # full-track, non-flag:/critical: → run dt-review IN PARALLEL with dt-qa
+      # (see Efficiency rules → "Parallel first-pass review"); if QA PASSes,
+      # the quality gate below already has its review-report — skip re-running dt-review
 
   else if latest qa-report Root Cause is design-level (wrong approach / structural gap):
       # Fork a new branch per alternative so the original work is never lost
@@ -142,15 +145,23 @@ loop:
       if orchestrator judges every applied finding mechanical AND non-security:
           run dt-qa (scoped)     # confirm on the fixed surfaces only — see Efficiency rules
           if VERDICT == PASS: mark DONE; break    # no second full review pass
+      else if no security finding AND the fix did not ripple beyond the cited lines:
+          run dt-qa (scoped) ∥ dt-review (scoped)   # in parallel; review scoped to the
+                                 # fixed surfaces + any finding the fixer disputed or
+                                 # deviated from (same model tier as the original review)
+          if VERDICT == PASS and no new Critical/Important: mark DONE; break
       attempt += 1
       if attempt > MAX_ATTEMPTS: mark BLOCKED; break
-      # loop back — the next pass re-runs QA and dt-review to confirm the fixes hold
+      # loop back — the next pass re-runs full QA and dt-review (security findings and
+      # rippling fixes always take this path)
 ```
 
 **Mechanical-fix shortcut (orchestrator's call):** *mechanical* = the review prescribed the exact fix and applying it took no design judgment (add an index, add a timeout, hoist work out of a loop, paginate a fetch) — judge from the fix report's Changes Made. Any security finding, Critical, disputed/deferred finding, or fix that rippled beyond the cited lines → full loop-back with a fresh review. When unsure, loop back.
 
 ## Efficiency rules
 
+- **Parallel first-pass review.** On attempt 1 of a **full-track, non-`flag:`/`critical:`** item, spawn dt-review in the same message as dt-qa — review needs the code, not the verdict. If QA PASSes, the quality gate uses the already-written review-report (no second review spawn). If QA FAILs, the review-report is stale — delete it and revert to sequential (review after QA) for that item's remaining attempts. Keep `flag:`/`critical:` items sequential (an Opus/Fable review wasted on failing code is too expensive a bet), and skip the parallel spawn when team-memory shows the repo's first-attempt pass rate is poor.
+- **Inject relevant learnings into builder prompts.** When an item matches a failure family recorded in `~/.claude/memory/dev-team-learnings.md` (money, RLS/auth, migrations, Next.js rendering/actions, content sweeps, …), paste the 3–5 matching bullets verbatim into the dt-engineer and dt-fix spawn prompts under a "Known failure modes — avoid these:" header. A few hundred tokens per spawn; a defect prevented at build time is ~3 agents cheaper than one caught at review. Don't paste the whole file — matching bullets only.
 - **Report discipline.** Every `dt-*` report: machine-readable lines first (`## VERDICT: PASS|FAIL`, `**Branch:** …`, severity-tagged findings), findings only, one line each (`SEVERITY — path:line — what's wrong — the fix`), **hard cap ≤40 lines** (over cap: keep highest severity, end with `(N more Minor omitted)`), no preamble/sign-off. The dt-* skills' own report templates already match this.
 - **Escalate before you loop (effort → model → stop).** Read the QA Root Cause each attempt and compare it to the previous one. When the same Root Cause survives a fix, do not just re-run the same build at the same power:
   1. **First recurrence** → re-run the builder (`dt-fix`/`dt-engineer`) at **one higher effort** on the same model (raise `think` → `think hard`).

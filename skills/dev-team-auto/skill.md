@@ -37,6 +37,8 @@ If the current item sits at or past a PLAN.md line beginning with `> **⚠️ AU
 
 Do not read the inner agents' reports yourself — the returned line is your record.
 
+**`parallel-group:` items** — consecutive items sharing the same `parallel-group:` value (an explicit PLAN.md marker; never infer independence yourself) run concurrently: spawn their item orchestrators (up to 3) in a single message. Each orchestrator's prompt replaces the branch line with: "Create your own worktree branch forked from [branch name]; report it back." Additionally instruct each: "Do NOT append to team-memory.md yourself — return your memory-log entry verbatim after your outcome line instead." As each finishes, merge its branch into the session worktree branch in completion order, then append its returned team-memory entry yourself (merge order = append order). A merge conflict means the group wasn't actually disjoint — resolve it, note it in team-memory, and run the remainder of that group sequentially.
+
 ### 3. Record the outcome and move on
 
 From the returned line, before touching the next item: update `PROGRESS.md` — `done [track] — [summary + commit hash]` or `blocked — [reason]` (never silently mark a blocked item done) — and set the item's `status:` in `PLAN.md`. The item orchestrator already appended the team-memory entry; for trivial items you ran directly, append it yourself per the "Run memory log" format. A blocked item does not stop the run. Back to step 1.
