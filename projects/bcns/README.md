@@ -3,7 +3,7 @@ name: bcns
 status: active
 priority: high
 last_active: 2026-07-21
-next_step: "Two branch sets await Nate. (1) Template split (2026-07-21): publish @nseluga/app-core@0.2.0 (agent permission-blocked), merge worktree-template-split (bcns) + skeleton-split-onmain (bcns-app-template), then refresh the template lockfile and smoke-test /new-client-repo with a throwaway slug. (2) Hosting architecture LOCKED same day: per-client systemd isolation, CI artifact deploys, shadow-DB migration gate, contract backup to DO Spaces — code in bcns/infra/ + unified deploy.yml, committed locally but UNPUSHED (gh token needs `gh auth refresh -s workflow` to push workflow files; SSH to GitHub blocked on this network — push via https URL). Next: provision the first real DO droplet with infra/bootstrap.sh and rehearse rebuild-from-scratch before client one goes live. Marketing site follow-ups still deferred: mobile/reduced-motion spot-check, copy gaps (founder photos, testimonials), @nseluga→@bcns org migration."
+next_step: "Finish setting up and publishing website. Purchase domain and attach it to a server so that it is fully ready for use"
 repo: ~/bcns
 github: https://github.com/nseluga/bcns
 summary: "Software studio (Nate + Brandon Chung) — platform repo: marketing site plus shared @nseluga/* packages and the hosted-web client template. Client apps live in their own repos."
