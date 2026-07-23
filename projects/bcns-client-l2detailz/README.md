@@ -2,8 +2,8 @@
 name: bcns-client-l2detailz
 status: active
 priority: high
-last_active: 2026-07-20
-next_step: "Get the original l2-detailz.html + logo/brand assets from Nate, then start PLAN.md item 1 (rebuild the public marketing site into the template). Also confirm his current site host and how he takes payment (gates the deferred deposits add-on)."
+last_active: 2026-07-23
+next_step: "Nate tests the admin UI (PR #2, branch ui/admin-phase1-phase2 — layout-loop visual pass on 8 routes). Decide: another grilling + full dev pass, or small manual updates → merge → staging deploy + DNS cutover. Pending: migration 0009 (Supabase dashboard SQL editor) + API keys (Maps/Anthropic/Resend)."
 repo: ~/bcns-client-l2detailz
 github: https://github.com/nseluga/bcns-client-l2detailz
 summary: "bcns hosted-web client — converting L2 Detailz's static marketing site into a web app with an admin dashboard (booking→calendar, Claude banner maker, Maps routing, lifecycle email)."
@@ -12,21 +12,18 @@ tags: [full-stack, next.js, bcns-client]
 
 ## Where it stands
 
-First hosted-web client scoped from the `bcns-app-template`. Requirements are
-locked via a full grilling pass (2026-07-20) and written into the repo's
-`PLAN.md` (16 ordered dev-team items) + `PROGRESS.md`. L2 Detailz is a solo
-mobile car detailer on Oahu; the job is to rebuild his current static site
-(`l2details.com` — dark/gold/serif, three packages) as one integrated Next.js
-app on the bcns stack, then add an admin area: pending-request booking with a
-daily-capacity availability pre-check, a month/week/day calendar with
-per-package materials checklists, a Google-Maps optimized "Today's Route," a
-Claude-authored freeform banner maker (publish-to-slot + PNG export + reusable
-library, using his uploaded media), and a Resend lifecycle-email engine
-(thank-you, re-book reminder, Google-review request). No code written yet.
-**Deferred out of launch:** deposits/payments (Stripe), SMS, on-job photo
-capture, public gallery, CRM, weather, recurring plans. **Blocked on Nate:**
-the original HTML + brand assets (macOS walled off the Messages attachment),
-and his current host + payment method.
+All 15 pre-marker PLAN.md items DONE (dev-team-auto passes 1 + 2, 2026-07-22);
+layout-loop admin visual pass also complete (8 routes, 2026-07-23). PR #2 open
+(`ui/admin-phase1-phase2`). Full feature set built: public marketing site
+(dark/gold/serif), pending-request booking with availability pre-check, admin
+inbox (confirm/decline), month/week/day calendar + materials checklists,
+Google-Maps optimized "Today's Route", Claude banner maker (freeform + slots +
+PNG export + media library), Resend lifecycle email + review-request engine.
+**Pending before launch:** Nate tests and signs off PR #2; migration 0009 via
+Supabase SQL editor; API keys from client (Maps/Anthropic/Resend); staging
+deploy + DNS cutover (item 16, below the stop marker). **Deferred out of
+launch:** deposits/payments (Stripe), SMS, public gallery, CRM, weather,
+recurring plans.
 
 ## Run / verify
 
