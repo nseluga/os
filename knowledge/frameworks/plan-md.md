@@ -69,8 +69,9 @@ production data integrity. Composes with any track above `trivial`.
 **`research:`** (optional) — a topic `dt-research` investigates before the first
 build (e.g. `research: astro auth patterns`). Use when the item hinges on
 choosing a current external tool, library, or hosted service — the knowledge
-training data gets wrong. `flag:` and `critical:` items get a research pass
-automatically; this field is the manual trigger for everything else. Cache-first
+training data gets wrong. `flag:`/`critical:` items get a research pass
+automatically when they involve an external tool choice; this field is the
+manual trigger for everything else. Cache-first
 (`~/.claude/skills/dev-team/research-notes/`), so repeat topics are near-free.
 
 ---

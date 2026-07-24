@@ -25,7 +25,7 @@ os/
 
 | Path | What it is | When to read it |
 |------|-----------|-----------------|
-| `knowledge/me/README.md` | Bio, job targets, projects, working style | When you need background on Nate — role, goals, how he works |
+| `knowledge/me/` | background.md (resume-grade facts), goals.md (targets/timeline), working style | When you need background on Nate — role, goals, how he works |
 | `knowledge/frameworks/` | Mental models and decision methods | When the task calls for a structured approach or framework |
 | `knowledge/audience/` | Notes on target readers/users | When writing, designing UX, or tailoring communication |
 | `knowledge/library/` | Reference docs (gitignored) | Only when the task clearly matches a specific doc's topic |
@@ -34,6 +34,15 @@ os/
 
 Do not read these files automatically. Pull them on demand when a task makes
 the content clearly relevant.
+
+**Index maintenance:** indexed folders carry an `INDEX.md` with a
+one-line-per-file entry (`knowledge/` and its subfolders, `skills/`,
+`projects/`, `agents/`). When you add, remove, or repurpose a file in one,
+update that folder's `INDEX.md` line in the same turn — an index that drifts
+is worse than none. Exceptions: `knowledge/raw/` contents are transient
+(never indexed); `knowledge/memory/`'s file index is `MEMORY.md` (auto-loaded; its `INDEX.md`
+explains folder structure only); per-project files stay
+`projects/<name>/README.md` (the dashboard's data contract).
 
 **Exception — always for plan/progress files:** when creating or updating a
 `PLAN.md` or `PROGRESS.md` in *any* repo, first read
