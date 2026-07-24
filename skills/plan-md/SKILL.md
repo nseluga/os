@@ -56,7 +56,11 @@ accepting it.
    resolved. Challenge any item the codebase scan shows already exists.
 4. Per item: testable `done when:` criteria (2–4, behavior + observable — use
    the red-flag table in plan-md.md as your bar), `track:` sizing, and whether
-   the stakes or tool-choice earn `flag:`, `critical:`, or `research:`.
+   the stakes or tool-choice earn `flag:`, `critical:`, or `research:`. For
+   `full` items, propose the standard speed + reliability criteria from
+   plan-md.md (measured threshold against a named seed size; the item's
+   likeliest failure mode) — or an explicit one-line waiver, and push back on
+   waivers that look wrong for a data-path or entry-point item.
 5. Scale targets — ask what load/growth the result must survive; apply the
    Scale & Infrastructure ladder to decide which items (if any) earn
    caching/queue/pooling work, and push back on infrastructure below its

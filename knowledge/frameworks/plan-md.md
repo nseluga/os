@@ -198,6 +198,29 @@ Fewer than 2 usually means the item is under-specified.
 **Hygiene criterion:** include "Existing passing tests remain passing" when
 regression risk is real. Skip it for trivial items where it's obvious.
 
+**Speed + reliability criteria (standard for `full` items):** functionality
+criteria alone let slow or fragile code pass QA. Every `full`-track item also
+carries:
+
+- One **speed** criterion: a measured number against seeded data — "median of
+  5 runs of <the operation> stays under <threshold> with <N> rows seeded."
+  Defaults when you have no better number: API route < 200ms, full page render
+  < 1s, background job < 30s. Set thresholds at ~2× the real target — the
+  criterion exists to catch regressions (an unindexed scan, an N+1 loop), not
+  to benchmark the laptop — and always name the seed size; a timing against an
+  empty DB proves nothing.
+- One **reliability** criterion matching the item's likeliest failure mode:
+  double-submit/retry creates no duplicate row; a down dependency degrades to
+  a defined fallback within a timeout instead of hanging; behavior holds under
+  both `TZ=UTC` and a non-UTC TZ; invalid input at the boundary returns the
+  defined error, not a 500.
+
+Waive either with one visible line in the item — `speed: N/A — <reason>` —
+never silently; a written waiver is something the Reviewer can challenge.
+`light` items take the reliability criterion when they touch a system entry
+point; `trivial` items are exempt. QA verifies speed criteria by measurement
+(running the timed test), never by inspection.
+
 ---
 
 ## Writing items for cheaper agents
@@ -233,8 +256,11 @@ to Opus/Fable) rediscovering what you already knew. Rules:
   done when:
     - Requests beyond 10/min from the same IP receive a 429 response with Retry-After header
     - The rate limit window and max requests are configurable via environment variables
+    - Median of 5 runs, a request under the limit responds in < 200ms with 100k rows in the request log seed
+    - Two concurrent requests at the limit boundary yield exactly one 429 (no double-count or double-pass)
     - Existing passing tests remain passing
   status: not started
+  track: full
   flag: security
 
 - task: Rewrite session token signing to use HMAC-SHA256
@@ -242,24 +268,30 @@ to Opus/Fable) rediscovering what you already knew. Rules:
     - All tokens are signed with HMAC-SHA256 using a server-side secret
     - A token with a tampered payload fails verification and returns 401
     - Existing sessions are invalidated on deploy (no legacy unsigned tokens accepted)
+  speed: N/A — in-memory signing, no data-size dependence
   status: not started
+  track: full
   critical: security
 
 - task: Replace inline SQL in UserRepository with parameterized queries
   done when:
     - No raw string interpolation remains in UserRepository
     - A test covers a value that would have triggered injection if unparameterized
+    - Median of 5 runs, findByEmail stays under 50ms with 100k users seeded (parameterization didn't lose the index)
     - All existing UserRepository tests pass
   status: not started
+  track: full
 
 > **⚠️ AUTONOMOUS RUN — STOP HERE**
 
 - task: Add last_login_at column to users table
   done when:
     - Migration runs without error on dev DB
-    - Column is populated on every successful login
+    - Column is populated on every successful login, and a retried login write does not error or duplicate
     - Rolling back the migration restores the prior schema
+  speed: N/A — single-column write on an existing indexed path
   status: not started
+  track: full
   flag: data-path
 ```
 

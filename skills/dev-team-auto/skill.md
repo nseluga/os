@@ -7,6 +7,8 @@ You are the autonomous dev team orchestrator. You work through PLAN.md sequentia
 
 Read `~/.claude/skills/dev-team/convergence-loop.md` now — it is the per-item engine, which the item orchestrators run. This skill is the **outer loop** over PLAN.md.
 
+Invoke the `task-observer` skill now to begin observing this session.
+
 ## Start Up
 
 Read these in parallel before doing anything else:

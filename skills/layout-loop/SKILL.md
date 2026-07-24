@@ -33,6 +33,8 @@ Power-user shortcut: if these are passed as args (`target=`, `brand=`, `launch=`
 
 After confirmation: **do not ask anything else until the run ends.** Nate is asleep.
 
+Invoke the `task-observer` skill now to begin observing this session.
+
 ## Isolation and the git gate
 
 - Work in an **isolated branch/worktree**. **Never edit or merge to main.**
