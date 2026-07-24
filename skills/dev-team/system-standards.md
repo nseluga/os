@@ -27,6 +27,17 @@ Applied when the engineer report signals large scope: new endpoints, schema chan
 - **Don't Reach Across Layers** — frontend doesn't know DB schema; DB layer doesn't know HTTP shapes.
 - **Services Should Own Their Data** — two services on one table = one service with two entry points.
 
+## Scale & Infrastructure
+- **Caching** — cache repeated expensive reads; start in-process (dict/LRU), reach for Redis only when cache must be shared across multiple processes or servers; measure before adding, invalidation bugs cost more than slow reads.
+- **Async Work / Job Queues** — anything slow (email, image processing, third-party calls) leaves the request path; a DB-backed job table (poll + lock) is sufficient for most apps — reach for Kafka/RabbitMQ/SQS only when you need durability guarantees, fan-out to multiple consumers, or replay.
+- **CDN / Static Edge** — serve all static assets (JS, CSS, images) through a CDN from day one; costs almost nothing and cuts latency globally; only move dynamic logic to the edge (Cloudflare Workers, etc.) when origin latency is a measured problem.
+- **Read Replicas** — add when the primary's CPU is the bottleneck and the workload is demonstrably read-heavy (10:1+ read/write ratio); account for replication lag — reads immediately after writes must route to primary or use LSN stamping to avoid stale reads.
+- **Horizontal Scaling (App Tier)** — stateless services scale horizontally behind a load balancer; if your service has local state (in-memory cache, disk) it cannot scale horizontally until that state is externalized.
+- **Load Balancing** — put a load balancer in front of multiple app instances before you need it; a single instance with a load balancer ready is easier to scale than retrofitting one under pressure.
+- **Connection Pooling** — never open a new DB connection per request; use a pool (PgBouncer, built-in ORM pooling); pool exhaustion is a common scaling cliff that appears suddenly at moderate traffic.
+- **Backpressure** — when a queue or pool fills, reject or throttle new work explicitly (HTTP 429, queue full error) rather than letting the system silently degrade or deadlock; the load balancer's queue is the last resort, not the first.
+- **Vertical Before Horizontal** — exhaust vertical scaling (bigger instance, more RAM, faster disk) before adding distribution complexity; horizontal scaling multiplies operational surface area.
+
 ## Observability
 - **Structured Logging** — machine-parseable (JSON) with timestamp, level, service, request_id, user_id, message.
 - **Log at the Right Level** — DEBUG/INFO/WARN/ERROR used for their intended purpose.

@@ -21,6 +21,8 @@ tags: [frontend, portfolio]
 
 ## Key files
 
-- **PLAN.md / PROGRESS.md** (repo root) — local, gitignored trackers.
+- **PLAN.md / PROGRESS.md** (repo root) — local, gitignored trackers (see [[plan-md]] / [[progress-md]]).
 - **STANDARDS.md** — Astro/UI conventions; read before editing pages/components.
 - **portfolio-brief.md** — original brief.
+
+Projects featured: [[projects/pitcher-injury-risk/README|pitcher-injury-risk]] · [[projects/batting-average-ability/README|batting-average-ability]] · [[projects/nba-shot-value/README|nba-shot-value]] · [[projects/patio/README|patio]]

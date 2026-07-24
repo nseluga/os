@@ -8,7 +8,9 @@ read this instead of the two full files. Every finding cites the section + bulle
 > MAINTENANCE: manual extraction of code-standards.md (Efficiency, Reliability,
 > Scalability, Safety & Security) + system-standards.md (Observability, Fault
 > Tolerance). Editing either source file? Update this file to match — the
-> Reviewer reads only this one.
+> Reviewer reads only this one. Intentionally NOT extracted: system-standards'
+> API Design, Data Modeling, Service & Module Boundaries, Deployment, and
+> Scale & Infrastructure — those are engineer/design standards, not review lenses.
 
 ## Efficiency
 - **No N+1 Queries** — never query inside a loop; batch before, pass results in.

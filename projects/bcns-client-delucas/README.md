@@ -28,4 +28,4 @@ is reactive, not a monthly hosting relationship.
 ## Key files
 
 - **Bridge contract:** `src/bridge/BridgeInterface.ts` (renderer ↔ Electron shell)
-- **Platform relationship:** consumes `@nseluga/*` packages from GitHub Packages
+- **Platform relationship:** consumes `@nseluga/*` packages from GitHub Packages — see [[projects/bcns/README|bcns]] for the platform repo

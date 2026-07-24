@@ -21,6 +21,8 @@ Before running anything, pick a rigor track per item — how much of the team ru
 
 **`dt-analyze` runs by default, once, before the loop for any `full`-track item that spans multiple files** (and for any unfamiliar area on any track). Skip it only for single-file items. Its `analyze-report.md` map is then injected into every agent (see Spawn template) so no agent re-explores the codebase.
 
+**`dt-research` runs once, before the first build, when the item carries a `research:` field or a `flag:`/`critical:` marker.** Spawn it (Sonnet, medium) with the topic — from `research:`, or derived from the item text for flagged items. It is cache-first against `~/.claude/skills/dev-team/research-notes/` (a cache hit costs ~2k tokens; only a miss does web research), and it never covers static architecture — the standards files own that. Its `research-brief.md` is injected into the builder/reviewer spawns (see Spawn template). It may run in parallel with dt-analyze. A third trigger lives in dt-engineer itself: the Engineer spawns dt-research before adding any dependency not already in the repo.
+
 ## Model & effort selection (shared)
 
 Every agent is spawned with a **model** and an **effort** level. Model goes in the spawn template's `[MODEL]` slot. Effort is not a spawn parameter, so express it in the agent's prompt as a reasoning-depth directive / thinking keyword: **minimal** (none — mechanical work), **medium** (`think` — proportionate reasoning), **high** (`think hard` — reason through edge cases, alternatives, and failure modes first).
@@ -30,6 +32,7 @@ Starting model + effort by role (the escalation ramp in Efficiency rules raises 
 | Agent | Model | Effort | Why |
 |---|---|---|---|
 | `dt-analyze` | Sonnet (Haiku for its `Explore` fan-out, per its skill) | medium | broad mapping, not deep reasoning |
+| `dt-research` | Sonnet | medium | web search + synthesis, not deep reasoning; cache-first keeps repeat topics near-free |
 | `dt-engineer` — **light** track | Sonnet | medium | one file, bounded blast radius |
 | `dt-engineer` — **full** track | Sonnet | **high** | build quality sets how many review/fix cycles you pay for later |
 | `dt-engineer` — **full** track, open design space | Opus sketch (1 agent) → Sonnet implement | high | Opus buys the design decisions; Sonnet types the code — see Design exploration Tier 1 |
@@ -71,6 +74,7 @@ Use this prompt:
 >
 > Prior teammates' reports are in `.claude/dev-team/` — read the ones your skill lists as inputs instead of re-deriving that context. Reports present so far: [list the filenames that exist].
 > [If dt-analyze ran:] The shared codebase map is `.claude/dev-team/analyze-report.md` — treat its file locations, data flows, and patterns as ground truth. Do NOT re-explore what it already covers; only open the files it points you to.
+> [If dt-research ran:] The research brief is `.claude/dev-team/research-brief.md` — its Recommendation is the default tool/library/pattern choice. Override only on a concrete conflict with the codebase, recorded in your report.
 > Report discipline: your report is the next agent's context — lead with the machine-readable lines (VERDICT/Branch/severity), findings-only, one line each, ≤40 lines, no narration. Full rules: Efficiency rules → "Report discipline" in `convergence-loop.md`.
 
 After each agent finishes, route on its report from `.claude/dev-team/` before spawning the next: read only the `VERDICT`/`Branch`/severity lines you need to pick the next step. Extract the branch name from the first engineer report and pass it to every later agent. Agents editing the same worktree run sequentially.
@@ -86,6 +90,7 @@ After each agent finishes, route on its report from `.claude/dev-team/` before s
 
 ## Roles used
 
+- `dt-research` — cache-first current-tooling research before the first build, on `research:`/`flag:`/`critical:` items (also spawned by dt-engineer before any new dependency)
 - `dt-engineer` — builds the item on attempt 1; on a *design-level* QA failure, up to 2 additional engineers are spawned to try alternative approaches without wiping prior work
 - `dt-qa` — writes/runs the tests (and behavioral checks), emits the **VERDICT: PASS | FAIL** gate
 - `dt-review` — quality/optimization review; its findings gate DONE only after QA is green (may run in parallel with dt-qa on attempt 1 — see Efficiency rules)
@@ -99,6 +104,8 @@ loop:
   # 1+2. BUILD + CORRECTNESS GATE (paired together)
 
   if attempt == 1:
+      # if item has research:/flag:/critical: → run dt-research first (∥ dt-analyze
+      # if both apply) so its research-brief.md exists before any design/build spawn
       if item has a flag: or critical: field:
           run design exploration (Tier 2) → winning sketch   # see "Design exploration"
           run dt-engineer with the winning sketch

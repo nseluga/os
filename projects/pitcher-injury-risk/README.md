@@ -24,3 +24,5 @@ On hold. Models pitcher injury probability, severity, and time-to-injury (surviv
 - **claude_instructions.md** — project conventions.
 - **audit.md** (in this os folder) — prior code audit.
 - `src/`, `notebooks/`, `models/`, `reports/`, `dashboard/` in the repo.
+
+Related: [[projects/batting-average-ability/README|batting-average-ability]] · [[projects/hitter-embedding/README|hitter-embedding]]

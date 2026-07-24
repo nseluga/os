@@ -29,9 +29,10 @@ droplet + PM2, Clerk/Neon/Stripe and Docker/Coolify removed, BCNS billing decide
 as central-never-in-app — and five platform defaults (pg-boss jobs, PM2 deploys,
 Twilio SMS, Supabase CLI migrations, template contract) were written into
 `~/os/knowledge/library/bcns/hosting-reference.md`. Per-client work is tracked
-in its own project entries — **bcns-client-coventry** (first hosted-web client,
-in scoping; client-specific overrides layered on the platform defaults) and
-**bcns-client-delucas** (maintenance). This entry now covers only the platform:
+in its own project entries — [[projects/bcns-client-coventry/README|bcns-client-coventry]] (first hosted-web client,
+in scoping; client-specific overrides layered on the platform defaults),
+[[projects/bcns-client-l2detailz/README|bcns-client-l2detailz]] (L2 Detailz, near launch), and
+[[projects/bcns-client-delucas/README|bcns-client-delucas]] (maintenance). This entry now covers only the platform:
 shared packages, the template, and the marketing site.
 
 The template purpose split landed on branches (2026-07-21): **packages = all

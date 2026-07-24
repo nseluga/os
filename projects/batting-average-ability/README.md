@@ -24,3 +24,5 @@ On hold. Decomposes batting average into skill vs. luck via a BABIP model (CLR f
 
 - **audit.md** (in this os folder) — prior code audit of the repo.
 - Notebooks + committed model artifacts (`*.pkl`, `*_table.csv`) live in the repo root.
+
+Related: [[projects/pitcher-injury-risk/README|pitcher-injury-risk]] · [[projects/hitter-embedding/README|hitter-embedding]]

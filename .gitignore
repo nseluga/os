@@ -7,3 +7,6 @@ knowledge/library/*
 
 # Claude Code worktree scratch dirs
 .claude/worktrees/
+
+# Obsidian vault config (local-only)
+.obsidian/

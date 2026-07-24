@@ -37,6 +37,6 @@ before countersigning.
 
 ## Key files
 
-- **Authority docs:** `~/Downloads/Beacon_Systems_Proposal_Coventry_v2.pdf` (v3 edit checklist lives in the notes) · `~/Downloads/coventry_implementation_notes.md` (client-specific decisions + open items) · `~/os/knowledge/library/bcns/hosting-reference.md` (platform defaults)
+- **Authority docs:** `~/Downloads/Beacon_Systems_Proposal_Coventry_v2.pdf` (v3 edit checklist lives in the notes) · `~/Downloads/coventry_implementation_notes.md` (client-specific decisions + open items) · `~/os/knowledge/library/bcns/hosting-reference.md` (platform defaults) · [[projects/bcns/README|bcns]] (platform project)
 - **Repo:** `github.com/nseluga/bcns-client-coventry` (Private) · local `~/bcns-client-coventry` — generated from `bcns-app-template`
-- **Trackers:** `~/bcns-client-coventry/PLAN.md` (foundation-first, STOP marker, blocked items) · `~/bcns-client-coventry/PROGRESS.md` (seed ledger, dev-team-auto maintains it)
+- **Trackers:** `~/bcns-client-coventry/PLAN.md` (foundation-first, STOP marker, blocked items — see [[plan-md]]) · `~/bcns-client-coventry/PROGRESS.md` (seed ledger, dev-team-auto maintains it — see [[progress-md]])

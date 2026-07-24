@@ -15,6 +15,7 @@ team-memory entry) are treated as one atomic action.
 **`/layout-loop`** — writes a row after each page's loop ends, same discipline.
 
 **`/dev-team` (interactive)** — does **not** write PROGRESS.md. It reports
+results to you in the conversation. PROGRESS.md is exclusively for unattended runs. It reports
 results to you in the conversation. PROGRESS.md is exclusively for unattended runs.
 
 You never hand-edit PROGRESS.md mid-run. Read it to check status; let the agent
@@ -144,9 +145,9 @@ blocked — graceful failure — [reason: dev server died / screenshots failed]
 
 ---
 
-## Relationship to PLAN.md
+## Relationship to [[plan-md]]
 
-PROGRESS.md does not replace PLAN.md — it annotates it. PLAN.md is the source
+PROGRESS.md does not replace [[plan-md|PLAN.md]] — it annotates it. PLAN.md is the source
 of truth for what to do; PROGRESS.md is the source of truth for what happened.
 
 - PLAN.md `status:` field is also updated in place by the agent — it mirrors

@@ -20,6 +20,7 @@ Read `~/.claude/skills/dev-team/convergence-loop.md` now — it is the engine yo
 ## Optional Prep
 
 - **Multi-file `full`-track item, or any unfamiliar area** → run `dt-analyze` once before the loop so every agent shares one codebase map (its `analyze-report.md` is injected into every agent — see `convergence-loop.md` → Spawn template). Default for multi-file items; skip only for single-file work.
+- **Item carries `research:`, `flag:`, or `critical:`** → run `dt-research` before the first build (may run in parallel with `dt-analyze`) per `convergence-loop.md` — cache-first current-tooling research; its `research-brief.md` is injected into the builder and reviewer spawns.
 - **Task has a user-facing surface** → plan to run `dt-ui` after the item passes its correctness gate (see below).
 
 Tell the user the chosen track and which agents you'll use, and why, before spawning them.

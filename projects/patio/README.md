@@ -24,6 +24,6 @@ React Native/Expo conversion complete (M.1–M.3, Expo SDK 54). Backend refactor
 
 ## Key files
 
-- **PLAN.md / PROGRESS.md** (repo root) — local, gitignored trackers (execution plan + what's landed).
+- **PLAN.md / PROGRESS.md** (repo root) — local, gitignored trackers (see [[plan-md]] / [[progress-md]]).
 - **DATABASE.md** — trusted Supabase schema reference (`models.py` is stale/untrusted).
 - **STANDARDS.md**, **CLAUDE.md** — conventions; read before writing code.

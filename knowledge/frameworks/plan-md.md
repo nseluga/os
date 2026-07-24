@@ -66,6 +66,13 @@ Fable architects. Use when a defect would be catastrophic or irreversible: auth
 systems, cryptography, authorization, PII/PHI handling, financial transactions,
 production data integrity. Composes with any track above `trivial`.
 
+**`research:`** (optional) — a topic `dt-research` investigates before the first
+build (e.g. `research: astro auth patterns`). Use when the item hinges on
+choosing a current external tool, library, or hosted service — the knowledge
+training data gets wrong. `flag:` and `critical:` items get a research pass
+automatically; this field is the manual trigger for everything else. Cache-first
+(`~/.claude/skills/dev-team/research-notes/`), so repeat topics are near-free.
+
 ---
 
 ## Format — layout-loop runs
@@ -192,6 +199,32 @@ regression risk is real. Skip it for trivial items where it's obvious.
 
 ---
 
+## Writing items for cheaper agents
+
+Plan items are mostly executed by Sonnet-tier agents. A well-written item lets a
+cheaper model succeed on attempt 1; a vague one burns attempts (and escalations
+to Opus/Fable) rediscovering what you already knew. Rules:
+
+- **One logical change per item.** If the task sentence needs an "and", split it.
+  Small items converge in one loop pass; compound ones fork alternatives.
+- **Name known files and functions.** "Add the toggle to `src/components/Nav.astro`"
+  removes an exploration pass. Only omit paths when you genuinely don't know them.
+- **State the approach when you have one.** "Reuse the existing `readManual()`
+  helper" is one line that prevents an alternative-engineer fork. Leave the
+  approach open only when you actually want design exploration.
+- **Right-size `track:`.** Defaulting everything to `full` wastes the loop on
+  copy edits; defaulting to `light` under-gates schema changes. Classify each
+  item; when torn, go heavier.
+- **Escalate per item, not per run.** `flag:`, `critical:`, and `research:` buy
+  targeted scrutiny exactly where the stakes or staleness risk live — cheaper
+  than raising the whole run's model tier.
+- **Global constraints go in the preamble once**, not repeated per item — agents
+  read the preamble; duplication drifts.
+- **Testable `done when:` always** (previous section) — it is the contract a
+  cheap QA gate can enforce mechanically.
+
+---
+
 ## Example PLAN.md — dev-team
 
 ```markdown
@@ -257,5 +290,5 @@ url: http://localhost:3000
 |---|---|
 | Before a session | Author PLAN.md; all items at `status: not started` |
 | During a run | Agents update `status:` in place; do not edit mid-run |
-| After a run | Review PROGRESS.md for blocked items; move the stop marker; update `os/projects/README.md` if a milestone was hit |
+| After a run | Review [[progress-md|PROGRESS.md]] for blocked items; move the stop marker; update `os/projects/README.md` if a milestone was hit |
 | When the project is complete | Delete or archive PLAN.md — a fully-done plan left in place will be picked up by the next run |

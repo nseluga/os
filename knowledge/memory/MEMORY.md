@@ -15,3 +15,4 @@
 - [Offer README updates post-session](feedback-project-readme-updates.md) — after a meaningful change, offer to update the project's os README to the `projects/_TEMPLATE.md` shape; daily synthesis cloud routine retired 2026-07-11
 - [Claude-in-Chrome limits](reference-claude-in-chrome-limits.md) — extension only sees tabs in its own window (drag tabs in); `file://` URLs blocked (use python3 http.server instead)
 - [Local automation ≠ cloud schedule](reference-local-automation-not-cloud-schedule.md) — repeatable jobs touching local files/apps can't use cloud routines/cowork; must run on-machine via launchd/cron
+- [bcns CI setup](reference-bcns-ci-setup.md) — 5 secrets/vars required per client repo before first deploy; pnpm 11 gotchas, IPv6 pooler URL, PAT expiry Aug 2026

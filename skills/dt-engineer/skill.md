@@ -35,6 +35,8 @@ Decide and record:
 
 Every decision goes in your report with a one-line rationale. If the task is small enough that none of these apply, say so in the report rather than inventing design work.
 
+**New-dependency rule:** never pick a library or external tool not already in the repo from training data alone — that is where stale knowledge hurts most. First read `.claude/dev-team/research-brief.md` if it exists (the orchestrator may have run research already). Otherwise check `~/.claude/skills/dev-team/research-notes/` for a fresh note (`updated:` within 90 days) on the topic and follow its Recommendation. No brief and no fresh note → spawn `dt-research` (`subagent_type: "dt-research"`, model Sonnet) with the topic and adopt its brief before choosing. Skip all of this when the task adds no new dependency.
+
 ## Minimalism Ladder
 
 Before writing code, stop at the first rung that holds:
