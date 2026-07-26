@@ -1,6 +1,6 @@
 # Craft layer template — Nate's invariant design taste
 
-This file is the backbone of the `layout-loop` skill. It holds what is **true of Nate's
+This file is the backbone of the `design` skill. It holds what is **true of Nate's
 taste regardless of brand or client** — the "uniquely Nate" signal that rides along on
 every project, even a client dashboard wearing someone else's colors.
 

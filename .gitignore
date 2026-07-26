@@ -10,3 +10,19 @@ knowledge/library/*
 
 # Obsidian vault config (local-only)
 .obsidian/
+
+
+# Design reference images live in raw/ until a clustering session files them.
+# They are third-party work (Dribbble etc.) and this repo is PUBLIC — never publish them.
+knowledge/raw/**/*.png
+knowledge/raw/**/*.jpg
+knowledge/raw/**/*.jpeg
+knowledge/raw/**/*.gif
+knowledge/raw/**/*.webp
+knowledge/raw/**/*.mp4
+
+# Marketplace-installed third-party skill packs. ~/.claude/skills symlinks to
+# skills/, so anything installed as a skill lands physically in this PUBLIC repo.
+# Same policy as Impeccable (a plugin, so it never lands here): tools reinstall,
+# config commits. Reinstall via the Higgsfield marketplace.
+skills/higgsfield-*/

@@ -4,6 +4,7 @@ One folder per skill. Each `SKILL.md`'s `description:` frontmatter is the canoni
 
 ## Dev team
 
+- `design` — Interactive design skill: pick a style, pick a composition, build, then refine. Merges craft + mode + style + brand with Impeccable as the technical floor. Replaced `layout-loop`.
 - `dev-team` — Coordinates the dev team convergence loop for one plan item
 - `dev-team-auto` — Autonomous dev team drives PLAN.md items through convergence loop
 - `dt-analyze` — Code Analyzer maps the codebase before other agents work
@@ -44,7 +45,6 @@ One folder per skill. Each `SKILL.md`'s `description:` frontmatter is the canoni
 
 ## Apps & clients
 
-- `layout-loop` — Autonomous visual-polish loop applying Nate's design language
 - `new-client-repo` — Create a new bcns client repo from the template
 - `career-advisor` — Senior career advisor reviewing portfolio sites and writeups
 
@@ -52,3 +52,17 @@ One folder per skill. Each `SKILL.md`'s `description:` frontmatter is the canoni
 
 - `find-skills` — Discover and install agent skills
 - `tidy-downloads` — Sort a messy folder into meaningful subfolders
+
+## Installed elsewhere — not in this repo
+
+Third-party tooling is installed, never vendored: this repo is **public**, and a
+committed copy forks a package we don't maintain. Both reinstall from their source.
+
+| Tool | Installs as | Lives at | Why not here |
+|---|---|---|---|
+| **Impeccable** | plugin | `~/.claude/plugins/cache/impeccable/impeccable/<ver>/` | Plugins aren't symlinked into `~/os`, so it never lands here. Ships 4 agents + a `hooks.json` a plain skill folder can't. |
+| **Higgsfield** | skills | `skills/higgsfield-*/` — **gitignored** | `~/.claude/skills` symlinks to `skills/`, so these land physically in this repo by accident of the symlink. Marketplace-managed and versioned; committing them forks them. |
+
+Both are consumed by the `design` skill — see `skills/design/SKILL.md` for how.
+Impeccable's `hooks.json` is active **plugin-wide**: it runs `detect.mjs` on every
+`Edit`/`Write` and a deep pass at `Stop`, in every repo, whether or not `design` is running.

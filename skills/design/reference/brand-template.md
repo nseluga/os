@@ -1,4 +1,4 @@
-# Brand file template — a swappable skin for `layout-loop`
+# Brand file template — a swappable skin for `design`
 
 One file per brand/context (portfolio, bcns, or a specific client). Hand-authored from
 online research + example screenshots/URLs. This is the *swappable* layer; it supplies the

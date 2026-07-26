@@ -1,0 +1,39 @@
+# Design reference sources — captured 2026-07-25 from Dribbble
+
+| File | Source | Animated |
+|---|---|---|
+| `01-learning-web-app-taitor.png` | https://dribbble.com/shots/27073317-Learning-Web-App-Design-Taitor | still |
+| `02-task-tracker-ai-dashboard.png` | https://dribbble.com/shots/26710131-Web-App-Design-Task-Tracker-AI-Dashboard | ANIM |
+| `03-student-portal-web-app.png` | https://dribbble.com/shots/25743076-Student-Portal-Web-App-Design | still |
+| `04-pixl-bio-biotech-website.png` | https://dribbble.com/shots/27405997-Pixl-bio-Biotech-Website | still |
+| `05-fintech-digital-banking-website.jpg` | https://dribbble.com/shots/27484396-Fintech-Website-Design-Digital-Banking | still |
+| `06-brightscout-agency-website.png` | https://dribbble.com/shots/26782965-BRIGHTSCOUT | still |
+| `07-cybersecurity-website.jpg` | https://dribbble.com/shots/26845763-Cybersecurity-Website-Design | still |
+| `08-aires-real-estate-web-app.png` | https://dribbble.com/shots/25642303-AIRES-Real-Estate-Web-App | still |
+| `09-iowa-focus-webapp.jpg` | https://dribbble.com/shots/27373380-lowa-focus-webapp-design | still |
+| `10-crypto-dashboard-a.png` | https://dribbble.com/shots/27403304-Crypto-Dashboard-UI | still |
+| `11-tech-agency-website.png` | https://dribbble.com/shots/27216705-Tech-Agency-Website-UI | still |
+| `12-ai-saas-landing-predictive-analytics.png` | https://dribbble.com/shots/27339497-AI-SaaS-Landing-Page-Predictive-Data-Analytics | ANIM |
+| `13-ai-sales-automation-saas-landing.png` | https://dribbble.com/shots/27152902-AI-Sales-Automation-SaaS-Landing-Page | still |
+| `14-crypto-dashboard-nixtio.png` | https://dribbble.com/shots/26784915-Crypto-Dashboard-UI | still |
+| `15-ai-agent-platform-website.png` | https://dribbble.com/shots/27515445-AI-Agent-Platform-Website | still |
+| `16-instinct-satellite-tech-website.png` | https://dribbble.com/shots/25695041-AI-Website-satellite-tech-Instinct | ANIM |
+| `17-crypto-dashboard-b.png` | https://dribbble.com/shots/27388831-Crypto-Dashboard-UI | still |
+| `18-ai-landing-page.png` | https://dribbble.com/shots/27127555-AI-Landing-Page-Design | ANIM |
+| `19-tae-travel-tourism-website.png` | https://dribbble.com/shots/16508584-TAE-Web-Design-for-Travel-Tourism | ANIM |
+| `20-healance-mental-health-platform.png` | https://dribbble.com/shots/26508399-Healance-Mental-Health-Platform-Web-Design | still |
+| `21-digital-security-illustration-website.png` | https://dribbble.com/shots/19320179-digital-security-web-design-art-illustration | still |
+| `22-earth-day-sustainable-website.png` | https://dribbble.com/shots/27282245-Earth-Day-Brand-Recognition-Sustainable-Web-Design | ANIM |
+| `23-bloom-mental-health-clinic.png` | https://dribbble.com/shots/26661884-Mental-Health-Clinic-Web-Design-Bloom | ANIM |
+| `24-fintech-landing-3d-hero.png` | https://dribbble.com/shots/25500758-Hero-for-fintech-landing-page-web-design-3D-animation | ANIM |
+| `25-enterprise-erp-platform.png` | https://dribbble.com/shots/27342202-Web-Design-for-an-Enterprise-ERP-Platform-part-2 | ANIM |
+| `26-logistics-fleet-management.png` | https://dribbble.com/shots/27200822-Global-Logistics-Fleet-Management-Web-Design | still |
+| `27-aiaf-agents-landing-3d.png` | https://dribbble.com/shots/25926676-AiAf-Agents-Landing-page-web-design-3D-animation | ANIM |
+| `28-ai-saas-neural-flow-landing.png` | https://dribbble.com/shots/27330975-AI-SaaS-Landing-Page-Neural-Flow-State-Web-Design | ANIM |
+| `29-hume-smart-home-mobile-app.png` | https://dribbble.com/shots/26559633-Hume-Mobile-App-Design-for-Smart-Home | ANIM |
+| `30-skincare-mobile-app.png` | https://dribbble.com/shots/21700382-Skin-Care-App-design | still |
+| `31-travel-mobile-app.png` | https://dribbble.com/shots/25578724-Travel-app-design | still |
+| `32-prakthis-ewallet-mobile-app.png` | https://dribbble.com/shots/26779207-Prakthis-e-wallet-mobile-app-design | still |
+| `33-fintech-mobile-banking-app.png` | https://dribbble.com/shots/26682614-Fintech-Mobile-Banking-App-Design | ANIM |
+| `34-crypto-portfolio-dashboard-nixtio.png` | https://dribbble.com/shots/27182585-Crypto-Portfolio-Dashboard-Web-App-UI | still |
+| `35-hr-dashboard-ronas.png` | https://dribbble.com/shots/26327753-HR-Dashboard-Web-App-UI | still |
