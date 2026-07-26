@@ -1,6 +1,6 @@
 ---
 name: branch
-description: Create a new git branch from main and enter an isolated worktree. Use when the user says "/branch <name>", "new branch", "start a branch", or "spin up a branch for X". Fast path to isolated feature work.
+description: Create a new git branch from main and enter an isolated worktree. Use when the user says "/branch <name>", "new branch", "start a branch", or "spin up a branch for X".
 ---
 
 # Branch

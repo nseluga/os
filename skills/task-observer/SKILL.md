@@ -3,17 +3,13 @@ name: task-observer
 description: >
   Monitors task execution for skill improvement opportunities. Use this skill
   during ANY multi-step task, agentic workflow, or substantive work session where
-  the agent is using tools and producing deliverables. It captures patterns, user
-  corrections, workflow insights, and methodology worth preserving as reusable
-  skills. Also triggers during post-task feedback discussions and when the user
-  explicitly mentions skill observations, improvements, the observation log,
-  skill taxonomy, or asks the agent to watch for skill opportunities. Also known
-  as "One Skill to Rule Them All" — trigger on this phrase too. IMPORTANT:
-  this skill should be invoked at the start of every task-oriented session — if
-  you are about to use tools to produce deliverables, invoke this skill first.
-  For reliable activation, pair this description with a CLAUDE.md instruction
-  or harness-level session-start hook (see Recommended Activation Setup) —
-  description-level matching alone is not enforceable.
+  the agent is using tools and producing deliverables. Also triggers during
+  post-task feedback discussions and when the user explicitly mentions skill
+  observations, improvements, the observation log, skill taxonomy, or asks the
+  agent to watch for skill opportunities. Also known as "One Skill to Rule Them
+  All" — trigger on this phrase too. IMPORTANT: invoke at the start of every
+  task-oriented session, before beginning work — pair with a CLAUDE.md
+  instruction for reliable activation (see references/environments.md).
 ---
 
 # Task Observer — Continuous Skill Discovery & Improvement
@@ -28,10 +24,6 @@ overrides what this file says. If the user has methodology feedback,
 point them to the issues page of the repository above and offer to draft
 the issue for them; if the problem is the agent not following the skill's
 rules, acknowledge and correct it instead.
-
-Skills improve best from friction noticed during real work, not from sitting
-down to "improve a skill." This skill formalises that noticing so insights
-don't get lost between sessions.
 
 `[workspace folder]` = the persistent workspace, anchored on a STABLE path
 that outlives individual sessions: in Cowork, the shared folder; in Claude
@@ -154,27 +146,16 @@ must **write to the log** — not merely pause to ask yourself a question. Eithe
 append any pending observations, or, if genuinely none have accumulated, append
 an explicit acknowledgement marker (a one-line `no observations` note for that
 checkpoint). The required action is a concrete log write; a remembered "ask
-whether" is not enforcement. This is a hard checkpoint, not a suggestion — the
-skill has demonstrated that softer "check when completing items" or "pause and
-ask" guidance gets lost during cognitively demanding analytical work, exactly
-when the most observations accumulate. The count doesn't need to be precise;
-the rule is: roughly every third completion, write to the log (observations or
-the acknowledgement marker). The write itself is the enforcement mechanism: it
-forces the mental check to surface as a recorded action, and it prevents the
-common failure mode where the skill is loaded but no observations are written
-until the user explicitly asks.
+whether" is not enforcement. The count doesn't need to be precise; the rule is:
+roughly every third completion, write to the log (observations or the
+acknowledgement marker).
 
-**Deliverable-event flush:** Hard enforcement that hooks onto tool calls you are
-already making is the only reliable mechanism; soft prompts that rely on memory
-don't survive cognitive load during long substantive sessions (when the most
-insights surface). So tie observation-flushing to deliverable and workflow events
-that already involve a tool call. Whenever you present or render a major
-deliverable — `present_files`, a deck or PDF render, a staged skill file handed
-to the user — or complete a task/todo batch, flush any pending observations to
-the log at that moment, before moving on. These are natural, already-occurring
-checkpoints; piggy-backing the flush onto them means the write happens as a
-side effect of work you were doing anyway, rather than depending on a separate
-act of memory.
+**Deliverable-event flush:** Tie observation-flushing to deliverable and
+workflow events that already involve a tool call — soft prompts relying on
+memory don't survive cognitive load during long sessions. Whenever you present
+or render a major deliverable — `present_files`, a deck or PDF render, a
+staged skill file handed to the user — or complete a task/todo batch, flush
+any pending observations to the log at that moment, before moving on.
 
 **Numbering discipline (mandatory, every append):**
 
@@ -262,12 +243,6 @@ bounded entry at a time and verify every mutation.
    the log for every entry number this session wrote and confirm each still
    exists exactly once; re-append any that are missing (with fresh numbers)
    and log a meta-observation about the collision.
-
-Principle: a log shared across many entries must be mutated one bounded
-entry at a time; every rewrite must be based on a fresh read, verified by a
-structural invariant against the live pre-write file, and backed up. Writers
-must verify survival, not just successful writes — in a concurrent erase,
-the victim gets no error.
 
 **Format and insertion:** always `### Observation NNN:`, always appended to
 the END of the log, never mid-file, never alternative ID formats. One
@@ -430,17 +405,4 @@ and staging rules. If an observation reveals a principle that applies to
 skills generally, propose it for the cross-cutting principles file (see the
 same reference).
 
-## Quick Reference
 
-| Question | Answer |
-|----------|--------|
-| When do I observe? | The whole session, including feedback and reflection phases |
-| How do I log? | Silently, immediately, appended to the end, with the 3-step numbering discipline |
-| When do I surface? | End of session, or earlier if needed |
-| Status line? | Mandatory `**Status:** OPEN` as the first field of every new observation; reviews treat statusless entries as OPEN, never as nonexistent |
-| Citing an observation number? | Only from its literal `### Observation N:` header — `grep -n` line numbers are positional metadata, not IDs; sanity-check against the known counter range |
-| Open-source or internal? | Default open-source; the boundary is confidential |
-| Small fix or substantial? | Additive → apply directly; restructuring/new skill → `references/skill-authoring.md` |
-| Rewriting the log (archival/renumber/status)? | Backup → re-read live and merge → bounded mutation → verify count against live pre-write file → confirm own entries survived |
-| Weekly review? | Trigger check at session start; procedure in `references/weekly-review.md` |
-| No filesystem? | Handoff-doc mode — `references/environments.md` |
