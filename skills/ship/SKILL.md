@@ -1,6 +1,6 @@
 ---
 name: ship
-description: Stage, commit, push, and open a PR in one command. Use when the user says "/ship", "ship this", "commit and push", or "get this out the door". Handles the full git workflow from dirty working tree to open PR.
+description: Stage, commit, push, and open a PR in one command. Use when the user says "/ship", "ship this", "commit and push", or "get this out the door".
 ---
 
 # Ship

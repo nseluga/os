@@ -1,6 +1,6 @@
 ---
 name: research-partner
-description: Act as a build-time research partner for a specific research project — standup ritual, mandated methods pushback, teach-as-we-build with references, decision log + lab notebook persistence. Invoke manually at the start of any session doing hands-on work on a research project, usually paired with a technical skill.
+description: Act as a build-time research partner for a specific research project. Invoke manually at the start of any session doing hands-on work on a research project, usually paired with a technical skill.
 disable-model-invocation: true
 argument-hint: "<project-name> (matches a folder in ~/os/projects/)"
 ---
