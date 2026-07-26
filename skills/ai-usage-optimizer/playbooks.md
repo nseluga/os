@@ -1,8 +1,6 @@
 # Systems Leverage Playbooks
 
-One playbook per leverage gap. Each opens with the **leading word** that anchors
-the fix. The theme throughout: *Nate built these systems — the goal is to make
-reaching for them reflexive, and to keep the systems themselves healthy.*
+One playbook per leverage gap.
 
 ---
 
@@ -11,9 +9,8 @@ reaching for them reflexive, and to keep the systems themselves healthy.*
 **Gap:** Doing work by hand that a purpose-built skill already covers. The skill
 exists, is loaded, and never gets invoked.
 
-**Rule:** Before starting a chunk of work, ask *"is there a skill for this?"* The
-answer is usually yes — the catalog is large. Reach for the system instead of
-free-handing it.
+**Rule:** Before starting a chunk of work, ask *"is there a skill for this?"*
+Reach for the system instead of free-handing it.
 
 **Work → skill map (Nate's actual toolkit):**
 | When the work is… | Reach for |
@@ -31,20 +28,16 @@ free-handing it.
 | Filing bugs conversationally | `/qa` |
 | Planning a refactor into safe commits | `/request-refactor-plan` |
 
-**Anti-pattern:** A 700-turn portfolio session with zero skill invocations. That's
-a whole toolkit sitting idle. Even one `/career-advisor` or `/review` pass would
-have paid off.
-
-**Diagnosis tip:** Cross `project_turns` (where effort went) against `skills_used`
-(what fired). Big effort + empty skills = the highest-value gap in the report.
+**Anti-pattern:** A 700-turn portfolio session with zero skill invocations — even
+one `/career-advisor` or `/review` pass would have paid off. Big effort + empty
+skills = the highest-value gap in the report.
 
 ---
 
 ## Dev-Team Leverage — "delegate the build"
 
 **Gap:** Hand-implementing multi-file features in the main session when the
-dev-team convergence loop (Engineer → QA → Review → Fix) would build it more
-robustly and in isolation.
+dev-team convergence loop (Engineer → QA → Review → Fix) would build it in isolation.
 
 **Rule:** If a task is more than a one-file edit and has a definition of "done,"
 route it through the dev-team rather than doing it inline.
@@ -56,10 +49,6 @@ Multi-file, has acceptance criteria?  → /dev-team (interactive)
 Whole PLAN.md to grind overnight?     → /dev-team-auto (unattended, experimental branch)
 Just need one role right now?         → /dt-<role> standalone
 ```
-
-**Why it matters:** The loop gives you tests (QA gate) and an optimization review
-for free, on an isolated worktree — strictly more than a raw inline build. Skipping
-it means you also skip the safety net you built.
 
 **Anti-pattern:** Build-heavy Patio/portfolio sessions that never once invoked
 `dev-team` or any `dt-*` role.
@@ -90,7 +79,7 @@ have returned just the conclusion.
 ## Memory System — "surface"
 
 **Gap:** The managed memory system exists, but sessions end without persisting
-what was learned — so the same context gets re-explained next time.
+what was learned.
 
 **Rule:** At the end of any session where something non-obvious surfaced, write it
 to `~/.claude/memory` (→ `~/os/knowledge/memory`). Specifically:
@@ -142,7 +131,7 @@ never fire because their trigger is weak.
 
 **Checks (run only when the usage data points at them):**
 - **Dead + overlapping:** a `skills_never_used` entry that duplicates one you do
-  use → merge or delete. Two skills competing for the same trigger help neither.
+  use → merge or delete.
 - **Weak trigger:** a skill that *fits* recent work but never auto-invoked → its
   `description:` router line is the problem. Rewrite it to lead with the trigger
   phrase (the first sentence is what the router reads).
@@ -150,7 +139,7 @@ never fire because their trigger is weak.
   → decide if it's genuinely not needed or just not top-of-mind, and fix whichever.
 
 **Rule:** Health findings must be backed by the usage data — don't audit skills in
-the abstract. Unused + overlapping + fits-the-work-but-never-fired are the signals.
+the abstract.
 
 ---
 
@@ -191,13 +180,3 @@ light model for complex tasks (poor output requiring extra correction rounds).
 **Model-switching habit:** Never run an entire session on one model by default.
 Size each task before starting. If a simple session grows complicated — unexpected
 bug, design gets hairy — switch up before continuing, not after five mediocre turns.
-
-**Anti-pattern:**
-```
-Entire session on Sonnet including:
-  - "Why does the JWT fail silently?"         ← needs Opus
-  - "Design the new player ranking system"    ← needs Opus
-  - "Rename this variable"                    ← Haiku is fine
-
-→ Switch model per task, not per session
-```

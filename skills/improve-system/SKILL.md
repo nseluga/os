@@ -1,6 +1,6 @@
 ---
 name: improve-system
-description: Audit and improve the ~/os system — memory, skills, and knowledge. Use when the user says "/improve-system", "audit the system", "clean up my os", "improve my setup", or "run a system pass". Two-phase: first applies any checkbox-approved items from the prior review, then does a fresh audit and sorts findings into auto-approve (applied immediately), needs sign-off (written to outputs/review.md), and more context required (written to outputs/needs-context.md).
+description: Audit and improve the ~/os system — memory, skills, and knowledge. Use when the user says "/improve-system", "audit the system", "clean up my os", "improve my setup", or "run a system pass". Biases toward removing, not adding. Not for syncing memory from sessions (use /sync-claude-sessions) or a targeted single-skill edit.
 ---
 
 # Improve System
@@ -67,6 +67,16 @@ If all items were checked, write an empty review.md (just the header line).
 ## Phase 2 — Audit
 
 Gather signal from five sources in parallel, then synthesize findings.
+
+### Bias toward less
+
+**The default answer is "remove," not "add."** This system grows on its own; nothing shrinks it but this pass.
+
+- Prefer deleting, merging, or shortening over adding. A change that removes words while keeping behavior is the best kind of finding.
+- Before proposing a new skill, memory file, or knowledge doc, check whether an existing one can absorb it. A new file needs a reason the existing ones can't cover — "it would be nice to have" is not one.
+- When reviewing a skill's content, cut what teaches Claude what it already knows: **keep the term, drop the tutorial.** A standards bullet like `**No N+1 Queries** — never query inside a loop; batch before, pass results in.` should be `**No N+1 Queries**`. The name is the information.
+- Never propose text that restates something already written elsewhere in the same file or a sibling file.
+- Ceiling on cutting: if a cut would make the skill produce output worse than ~90% as good as today's, don't make it. Preserve verbatim all file paths, commands, output formats and templates, numeric thresholds, scope limits, and any rule containing never/always/must/only. Compression is not worth a behavior regression.
 
 ### 2.1 — Gather signal
 
@@ -213,3 +223,4 @@ If outputs/needs-context.md has items: "Answer questions in ~/os/outputs/needs-c
 - `change-log.md` is append-only — never rewrite it, only append.
 - The skill reads session histories for signal but does NOT write to memory files directly. Memory changes go through Bucket B (needs sign-off).
 - When scanning sessions, focus on patterns across multiple sessions, not one-off moments.
+- Bias toward less applies to your own output too. A short review.md holding the highest-value items beats an exhaustive one — don't pad the audit with marginal findings to look thorough. If a run has nothing worth changing, say so and write nothing.

@@ -1,6 +1,6 @@
 ---
 name: new-client-repo
-description: Create a new bcns client repo from the bcns-app-template Template Repository — interview for slug/name/config decisions, create the private GitHub repo, stamp the customization points from the template's TEMPLATE.md, verify the build, push, and create the os project index entry. Use when the user wants to spin up a new client repo/app, onboard a new bcns client, or says "/new-client-repo".
+description: Create a new bcns client repo from the bcns-app-template Template Repository. Use when the user wants to spin up a new client repo/app, onboard a new bcns client, or says "/new-client-repo".
 ---
 
 # New client repo

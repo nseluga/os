@@ -1,6 +1,6 @@
 ---
 name: tidy-downloads
-description: Intelligently sort a messy folder (default ~/Downloads) into meaningful subfolders. Claude skims the actual files, infers natural groupings, proposes a plan, then executes it through a safe move script that never deletes or overwrites and logs every move for one-command undo. Use when the user wants to clean up / organize Downloads (or another folder) and says things like "tidy my downloads", "organize this folder", "/tidy-downloads".
+description: Intelligently sort a messy folder (default ~/Downloads) into meaningful subfolders via a safe move script that never deletes or overwrites and logs every move for one-command undo. Use when the user wants to clean up / organize Downloads (or another folder) and says things like "tidy my downloads", "organize this folder", "/tidy-downloads".
 ---
 
 # Tidy Downloads — smart, reversible folder sorting

@@ -19,6 +19,14 @@ skill discoverable and useful:
   the words/situations that should fire it.
 - Keep the body imperative and short. It's instructions to a model, not prose
   for a human. Ordered steps beat paragraphs.
+- Bias toward less. Every word here is loaded into a real context window, and
+  `description:` is loaded into EVERY session whether the skill fires or not.
+  Cut anything that teaches Claude what it already knows — keep the term, drop
+  the tutorial. No role preamble ("You are an expert..."), no motivation, no
+  prose defending a design choice, no second example making the first one's
+  point again. The shortest skill that still works is the best one.
+- Not everything below is required. Delete any section this skill doesn't need
+  rather than filling it in for completeness — an empty section is pure cost.
 -->
 
 ## When to use

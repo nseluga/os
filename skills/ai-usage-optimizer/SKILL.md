@@ -6,16 +6,8 @@ description: Audit how well Nate is actually using the AI systems he built (skil
 # AI Usage Optimizer
 
 This audits **the systems Nate built in `~/os` and how well he personally uses
-them** — not Claude's low-level execution mechanics. The question is: *you built
-dozens of skills, a dev-team, a memory system, and an os structure — are you
-actually getting leverage out of them, or are they sitting on the shelf?*
-
-Two modes depending on how it's invoked:
-
-- **Preemptive** — user described a task they're about to do → skip to Model Recommendation branch
-- **Audit** — no task described → run the full systems-usage audit (adoption-led, with a system-health pass and model coaching)
-
----
+them** (skills, dev-team, memory, os structure) — not Claude's low-level
+execution mechanics.
 
 ## Phase 0 — Detect Mode
 
@@ -27,8 +19,6 @@ Check whether a task description was provided as part of the invocation (e.g. `/
 ---
 
 ## [PREEMPTIVE] Model Recommendation Branch
-
-Analyze the task description to recommend the right model before the user starts.
 
 **Step 1 — Classify the task** using these signals:
 
@@ -46,7 +36,7 @@ Analyze the task description to recommend the right model before the user starts
 **Step 3 — If a built skill fits the task, name it.** Before recommending only a
 model, check whether one of Nate's own skills is the right entry point (e.g.
 build work → `/dev-team`; stress-testing a plan → `/grilling`; a hard bug →
-`/diagnosing-bugs`). Recommending the system beats recommending the raw model.
+`/diagnosing-bugs`).
 
 **Step 4 — Output** in this format:
 
@@ -77,12 +67,11 @@ Run the analyzer:
 python3 ~/.claude/skills/ai-usage-optimizer/analyze.py 25
 ```
 
-Capture the full JSON. If it errors, diagnose and fix before proceeding — never estimate metrics. The report measures *system usage*: skill adoption, dev-team activity, subagent leverage, memory writes, which projects the work happened in, real-world token spend, and model fit.
+Capture the full JSON. If it errors, diagnose and fix before proceeding — never estimate metrics.
 
 ## Phase 2 — Score Each Dimension
 
-Assign **Strong** / **Needs Work** / **Critical** to each. These dimensions are
-about *leveraging the systems*, not tool mechanics.
+Assign **Strong** / **Needs Work** / **Critical** to each.
 
 | Dimension | Metric | Thresholds |
 |-----------|--------|------------|
@@ -100,8 +89,7 @@ whether the *work that actually happened* used the skills that fit it. Use
 
 ## Phase 3 — Adoption Deep-Dive (the core)
 
-This is the heart of the audit. Cross-reference **what work happened** against
-**which built systems were used**.
+Cross-reference **what work happened** against **which built systems were used**.
 
 1. Look at `project_turns` — where did the effort go? (e.g. portfolio, Patio, os).
 2. Look at `skills_used` — what did that effort actually invoke?
@@ -116,13 +104,11 @@ This is the heart of the audit. Cross-reference **what work happened** against
    the ones that would have paid off in the sessions just analyzed. Name the
    session/project where each would have helped.
 
-Frame this as leverage left on the table, not a scolding. He built these; the
-goal is to make them reflexive.
+Frame this as leverage left on the table, not a scolding.
 
 ## Phase 4 — System Health Pass (secondary)
 
-A lighter look at the systems themselves, surfaced only where usage reveals a
-design problem:
+A lighter look at the systems themselves:
 
 - **Dead skills:** anything in `skills_never_used` that has been unused for a long
   time *and* overlaps a skill he does use → candidate to merge, delete, or fix its
@@ -137,14 +123,9 @@ Keep this section short. Only raise health issues that the usage data actually p
 
 ## Phase 5 — Cost Attribution (observational)
 
-This answers the cost-side question that complements adoption: *"where did my
-tokens actually go, and was the system I reached for worth it?"* — using real
-spend from the logs.
-
 **Boundary — read this before reporting cost.** This is **observational**, not a
 controlled benchmark. The tasks across sessions differ, so you **cannot** conclude
-"system X is more token-efficient than Y" from these numbers — that's the job of
-the benchmarking system Nate is building, which holds the task fixed. Here you may
+"system X is more token-efficient than Y" from these numbers. You may
 only say *where* tokens went and *which sessions were outliers*. Never rank systems
 on efficiency from this data.
 
@@ -157,7 +138,7 @@ Read from the report:
 2. `cost_outliers` — the 5 most expensive sessions, each with its project, turns,
    cost-per-turn, and which skills (if any) it used. **A high-cost outlier with
    `skills: null` is the headline finding** — expensive work done with zero system
-   leverage, tying cost directly back to the adoption gap.
+   leverage.
 3. `skilled_avg_cost_per_session` vs `unskilled_avg_cost_per_session` — a descriptive
    contrast only. Do **not** frame it as "skills save/cost tokens" (confounded);
    frame it as "here's what your skilled vs. unskilled sessions cost on average."
