@@ -1,9 +1,20 @@
 .DS_Store
 *.swp
 
-# knowledge/library: reference docs local-only (repo is public); README is tracked.
+# Personal content (repo is public / forkable — see README "Setting this up
+# for yourself"). Folders stay tracked via a template or .gitkeep; fill them
+# in with your own facts, docs, and projects.
+knowledge/me/*
+!knowledge/me/.gitkeep
+
+knowledge/audience/*
+!knowledge/audience/.gitkeep
+
 knowledge/library/*
-!knowledge/library/README.md
+!knowledge/library/GUIDE.md
+
+projects/*
+!projects/_TEMPLATE.md
 
 # Claude Code worktree scratch dirs
 .claude/worktrees/
