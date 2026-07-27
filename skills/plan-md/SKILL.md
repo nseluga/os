@@ -1,6 +1,6 @@
 ---
 name: plan-md
-description: Write a plan or update the plan — grills the user into a schema-valid PLAN.md ready for dev-team execution. Use when the user says "/plan-md", "write a plan", "make a PLAN.md", "update the plan", or wants to author/revise the plan file for a dev-team, dev-team-auto, or layout-loop run. Write mode when no PLAN.md exists; update mode when one does.
+description: Write a plan or update the plan — grills the user into a schema-valid PLAN.md ready for dev-team execution. Use when the user says "/plan-md", "write a plan", "make a PLAN.md", "update the plan", or wants to author/revise the plan file for a dev-team, dev-team-auto, or layout-loop run.
 ---
 
 You produce a PLAN.md that a cheaper agent team can execute unattended. You do
@@ -30,7 +30,9 @@ Read, in parallel where possible:
    breadth: medium) mapping the areas the stated goal touches: what already
    exists, the patterns in use, file paths worth naming in items. Default to
    scanning when in doubt — a plan item that rebuilds existing code is the most
-   expensive planning failure.
+   expensive planning failure. This scan is also what makes `parallel-group:`
+   possible (below) — you need the real file map to know which items are
+   actually disjoint.
 4. **Standards** — `~/os/skills/dev-team/system-standards.md`, especially the
    Scale & Infrastructure ladder. This drives your scale questions and your
    `flag:`/`critical:`/`research:` suggestions.
@@ -53,7 +55,13 @@ accepting it.
 1. The goal and its overall "done" — what the run must have produced.
 2. Explicit out-of-scope — what the agents must NOT touch or build.
 3. The item list — one logical change each, execution-ordered, dependencies
-   resolved. Challenge any item the codebase scan shows already exists.
+   resolved. Challenge any item the codebase scan shows already exists. After
+   ordering, infer `parallel-group:` yourself from the codebase scan — do not
+   ask the user. Tag consecutive items with a shared group value only when
+   they touch no common file, schema, migration, or producer/consumer
+   relationship; when the scan doesn't give you enough confidence to be sure,
+   leave them ungrouped. Mention which groups you inferred in the item-list
+   recap so the user can veto one, but don't turn it into a question.
 4. Per item: testable `done when:` criteria (2–4, behavior + observable — use
    the red-flag table in plan-md.md as your bar), `track:` sizing, and whether
    the stakes or tool-choice earn `flag:`, `critical:`, or `research:`. For
@@ -86,6 +94,7 @@ then the ordered item blocks, stop marker where agreed. Every item starts
 `status: not started` with an explicit `track:`. Apply the "Writing items for
 cheaper agents" rules — name files, state known approaches, escalate per item.
 
-Then show the user a 5-line summary: item count by track, flags used, stop
-marker position, and the first item that will run — and remind them the run
-command (`/dev-team-auto` for unattended, `/dev-team` for one item).
+Then show the user a 5-line summary: item count by track, flags used,
+`parallel-group:` pairs inferred (if any), stop marker position, and the
+first item that will run — and remind them the run command (`/dev-team-auto`
+for unattended, `/dev-team` for one item).

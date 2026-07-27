@@ -74,6 +74,15 @@ automatically when they involve an external tool choice; this field is the
 manual trigger for everything else. Cache-first
 (`~/.claude/skills/dev-team/research-notes/`), so repeat topics are near-free.
 
+**`parallel-group:`** (optional) — consecutive items sharing the same value run
+concurrently under `/dev-team-auto` (up to 3 at once, each in its own worktree
+branch, merged in completion order). Set it only when the items are file- and
+resource-disjoint: no shared files, no shared schema/migration, no
+producer/consumer relationship between them. Never infer independence at
+run-time — this field is the only signal `/dev-team-auto` trusts. The plan
+author (or plan-md's own scan of the codebase) sets it when writing the plan,
+not the executing agent.
+
 ---
 
 ## Format — layout-loop runs
@@ -242,6 +251,11 @@ to Opus/Fable) rediscovering what you already knew. Rules:
 - **Escalate per item, not per run.** `flag:`, `critical:`, and `research:` buy
   targeted scrutiny exactly where the stakes or staleness risk live — cheaper
   than raising the whole run's model tier.
+- **Mark disjoint items `parallel-group:`.** When the codebase scan shows two
+  consecutive items touch no common file, schema, or dependency chain, tag
+  them with a shared `parallel-group:` value so `/dev-team-auto` runs them
+  concurrently. Skip it when unsure — a wrong merge conflict costs more than
+  sequential execution saved.
 - **Global constraints go in the preamble once**, not repeated per item — agents
   read the preamble; duplication drifts.
 - **Testable `done when:` always** (previous section) — it is the contract a
@@ -281,6 +295,15 @@ to Opus/Fable) rediscovering what you already knew. Rules:
     - All existing UserRepository tests pass
   status: not started
   track: full
+  parallel-group: a
+
+- task: Add a /health endpoint returning build SHA and uptime
+  done when:
+    - GET /health returns 200 with { sha, uptimeSeconds } when the app is up
+    - Returns 503 while a dependency the app requires (DB) is unreachable
+  status: not started
+  track: light
+  parallel-group: a
 
 > **⚠️ AUTONOMOUS RUN — STOP HERE**
 

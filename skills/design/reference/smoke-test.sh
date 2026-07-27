@@ -46,10 +46,14 @@ ns=$(find "$DL/styles" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | wc -l | tr 
 grep -q "RETIRED" "$DL/brands/nate-personal.md" 2>/dev/null && wait_ "nate-personal brand RETIRED — needs re-authoring" || ok "nate-personal brand usable"
 
 echo "== 5. Reference corpus =="
+# Before an extraction session the corpus sits in raw/; after one it lives in styles/.
+# Count both, so this check stays meaningful on either side of the session.
 n=$(ls "$HOME"/os/knowledge/raw/*.png "$HOME"/os/knowledge/raw/*.jpg 2>/dev/null | wc -l | tr -d ' ')
-[ "$n" -ge 30 ] && ok "$n references staged" || wait_ "only $n references (want 30-50 before clustering)"
+f=$(find "$DL/styles" -mindepth 2 -type f \( -name '*.png' -o -name '*.jpg' \) 2>/dev/null | wc -l | tr -d ' ')
+tot=$((n+f))
+[ "$tot" -ge 30 ] && ok "$tot references in corpus ($f filed by style, $n awaiting clustering)" || wait_ "only $tot references (want 30-50)"
 [ -f "$HOME/os/knowledge/raw/sources.md" ] && ok "sources.md present" || no "sources.md missing — URLs unrecoverable"
-t=$(cd "$HOME/os" && git ls-files knowledge/raw/ | grep -cE '\.(png|jpg)$')
+t=$(cd "$HOME/os" && git ls-files knowledge/raw/ knowledge/library/ | grep -cE '\.(png|jpg|jpeg)$')
 [ "$t" -eq 0 ] && ok "images gitignored (public repo safe)" || no "$t images TRACKED — third-party work would be published"
 
 echo "== 6. Higgsfield =="

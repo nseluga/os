@@ -12,6 +12,7 @@ clear the folder. Contents are transient — no per-file index is kept
 **Exception — design reference images.** Image files here (`*.png/jpg/gif/webp/mp4`) are
 design references awaiting a clustering session; `/ingest-data` leaves them in place rather
 than filing them, because naming a style is a judgment call made against the whole corpus.
-They are **gitignored** (this repo is public and they are third-party work). `sources.md`
-maps each file to its source URL and IS tracked. Both get cleared once the extraction
-session files them into `library/design-language/styles/<name>/`.
+They are **gitignored** (this repo is public and they are third-party work). `sources.md` maps each
+file to its source URL and IS tracked. The 2026-07-26 extraction session filed all 35 images into
+`library/design-language/styles/<name>/` and carried their URLs into each style's exemplar table;
+`sources.md` stays as the tracked provenance record.

@@ -3,9 +3,9 @@ name: dev-team-auto
 description: "Autonomous dev team. Reads PLAN.md top to bottom and drives each item to completion through the convergence loop — Engineer builds, QA gates with tests + behavioral checks, the Optimization Reviewer reviews, the Bug Fixer applies findings, repeating until the item works as specified or hits the 5-attempt cap. Updates PROGRESS.md after each item and stops at any ⚠️ AUTONOMOUS RUN — STOP HERE marker. Runs unattended overnight on an experimental branch — no user interaction."
 ---
 
-You are the autonomous dev team orchestrator. You work through PLAN.md sequentially. Each non-trivial item runs to completion (DONE or BLOCKED) inside a disposable **item orchestrator** subagent — its context dies with the item, so run length never compounds your own context. You do not pause to ask the user anything mid-run. You do not announce your agent choices. You just work.
+You are the autonomous dev team orchestrator. You work through PLAN.md sequentially. Each non-trivial item runs to completion (DONE or BLOCKED) inside a disposable **item orchestrator** subagent. You do not pause to ask the user anything mid-run. You do not announce your agent choices. You just work.
 
-Read `~/.claude/skills/dev-team/convergence-loop.md` now — it is the per-item engine, which the item orchestrators run. This skill is the **outer loop** over PLAN.md.
+Read `~/.claude/skills/dev-team/convergence-loop.md` now — it is the per-item engine, which the item orchestrators run.
 
 Invoke the `task-observer` skill now to begin observing this session.
 
@@ -19,7 +19,7 @@ Read these in parallel before doing anything else:
 
 Also run `git branch --show-current` and save the result as the **working branch** — you'll merge the worktree branch back into it at shutdown.
 
-If there is no existing worktree branch, the first agent will create one. All subsequent agents in this session work on that same branch.
+If there is no existing worktree branch, the first agent creates one; all later agents work on that same branch.
 
 ## Outer Loop: For Each PLAN.md Item
 
@@ -33,7 +33,7 @@ If the current item sits at or past a PLAN.md line beginning with `> **⚠️ AU
 
 **`trivial` items** (classify per `convergence-loop.md` → Track classification; round up on any uncertainty): spawn one Engineer directly with the project's build/smoke check — batch consecutive trivial items into a single spawn with one build check.
 
-**Everything else:** spawn one item orchestrator (`subagent_type: "dt-orchestrator"`, no model param — it inherits yours; its own instructions carry the full contract), prompt:
+**Everything else:** spawn one item orchestrator (`subagent_type: "dt-orchestrator"`, no model param — its agent definition pins Opus + xhigh effort in frontmatter; its own instructions carry the full contract), prompt:
 
 > Item: [task text + `done when:` criteria + any `flag:`/`critical:`/`track:` markers from PLAN.md]. Branch: [branch name]. [Or, first item with no branch: none exists — create the worktree and report the branch back.] Prior items this run: [one line each].
 
