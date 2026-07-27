@@ -35,7 +35,7 @@ one short message, then build — don't interview him.
 | **Aesthetic** | The family of design. A look name from the library, or his words. |
 | **Reference** | Actual image files, `Read` into context. URLs count — fetch or browse them. Matching the *feel*, not the content. |
 | **Intent** | What is this, who is it for, what should they do when they land. This drives everything downstream — layout, density, how hard the CTA works. Never skip it. |
-| **Guardrails** | What never to do. Starting set: no Inter / Geist / Space Grotesk / Plus Jakarta, no purple-blue gradients, no 3D SaaS blobs, no colored side-tab borders on cards. Nate overrides freely; add whatever this project needs. |
+| **Guardrails** | What never to do. Starting set: no Inter / Geist / Space Grotesk / Plus Jakarta, no purple-blue gradients, no 3D SaaS blobs, no colored side-tab borders on cards, no eyebrow pill above the headline, no single accent-coloured word inside an otherwise plain headline. The last two are this wave's tells and they date a page instantly. Nate overrides freely; add whatever this project needs. |
 
 ## Wide net, then narrow
 
@@ -48,14 +48,31 @@ Build an `index.html` that shows the current round in a labeled grid of iframes,
 one scaled down and clickable through to full size. Same harness every round; only the
 contents change.
 
-**Round 1 — five drafts, five directions.** Pick five looks that fit the intent. If
-Nate named them, use his. Otherwise glob the library, choose five, and say which and why
-in one line each. Each draft is a whole page — hero, body, footer — not a mood board.
+**Round 1 — five drafts, five directions.** Write **five separate briefs**, not one brief
+rendered five ways. Each direction gets its own aesthetic, its own reference image(s) read
+into context, its own hero treatment, and its own headline. Say in one line why each fits
+the intent.
+
+The failure mode is one design in five skins — same nav, same headline, same button pair,
+same card row, different accent colour. Test for it: if you could lift the top of draft 2
+into draft 4 and not notice, you have not made five drafts. No two may share a —
+
+- **Composition.** Where the headline sits (centred, hard left, split, off-grid), whether
+  the hero is full-bleed or framed or has no image at all, whether there is a top nav at
+  all, how the first screen divides between type, image, and empty space.
+- **Headline.** The words are design, not content. Each aesthetic argues for the product
+  in its own voice — write a different headline per direction, not one headline restyled.
+- **Type pairing.** A different display face per draft, and don't default to the same
+  neutral sans for body copy every time.
+- **Palette,** including whether it is light or dark. Don't ship five dark drafts.
+
+Each draft is a whole page — hero, body, footer — not a mood board.
 
 **Round 2 — three variants of the winner, varying the body.** Hero stays. Move what's
 under it: an index rail that tracks scroll, framed sections, a denser column, a ledger.
 References apply here too — if Nate likes how some site's body reads, take that URL as
-input the same way.
+input the same way. If the three still read as the same page, the direction was too thin
+to develop — say so and go back to round 1 rather than varying harder.
 
 **Round 3 — imagery.** See below.
 
@@ -66,18 +83,29 @@ copy. Small, named, one at a time.
 
 ## Placeholder-first imagery
 
-There may be no image generator wired up. That never blocks a draft. Every image slot
-renders as a styled placeholder — correct aspect ratio, correct tonal weight in the
-composition — with its **image intent** visible in the slot and stored in the markup:
+There may be no image generator wired up. That never blocks a draft — but the stand-ins
+are **not grey boxes with a caption**. A labelled rectangle makes every draft read as the
+same wireframe in a different accent colour, which is the exact tell you are trying to
+escape.
+
+**Draw the stand-in.** CSS or inline SVG, built to carry that direction's aesthetic: a
+contour plot, a dither field, a ridgeline silhouette, a drift of numerals, a halftone, a
+blueprint grid, an oversized type specimen. It should be recognisable as *that look* from
+across the room. A few dozen lines buys most of the character of the draft.
+
+Keep the generation brief in the markup, never printed into the layout:
 
 ```html
-<figure class="img" data-image-intent="Aerial of a fog-filled valley at dawn, one
+<figure class="hero-fig" data-image-intent="Aerial of a fog-filled valley at dawn, one
   ridgeline entering from the right third, cool blue-grey, heavy negative space top-left
   for the headline. 16:9.">
+  <svg viewBox="0 0 1600 900" aria-hidden="true"><!-- drawn stand-in --></svg>
+</figure>
 ```
 
 Subject, mood, composition, aspect ratio. Specific enough that a generator fills it from
-that text alone. "Hero image" is not an intent.
+that text alone. "Hero image" is not an intent. The intent is metadata for the swap step —
+on the page it reads as scaffolding, so it stays in the attribute.
 
 **Swapping in real images.** Once the direction is locked — never before — offer it. If
 the Higgsfield MCP is connected, `mcp__higgsfield__generate_image` takes the intent
