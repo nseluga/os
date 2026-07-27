@@ -14,5 +14,5 @@ design references awaiting a clustering session; `/ingest-data` leaves them in p
 than filing them, because naming a style is a judgment call made against the whole corpus.
 They are **gitignored** (this repo is public and they are third-party work). `sources.md` maps each
 file to its source URL and IS tracked. The 2026-07-26 extraction session filed all 35 images into
-`library/design-language/styles/<name>/` and carried their URLs into each style's exemplar table;
+`library/inspiration/<look>/` and carried their URLs into each look's shot table;
 `sources.md` stays as the tracked provenance record.
