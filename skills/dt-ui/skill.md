@@ -16,6 +16,7 @@ Read any of these that exist in `.claude/dev-team/`:
 ## Survey the Frontend
 
 Before changing anything:
+- Read `STYLE.md` at the repo root if it exists — the locked visual direction, fonts, tokens file, and guardrails. It outranks your own taste; you are polishing inside it, not revisiting it.
 - Read the pages/components in scope, plus shared styles, theme files, and any reusable components
 - Identify the project's existing UI conventions — component patterns, CSS approach (modules, styled-components, plain CSS), spacing and color usage
 - Your improvements must look like they belong: consistency with the existing design system beats introducing a better-but-foreign pattern

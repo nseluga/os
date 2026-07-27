@@ -50,7 +50,7 @@ Reads every file in `knowledge/raw/` (skip README.md), classifies each by conten
 - Memory writes must follow the two-step format (fact file + MEMORY.md index line) from CLAUDE.md
 - Check for existing content before appending — don't duplicate facts already in me/README.md or audience/README.md
 - For project routing, match against the `repo:` or `name:` field in `projects/*/README.md`
-- Design reference images STAY in `raw/` until a clustering session files them into `library/design-language/styles/<name>/`. Do not move, rename, or delete them. They are the sole exception to "leave raw/ empty" — report them as awaiting clustering.
+- Design reference images STAY in `raw/` until a clustering session files them into `library/inspiration/<look>/`. Do not move, rename, or delete them. They are the sole exception to "leave raw/ empty" — report them as awaiting clustering.
 - Image files in `raw/` are gitignored (`.gitignore`: `knowledge/raw/**/*.png` etc.) because they are third-party work and this repo is public. Never remove those rules.
 - Don't sort design images into `styles/<name>/` yourself — naming a style is a judgment call Nate makes against the whole corpus in a clustering/extraction session, not a per-file classification
 - If an image's source URL is known, preserve it: append `<filename> — <url>` to `knowledge/raw/sources.md` (the style README schema requires a source URL per exemplar, and the URL is unrecoverable later)
