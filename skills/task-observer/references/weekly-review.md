@@ -172,30 +172,13 @@ Wait for the user to acknowledge before other work.
 
 ## Delivering updated skills
 
-Save each updated skill to
-`[workspace folder]/skill-updates/[date]/[skill-name]/` — the FULL skill
-directory (SKILL.md plus references/, scripts/, assets/ where present),
-never SKILL.md alone — and present it for review and installation. In
-Cowork: via `present_files` and its upload button. In environments without
-a presentation tool (e.g. Claude Code CLI): report the staged path and a
-change summary in chat and let the user review and install from there.
-Never write to the live skill directly, even where the skills directory is
-writable — staging-only is a deliberate safety property of the review loop
-(nothing goes live without the user's sign-off), not a filesystem
-constraint. For any skill with
-supporting files, zip the staged directory into a `.skill` bundle and
-present the bundle; a bare SKILL.md install silently truncates a
-multi-file skill. Pre-delivery gate (two items, run as the last step
-before presenting): (1) grep the staged SKILL.md body for `references/`,
-`scripts/`, `assets/` paths and fail the delivery if any referenced file
-is missing from the staged set; (2) for multi-file skills, fail the
-delivery if the artefact being presented is bare file links rather than
-the `.skill` bundle. Sweep build artefacts (`__pycache__/`, `*.pyc`,
-`.DS_Store`, `.~lock.*`) before zipping and read the archive listing back
-after. When seeding staged
-copies from the read-only mount, `chmod -R u+w` the staged path first —
-the mount's read-only mode travels with the copy, for directories as
-well as files. Do not edit skill files in place — nothing goes live
-until the user installs it. **Keep-two rule:** for any skill, keep only
-the two most recent date directories under `skill-updates/`; delete
-older ones.
+Follow the staging and delivery rules in `references/skill-authoring.md`
+(live file as base, `[workspace folder]/skill-updates/[date]/[skill-name]/`
+with the FULL skill directory, `.skill` bundle for multi-file skills,
+pre-delivery gate, packaging hygiene, `chmod -R u+w` when seeding from a
+read-only mount). Never write to the live skill directly — staging-only is
+a deliberate safety property of the review loop. In Cowork: present via
+`present_files` and its upload button. In environments without a
+presentation tool (e.g. Claude Code CLI): report the staged path and a
+change summary in chat. **Keep-two rule:** for any skill, keep only the two
+most recent date directories under `skill-updates/`; delete older ones.

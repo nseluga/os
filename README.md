@@ -4,7 +4,50 @@ A single home for knowledge, skills, and projects. Built on top of Claude Code: 
 
 The system compounds — each skill added makes the next session more capable, and the memory layer means Claude Code never starts cold. All AI-assisted work on [nateseluga.com](https://nateseluga.com) was built with this as infrastructure.
 
-This is a public repository. Reference materials in `knowledge/library/` are kept locally only (see `.gitignore`).
+This is a public repository. Everything personal to Nate — `knowledge/me/`,
+`knowledge/audience/`, `knowledge/library/`, and `projects/` — is gitignored;
+what's shared is the system itself (skills, frameworks, structure). See
+[Setting This Up For Yourself](#setting-this-up-for-yourself) to run your own
+copy.
+
+---
+
+## Setting This Up For Yourself
+
+This repo is designed to be forked: you get Nate's skills and frameworks, you
+fill in your own facts, and you can keep pulling his improvements later.
+
+1. **Fork it on GitHub, then clone your fork as `~/os`** (matching the path
+   keeps `CLAUDE.md`'s references valid without edits — clone elsewhere and
+   you'll need to update those paths):
+   ```
+   git clone https://github.com/<you>/os.git ~/os
+   ```
+
+2. **Symlink it into Claude Code:**
+   ```
+   ln -s ~/os/CLAUDE.md ~/.claude/CLAUDE.md
+   ln -s ~/os/skills ~/.claude/skills
+   ln -s ~/os/knowledge/memory ~/.claude/memory
+   ```
+   Health check: `ls -L ~/.claude/skills/grilling` should resolve.
+
+3. **Fill in your own personal folders.** `knowledge/me/`, `knowledge/audience/`,
+   `knowledge/library/`, and `projects/` are gitignored (see `.gitignore`) —
+   your fork starts with just the folder structure plus two generic templates
+   (`projects/_TEMPLATE.md`, `knowledge/library/GUIDE.md`). Add your own
+   `background.md`/`goals.md` under `me/`, persona notes under `audience/`,
+   reference docs under `library/`, and one `README.md` per real project under
+   `projects/` (copy `_TEMPLATE.md`). None of it gets pushed — see
+   [What's in Each Section](#whats-in-each-section) for what each folder is for.
+
+4. **Stay in sync with upstream.** Since your personal content lives in
+   gitignored folders, merging Nate's updates won't conflict with your own data:
+   ```
+   git remote add upstream https://github.com/nseluga/os.git
+   git fetch upstream
+   git merge upstream/main
+   ```
 
 ---
 
@@ -14,14 +57,14 @@ This is a public repository. Reference materials in `knowledge/library/` are kep
 os/
 ├── CLAUDE.md              # Developer instructions for Claude Code integration
 ├── knowledge/             # Organized facts and reference materials
-│   ├── me/                # Bio, roles, preferences, goals, working style
+│   ├── me/                # Bio, roles, preferences, goals, working style (gitignored)
 │   ├── frameworks/        # Mental models, decision methods, reusable thinking
-│   ├── audience/          # Notes on target readers / users
+│   ├── audience/          # Notes on target readers / users (gitignored)
 │   ├── memory/            # Claude Code's managed memory (auto-updated by Claude)
-│   ├── library/           # Reference docs (read on-demand; kept local-only)
+│   ├── library/           # Reference docs, read on-demand (gitignored)
 │   └── raw/               # Inbox for new materials (triaged into above)
 ├── skills/                # 48 Claude Code skills — reusable workflows and tools
-├── projects/              # Index entries for 8 active projects
+├── projects/              # Index entries for 8 active projects (gitignored, except _TEMPLATE.md)
 │   ├── pitcher-injury-risk/
 │   ├── batting-average-ability/
 │   ├── nba-shot-value/
@@ -50,6 +93,7 @@ Hand-written facts about who you are and what you want:
 - Working style and preferences
 
 This is the source of truth for Claude Code about how to work with you.
+**Note:** Files here are gitignored — personal, local-only.
 
 ### `knowledge/frameworks/`
 Reusable mental models and decision-making methods:
@@ -62,13 +106,15 @@ Notes on target readers and users for your work:
 - Persona notes for portfolio work, talks, writing
 - Communication style preferences by audience
 - Used when tailoring explanations or designing UX
+- **Note:** Files here are gitignored — personal, local-only.
 
 ### `knowledge/library/`
 Reference materials kept on-disk (read when the task clearly matches):
 - Technical documentation
 - Style guides and writing references
 - Domain-specific knowledge bases
-- **Note:** Files here are gitignored; this is a local-only reference store
+- **Note:** Files here are gitignored; this is a local-only reference store.
+  `GUIDE.md` (kept in the repo) explains the folder's conventions.
 
 ### `knowledge/memory/`
 Claude Code's managed memory system — automatically updated across sessions:
@@ -98,6 +144,7 @@ Each skill lives in `skills/<name>/SKILL.md` with frontmatter (name, description
 
 ### `projects/`
 Index entries for 8 active projects. Each is a pointer to a real repository elsewhere — not the actual codebase, just metadata (repo path, GitHub link, status, next step, priority). Used to context-switch quickly without re-explaining state.
+**Note:** Per-project READMEs are gitignored (personal); `_TEMPLATE.md` is kept in the repo so you can add your own.
 
 | Project | What it is |
 |---|---|
@@ -132,7 +179,7 @@ Editing a skill or memory file here changes it everywhere immediately.
 - **Interested in the projects?** Start at `knowledge/me/` — it has links to all active work
 - **Curious about the skills?** Browse `skills/` — each is a self-contained Claude Code automation
 - **Want to understand the thinking?** Check `knowledge/frameworks/` for mental models and decision methods
-- **Just exploring?** Start with this README, then `knowledge/me/README.md`
+- **Just exploring?** Start with this README, then `knowledge/me/INDEX.md`
 
 ---
 
@@ -140,12 +187,12 @@ Editing a skill or memory file here changes it everywhere immediately.
 
 | What you're looking for | Where to find it |
 |---|---|
-| Nate's bio, goals, projects | `knowledge/me/README.md` |
+| Nate's bio, goals, projects | `knowledge/me/INDEX.md` (gitignored — local only) |
 | How this repo works | `CLAUDE.md` (developer-focused) or this README |
-| A specific project's repo | `projects/<project-name>/README.md` |
+| A specific project's repo | `projects/<project-name>/README.md` (gitignored — local only) |
 | How to use a skill | `skills/<skill-name>/SKILL.md` |
-| Mental models for a task | `knowledge/frameworks/README.md` |
-| Communication style notes | `knowledge/audience/README.md` |
+| Mental models for a task | `knowledge/frameworks/INDEX.md` |
+| Communication style notes | `knowledge/audience/INDEX.md` (gitignored — local only) |
 | Things Claude has learned | `knowledge/memory/MEMORY.md` |
 
 ---
@@ -154,7 +201,7 @@ Editing a skill or memory file here changes it everywhere immediately.
 
 - **Don't move or rename `~/os`** without updating the symlinks in `~/.claude`, or skills and memory will silently break
 - **Health check:** `ls -L ~/.claude/skills/grilling` should resolve. If it errors, symlinks are broken
-- **Reference materials** in `knowledge/library/` are gitignored and kept local-only (see `.gitignore`)
+- **Personal content** in `knowledge/me/`, `knowledge/audience/`, `knowledge/library/`, and `projects/` is gitignored and kept local-only (see `.gitignore`)
 - **Memory format** is auto-managed by Claude Code; hand-edit `knowledge/me/` instead if you want to add notes
 - **Skills are real code** — each `SKILL.md` contains a frontmatter header (name, description, trigger) and implementation body
 
@@ -166,4 +213,4 @@ Editing a skill or memory file here changes it everywhere immediately.
 Harvey Mudd College, Class of 2027  
 Software engineering · ML/AI · Data science · Baseball analytics
 
-See `knowledge/me/README.md` for full bio and working style.
+See `knowledge/me/INDEX.md` for full bio and working style.
