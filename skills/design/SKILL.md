@@ -131,11 +131,15 @@ JSON on stdout, exit 2 means findings. `--scope type` / `--scope layout` narrow 
 Fix what it catches. Verify each finding in context first — a rule can fire on something
 that is deliberate and right here; when it does, say so in a line and move on.
 
-Once a direction is locked, Impeccable's verbs are fair game for a targeted pass —
-`typeset`, `colorize`, `layout`, `animate`, `adapt`, `bolder`, `quieter`, `distill`,
-`delight`, `polish`. Read `$IMP/reference/<verb>.md` and follow it. Don't route into
-`new-work` / `shape` / `critique` / `init` — those restart a direction Nate already
-chose.
+All of Impeccable's verbs are available — `typeset`, `colorize`, `layout`, `animate`,
+`adapt`, `bolder`, `quieter`, `distill`, `delight`, `overdrive`, `polish`, `harden`,
+`audit`, `optimize`, `clarify`, `onboard`, `extract`, `document`, `shape`, `critique`,
+`init`, `live`. Read `$IMP/reference/<verb>.md` and follow it. Nothing here is off
+limits; pick whichever actually fits the ask.
+
+Most are targeted passes on a design that already has a direction. `shape`, `critique`,
+`init` and `craft` are the ones that reopen creative direction — reach for them at the
+start, or when Nate wants the question reopened, rather than as a mid-flow reroute.
 
 ## STYLE.md
 
