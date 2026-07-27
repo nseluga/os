@@ -11,8 +11,6 @@ know each item is done. Agents read it at startup; you write it before the sessi
 Use PLAN.md when:
 - Running `/dev-team-auto` (it requires one — the outer loop iterates over it)
 - Running `/dev-team` on a multi-item backlog (it reads PLAN.md if no inline arg is given)
-- Running `/layout-loop` with more than one page, or when you want the queue
-  to persist across sessions
 - Any overnight/unattended run where you want a stop marker or a resumable queue
 
 Skip it (use an inline arg or TASK.md) when:
@@ -85,64 +83,17 @@ not the executing agent.
 
 ---
 
-## Format — layout-loop runs
-
-Layout-loop plans describe visual pages to improve, not code tasks. The queue
-is ordered; each page gets its own full visual loop.
-
-Plan-level metadata goes at the top (applies to the whole run):
-
-```markdown
-brand: portfolio
-launch: pnpm dev
-url: http://localhost:3000
-```
-
-Items follow:
-
-```markdown
-- page: /
-  notes: hero section feels cluttered — prioritize whitespace pass
-
-- page: /projects
-  notes: card grid — check spacing rhythm and image crop consistency
-```
-
-### Fields
-
-**`brand:`** (required, plan-level) — the brand file to load from
-`~/os/knowledge/library/design-language/brands/<brand>.md`. Must match an
-existing file. Never guess for client work; confirm before the run.
-
-**`launch:`** (required, plan-level) — the dev-server command
-(e.g. `pnpm dev`, `pnpm --filter web dev`).
-
-**`url:`** (required, plan-level) — the base URL to open in the browser
-(e.g. `http://localhost:3000`).
-
-**`page:`** (required per item) — the route path to view and improve.
-Each page gets its own 5-pass loop.
-
-**`notes:`** (optional per item) — hints about where to focus. Not instructions;
-the agent still applies the full rubric. Think of it as "look here first."
-
-**`status:`** (same as dev-team) — `not started` | `done` | `blocked`.
-Layout-loop updates this in place.
-
----
-
 ## The preamble (context above the items)
 
-Everything above the first item block (`- task:` for dev-team, the plan-level
-`brand:`/`launch:`/`url:` metadata or first `- page:` for layout-loop) is an
+Everything above the first item block (`- task:` for dev-team) is an
 optional **preamble**: orientation the orchestrator reads for global guidance
 but does not execute as an item. Recommended by default for every file-based
 PLAN.md; the only thing that varies is depth. Skip it only for a throwaway
 inline/TASK.md task.
 
 The loop reads top-to-bottom and is LLM-driven, so a clearly-separated preamble
-is safe — but keep the items unambiguous: start each with the exact `- task:` /
-`- page:` block format, and never put an executable item inside the preamble.
+is safe — but keep the items unambiguous: start each with the exact `- task:`
+block format, and never put an executable item inside the preamble.
 Close the preamble with a `---` rule before the first item.
 
 **Shape (all parts optional, scale to the plan):**
@@ -175,8 +126,6 @@ Use it to:
 - Require human review before a risky item (e.g. after a DB migration, before a
   deploy-adjacent change)
 - Break a large plan into sessions — move the marker down each morning
-
-Works the same in both dev-team and layout-loop plans.
 
 ---
 
@@ -317,28 +266,6 @@ to Opus/Fable) rediscovering what you already knew. Rules:
   track: full
   flag: data-path
 ```
-
-## Example PLAN.md — layout-loop
-
-```markdown
-brand: portfolio
-launch: pnpm dev
-url: http://localhost:3000
-
-- page: /
-  notes: hero feels heavy — whitespace and type hierarchy first
-  status: not started
-
-- page: /projects
-  status: not started
-
-> **⚠️ AUTONOMOUS RUN — STOP HERE**
-
-- page: /about
-  status: not started
-```
-
----
 
 ## Lifecycle
 

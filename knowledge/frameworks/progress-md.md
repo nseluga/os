@@ -12,8 +12,6 @@ run can be resumed, audited, and handed off without reading the full transcript.
 BLOCKED), before touching the next item. The two writes (PROGRESS.md row +
 team-memory entry) are treated as one atomic action.
 
-**`/layout-loop`** — writes a row after each page's loop ends, same discipline.
-
 **`/dev-team` (interactive)** — does **not** write PROGRESS.md. It reports
 results to you in the conversation. PROGRESS.md is exclusively for unattended runs. It reports
 results to you in the conversation. PROGRESS.md is exclusively for unattended runs.
@@ -95,28 +93,6 @@ or
 skipped — below stop marker
 ```
 
-### layout-loop row conventions
-
-**Done — converged:**
-```
-done — converged — [one-line summary of main changes]
-```
-
-**Done — diminishing returns:**
-```
-done — diminishing returns — [what was achieved; what remains]
-```
-
-**Done — iteration cap (5 passes):**
-```
-done — cap reached — [what was achieved; what still needs work]
-```
-
-**Blocked — graceful failure:**
-```
-blocked — graceful failure — [reason: dev server died / screenshots failed]
-```
-
 ---
 
 ## Example PROGRESS.md — dev-team-auto
@@ -129,18 +105,6 @@ blocked — graceful failure — [reason: dev server died / screenshots failed]
 | Add rate limiting to /api/submit | done full — rate limiting via Redis middleware, configurable via env vars — a3f92c1 |
 | Replace inline SQL in UserRepository | done light — all UserRepository queries parameterized, injection test added — b7d04e3 |
 | Add last_login_at column to users table | blocked — VERDICT: FAIL — column not populated on OAuth login path — Root Cause: OAuth callback skips the login hook where timestamp is set |
-```
-
-## Example PROGRESS.md — layout-loop
-
-```markdown
-# Progress
-
-| Page | Status |
-|------|--------|
-| / | done — converged — tightened hero whitespace, reduced type scale on subtitle, aligned CTA to grid |
-| /projects | done — diminishing returns — card spacing normalized; image crop inconsistency remains (requires content change, out of edit fence) |
-| /about | not started |
 ```
 
 ---
