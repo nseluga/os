@@ -4,7 +4,7 @@ One folder per skill. Each `SKILL.md`'s `description:` frontmatter is the canoni
 
 ## Dev team
 
-- `design` — Interactive design skill: pick a style, pick a composition, build, then refine. Merges craft + mode + style + brand with Impeccable as the technical floor. Replaced `layout-loop`.
+- `design` — Interactive design skill: five drafts side by side, narrow to one, then tweak it live in the browser. Prompts with real reference images from `knowledge/library/inspiration/`; Impeccable's detector is the anti-slop floor. Ships `tweaks.js`, the in-page control panel.
 - `dev-team` — Coordinates the dev team convergence loop for one plan item
 - `dev-team-auto` — Autonomous dev team drives PLAN.md items through convergence loop
 - `dt-analyze` — Code Analyzer maps the codebase before other agents work

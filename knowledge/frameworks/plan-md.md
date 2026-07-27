@@ -93,7 +93,6 @@ is ordered; each page gets its own full visual loop.
 Plan-level metadata goes at the top (applies to the whole run):
 
 ```markdown
-brand: portfolio
 launch: pnpm dev
 url: http://localhost:3000
 ```
@@ -109,10 +108,6 @@ Items follow:
 ```
 
 ### Fields
-
-**`brand:`** (required, plan-level) — the brand file to load from
-`~/os/knowledge/library/design-language/brands/<brand>.md`. Must match an
-existing file. Never guess for client work; confirm before the run.
 
 **`launch:`** (required, plan-level) — the dev-server command
 (e.g. `pnpm dev`, `pnpm --filter web dev`).
@@ -134,7 +129,7 @@ Layout-loop updates this in place.
 ## The preamble (context above the items)
 
 Everything above the first item block (`- task:` for dev-team, the plan-level
-`brand:`/`launch:`/`url:` metadata or first `- page:` for layout-loop) is an
+`launch:`/`url:` metadata or first `- page:` for layout-loop) is an
 optional **preamble**: orientation the orchestrator reads for global guidance
 but does not execute as an item. Recommended by default for every file-based
 PLAN.md; the only thing that varies is depth. Skip it only for a throwaway
@@ -321,7 +316,6 @@ to Opus/Fable) rediscovering what you already knew. Rules:
 ## Example PLAN.md — layout-loop
 
 ```markdown
-brand: portfolio
 launch: pnpm dev
 url: http://localhost:3000
 
