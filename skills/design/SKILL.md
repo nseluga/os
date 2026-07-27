@@ -38,12 +38,17 @@ Merged every run, in this order:
 | Conflict | Winner | Note |
 |---|---|---|
 | Technical / accessibility math — contrast ratios, touch targets, breakpoints, motion timing, type-scale ratios, measure, spacing systems | **Impeccable** | Always. Cite the Impeccable file; never restate its numbers in project docs. |
-| **Taste collision with brand** — the anti-slop registry flags a brand's palette, font, or effect | **Impeccable** | Nate's explicit ruling. The brand gets **re-picked**, not exempted. It has already fired once: `brands/nate-personal.md` was flagged on `ai-color-palette`, `dark-glow`/`radial-halo`, and `overused-font`, and Nate retired the palette rather than carve out an exception. |
+| **Taste collision with brand** — the anti-slop registry flags a brand's palette, font, or effect | **Impeccable** | Brand files are **reference, not rules** — so a collision costs a value, not the brand. Drop or move the flagged value and say so; never carve an exemption, and never stop to "re-pick the brand." |
 | Judgment Impeccable has no opinion on — what dominates, how much restraint, composition intent, whether a surface has earned character | **craft.md** | Impeccable holds the mechanics, never the direction. |
 | Style vs. mode — a genre wants more ornamentation than the mode allows | **mode** | Modes set the budget; styles spend inside it. If the style can't work at that budget, it was the wrong style for the mode — say so and re-pick. |
-| Brand vs. style on a value Impeccable does not flag | **brand** | Style says "muted, low-chroma"; brand says which muted hues. |
+| Brand vs. style on a value Impeccable does not flag | **brand** | Style says "muted, low-chroma"; brand says which muted hues. Values only — the brand never overrides the style's genre, composition, or imagery logic. |
+| Brand file appears to forbid something | **the brand file is wrong** | Brands are reference, not rules. Read a prohibition as strong direction, not a veto — and flag it for rewrite. Nothing in `brands/` may narrow the phase-1 slate or block a build. |
 
 This is the opposite of the usual "brand wins on brand concerns" instinct. It is deliberate.
+
+**The brand layer supplies colour, type character, register, and closest-fit
+observations — nothing else.** See `reference/brand-template.md` for the schema and its
+authoring rules.
 
 ### Resolving Impeccable
 
@@ -100,7 +105,7 @@ node "$IMP/scripts/detect.mjs" --json [--scope layout|type] <files or dirs>
 1. Resolve `$IMP`.
 2. Read `craft.md`. **If it carries a STALE banner, do not cite its tokens or `Ref:` paths** — use only the principles the banner says survive, and tell Nate the re-extraction is still pending.
 3. Read the mode file for the declared mode. Missing or unpopulated → ask Nate for the mode and its dials, or stop.
-4. Read the brand file. **If it carries a RETIRED/PENDING banner, refuse to apply it** and ask which brand to use instead.
+4. Read the brand file **as reference, not as constraint** — it tells you what the brand is like and what to try to match. Treat its palette, type character, register, and affinities as input to your options; treat any prohibition in it as a defect to flag, not an instruction to obey.
 5. Phase artifacts go in `<repo>/.design/` (scratch, gitignored). Only `STYLE.md` is committed.
 
 Nate's **mode** (`app` / `website`) is not Impeccable's **visitor mode** (Persuade / Operate / Read / Experience). Map when loading Impeccable references: `website` → Persuade (or Experience for portfolio/gallery surfaces), `app` → Operate, docs/long-form → Read.
@@ -112,7 +117,7 @@ Nate's **mode** (`app` / `website`) is not Impeccable's **visitor mode** (Persua
 Nate picks the genre. You render it; you do not rank it.
 
 1. Confirm **mode** (`app` | `website`) and **brand** with Nate. Never guess brand for client work.
-2. List candidate styles from `~/os/knowledge/library/design-language/styles/`, filtered by the mode file's **style fitness** and each style README's **Mode fitness** line. **If fewer than five styles qualify, stop** — the catalog is not populated enough to sample; tell Nate the extraction session must land first. Do not invent styles to fill slots.
+2. List candidate styles from `~/os/knowledge/library/design-language/styles/`, filtered by the mode file's **style fitness** and each style README's **Mode fitness** line — **and by nothing else**. The brand's "Style affinities" table is advisory: it tells Nate which are closest, it never removes a style from the slate. **If fewer than five styles qualify, stop** — the catalog is not populated enough to sample; tell Nate the extraction session must land first. Do not invent styles to fill slots.
 3. Pick a **representative layout** for the project: the real first page's actual content shape, simplified — nav, a hero or entry region, a primary content block, one secondary block, a footer. Same content in all five sections.
 4. Produce **one self-contained HTML file** at `<repo>/.design/phase1-styles.html`:
    - **Five full-width stacked sections**, one per style. NOT a tile grid — style is judged on composition and rhythm, and a tile can't show either.
@@ -319,8 +324,8 @@ All optional. Anything not passed is asked once, up front, then not asked again 
 
 - **This skill is interactive.** There is no overnight mode, no autonomous convergence, no diminishing-returns test, no iteration cap, no decide-and-log fork resolution. Taste has no gradient to descend — Nate decides. If you cannot ask, stop and ask.
 - **Do not merge or push without sign-off.** Normal branch hygiene, not a special gate.
-- **`craft.md` is currently STALE** (re-extraction pending as of 2026-07-25) and `modes/` + `styles/` hold only their READMEs. Phase 1 cannot run against an empty style catalog — check before promising output.
-- **`brands/nate-personal.md` is retired pending re-authoring.** Its palette, glow treatment, and fonts were all flagged by the registry. Refuse it; ask for a replacement.
+- **The catalog is populated** (as of 2026-07-27): `craft.md` re-extracted 2026-07-26 against 35 references, seven styles under `styles/` each with a README plus its reference shots, both mode files written. Phase 1 can run — six styles qualify for `website`, four for `app`. Re-check before promising output, but the old "empty catalog" blocker is gone.
+- **Both brand files predate the reference-not-rules schema** and still carry prohibitions, restated Impeccable thresholds, and (in `nate-personal.md`) an exclusionary style-pairings table. Rewrites are pending in their own sessions. Until then, read them per preflight step 4 — reference only — and ignore the `avoid` rows.
 - **Impeccable's own `/impeccable` skill will try to route you into `new-work` / `shape` / `critique`.** Do not follow it there. Load the specific reference files directly.
 - **Never repair Impeccable artifact drift as a side effect.** A `CONTEXT_STALE` finding is reported, not acted on.
 - `.design/` is scratch. Add it to `.gitignore`. `STYLE.md` is the only committed output of phases 1–3.
