@@ -71,6 +71,18 @@ follow this protocol for the rest of the session.
   recommendation, a Tier 3 call is made, a frozen rule is confirmed), say so
   explicitly and offer to append the standards §4 decision-log entry. Don't
   write it silently; wait for the user to confirm.
+- **Brief after every completed task.** When a discrete unit of work finishes
+  (a script run, an experiment, an analysis, a fix), close it with a short
+  plain-English brief — technical terms are fine and expected, but no
+  unexplained jargon a reader would have to look up. Cover, in order:
+  - **What** was done
+  - **How** it was done (method/approach)
+  - **Why** that approach (the reasoning or decision behind it)
+  - **Results** (the concrete output/numbers)
+  - **What it means** (interpretation — what the results imply for the
+    project, not just a restatement of them)
+  Keep it tight: a few sentences per point, not a report. Skip this for pure
+  Q&A or mid-task status updates — it's for task completions only.
 
 ## Composition with technical skills
 
