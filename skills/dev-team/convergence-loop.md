@@ -142,6 +142,10 @@ loop:
       if attempt > MAX_ATTEMPTS: mark BLOCKED; break
       continue                   # next build = dt-fix or another round of alternatives
 
+# CHECKPOINT: correctness is green — commit this last-known-good state
+  git add -A && git commit       # "checkpoint: item <title> — QA PASS (attempt #{attempt})"
+                                 # so a later fix/review pass that regresses can be reset back to here
+
   # 3. QUALITY GATE (only once correctness is green)
   run dt-review                  # writes review-report.md
   if review has zero Critical AND zero Important findings:
