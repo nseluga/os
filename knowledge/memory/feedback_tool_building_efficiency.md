@@ -13,9 +13,9 @@ When building or improving skills, agents, or orchestration tools, apply this ef
 
 **Cheap models belong on mechanical work only.** Fan-out with Haiku/cheap models for read-only, mechanical tasks (search, grep, trace, gather). QA, engineering, design, and reasoning roles require Sonnet+; cheap models produce shallow output that degrades effectiveness there.
 
-**Gate expansions on explicit, narrow signals.** Broader triggers (content heuristics, size proxies) fire too often and add cost without proportional gain. Prefer explicit author intent (like `flag:`) or unambiguous structural signals over fuzzy inference.
+**Gate expansions on explicit, narrow signals.** Broader triggers (content heuristics, size proxies) fire too often and add cost without proportional gain. Prefer unambiguous structural signals over fuzzy inference. *Revised 2026-07-28:* explicit author intent is a weaker signal than it looks — a classification field the author fills in rounds up to the max under uncertainty (coventry: 20/20 `full`, 16/20 `flag:`). Prefer a stated consequence over an author-assigned tier; see [[prescribe-stakes-not-process]].
 
-**Proactive fan-out only where it's cheaper than reactive.** The convergence loop's reactive alt-branch fork already handles design failures. Front-loading parallel exploration only pays off where the cost of a wrong first approach exceeds the fan-out cost — i.e., genuinely uncertain architecture on high-risk items, not every full-track item.
+**Proactive fan-out only where it's cheaper than reactive.** Front-loading parallel exploration only pays off where the cost of a wrong first approach exceeds the fan-out cost — genuinely uncertain architecture, not every heavyweight item. *Revised 2026-07-28:* make the fan-out cheap and it changes the math — parallel agents that only **outline** (no code, no worktree) cost a fraction of parallel builds, and keeping the runner-up outlines lets the reactive fork reuse them instead of re-deriving. Gate exploration on design uncertainty, not on stakes.
 
 **Align selection criteria with the review stage.** When picking a winning design/approach, use the same axes the Optimization Reviewer uses (efficiency, reliability, scalability) so the chosen path is already optimized for the quality gate it will face.
 
