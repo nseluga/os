@@ -121,6 +121,10 @@ loop:
       if attempt > MAX_ATTEMPTS: mark BLOCKED; break
       continue                   # next build = dt-fix or another round of alternatives
 
+  # CHECKPOINT: correctness is green — commit this last-known-good state
+  git add -A && git commit       # "checkpoint: item <title> — QA PASS (attempt #{attempt})"
+                                 # so a later fix/review pass that regresses can be reset back to here
+
   # 3. QUALITY GATE (only once correctness is green)
   run dt-review                  # writes review-report.md
   if review has zero Critical AND zero Important findings:
@@ -154,6 +158,7 @@ loop:
   3. **Already at Opus and the same cause persists** → mark **BLOCKED** now; attempts at the ceiling won't converge.
   This turns a blind retry into a capability ramp, and composes with the hard floor below.
 - **Detect a stuck loop.** If a BUILD step reports "nothing to change" yet QA still FAILs, the loop cannot converge — mark BLOCKED immediately rather than burning the remaining attempts.
+- **Checkpoint every green-QA state.** The moment QA reports `VERDICT: PASS`, commit the worktree before running `dt-review` (see the CHECKPOINT step in the loop). Each green-correctness state becomes a recoverable point, so a subsequent `dt-fix` applying review findings that regresses correctness can be `git reset --hard` back to the last passing commit instead of relying on the Fixer to un-break it within the remaining attempts. The commit is near-free (no model reasoning, no context pulled in) and matters most for `/dev-team-auto`, which runs unattended with no human to catch a green→fix→regress. Commit on *every* QA PASS, not just the final one.
 - **One worktree per item (normally).** Whichever agent runs first creates the worktree. On a design-level failure, each alternative gets its own branch forked from the current item branch (e.g. `feat/x-alt-1`, `feat/x-alt-2`) — failed alternative branches can be left or deleted, but the original and the winning branch must be kept. After an alternative passes, pass `winning_branch` to every later agent instead of the original branch name.
 
 ## Outcomes
