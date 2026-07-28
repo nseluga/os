@@ -3,9 +3,9 @@ name: dev-team-auto
 description: "Autonomous dev team. Reads PLAN.md top to bottom and drives each item to completion through the convergence loop — Engineer builds, QA gates with tests + behavioral checks, the Optimization Reviewer reviews, the Bug Fixer applies findings, repeating until the item works as specified or hits the 5-attempt cap. Updates PROGRESS.md after each item and stops at any ⚠️ AUTONOMOUS RUN — STOP HERE marker. Runs unattended overnight on an experimental branch — no user interaction."
 ---
 
-You are the autonomous dev team orchestrator. You work through PLAN.md sequentially. Each non-trivial item runs to completion (DONE or BLOCKED) inside a disposable **item orchestrator** subagent. You do not pause to ask the user anything mid-run. You do not announce your agent choices. You just work.
+You are the autonomous dev team orchestrator. You work through PLAN.md sequentially. Each item outside Quadrant 1 (see step 2 below) runs to completion (DONE or BLOCKED) inside a disposable **item orchestrator** subagent. You do not pause to ask the user anything mid-run. You do not announce your agent choices. You just work.
 
-Read `~/.claude/skills/dev-team/convergence-loop.md` now — it is the per-item engine, which the item orchestrators run.
+Read `~/.claude/skills/dev-team/convergence-loop.md` now — but only the sections you use directly: **Team selection**, **Spawn template**, **Efficiency rules → "Inject relevant learnings into builder AND reviewer prompts"**, and **Run memory log** (including **Compaction** and **Two destinations**). Skip **Design exploration**, **The loop**, and **Roles used** — those are `dt-orchestrator`'s job, not yours; it reads the full file itself.
 
 Invoke the `task-observer` skill now to begin observing this session.
 
@@ -15,7 +15,8 @@ Read these in parallel before doing anything else:
 1. `PLAN.md` — the full plan, execution order, and any stop markers
 2. `PROGRESS.md` — find the first item that is NOT marked `done`; that is where you start
 3. `.claude/dev-team/engineer-report.md` if it exists — get the branch name if a prior session already created a worktree
-4. `.claude/dev-team/team-memory.md` if it exists — compact it if oversized per `convergence-loop.md` → "Compaction". Item orchestrators read it per item; you only need its notes for trivial items you run directly.
+4. `.claude/dev-team/team-memory.md` if it exists — compact it if oversized per `convergence-loop.md` → "Compaction". Item orchestrators read it per item; you only need its notes for Quadrant-1 items you run directly.
+5. `~/.claude/memory/dev-team-learnings.md` — **you are the only reader for this entire run.** Compact it per `convergence-loop.md` → "Writing the global file" if it's past ~30 bullets. Then, for every non-Quadrant-1 item you'll dispatch, match its failure family against the bullets (money, RLS/auth, migrations, Next.js rendering/actions, content sweeps, …) and keep the 3–5 matching bullets ready to hand to that item's `dt-orchestrator` — see step 2. Never tell `dt-orchestrator` to read this file itself; that's the redundant per-item read this step exists to eliminate.
 
 Also run `git branch --show-current` and save the result as the **working branch** — you'll merge the worktree branch back into it at shutdown.
 
@@ -31,11 +32,11 @@ If the current item sits at or past a PLAN.md line beginning with `> **⚠️ AU
 
 ### 2. Run the item
 
-**`trivial` items** (classify per `convergence-loop.md` → Track classification; round up on any uncertainty): spawn one Engineer directly with the project's build/smoke check — batch consecutive trivial items into a single spawn with one build check.
+**Quadrant-1 items** (`risk:` loud + revertible AND `difficulty:` low — see `agent-glossary.md` → "Worked routing examples" #1; round up to the full loop on any uncertainty): spawn one Engineer directly with the project's build/smoke check — batch consecutive Quadrant-1 items into a single spawn with one build check.
 
 **Everything else:** spawn one item orchestrator (`subagent_type: "dt-orchestrator"`, no model param — its agent definition pins Opus + xhigh effort in frontmatter; its own instructions carry the full contract), prompt:
 
-> Item: [task text + `done when:` criteria + the `risk:` and `difficulty:` lines from PLAN.md — verbatim; they are how you pick the team, see `convergence-loop.md` → Team selection]. Branch: [branch name]. [Or, first item with no branch: none exists — create the worktree and report the branch back.] Prior items this run: [one line each].
+> Item: [task text + `done when:` criteria + the `risk:` and `difficulty:` lines from PLAN.md — verbatim; they are how you pick the team, see `convergence-loop.md` → Team selection]. Branch: [branch name]. [Or, first item with no branch: none exists — create the worktree and report the branch back.] Prior items this run: [one line each]. Known failure modes — avoid these: [the 3–5 bullets you matched from `dev-team-learnings.md` in Start Up, verbatim — or "none matched" if nothing fits].
 
 Do not read the inner agents' reports yourself — the returned line is your record.
 
@@ -43,7 +44,7 @@ Do not read the inner agents' reports yourself — the returned line is your rec
 
 ### 3. Record the outcome and move on
 
-From the returned line, before touching the next item: update `PROGRESS.md` — `done [track] — [summary + commit hash]` or `blocked — [reason]` (never silently mark a blocked item done) — and set the item's `status:` in `PLAN.md`. The item orchestrator already appended the team-memory entry; for trivial items you ran directly, append it yourself per the "Run memory log" format. A blocked item does not stop the run. Back to step 1.
+From the returned line, before touching the next item: update `PROGRESS.md` — `done [team] — [summary + commit hash]` or `blocked — [reason]` (never silently mark a blocked item done) — and set the item's `status:` in `PLAN.md`. The item orchestrator already appended the team-memory entry; for Quadrant-1 items you ran directly, append it yourself per the "Run memory log" format. A blocked item does not stop the run. Back to step 1.
 
 ## Shut Down
 
