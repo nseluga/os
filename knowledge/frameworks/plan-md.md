@@ -28,9 +28,9 @@ Each item is a YAML-ish block under a top-level list. Ordering is execution orde
   done when:
     - <testable criterion>
     - <testable criterion>
+  risk: <what breaks if this is wrong, and how you'd find out>
+  difficulty: <why this might not work first try — or `low` and why it's obvious>
   status: not started
-  track: full
-  flag: security
 ```
 
 ### Fields
@@ -45,32 +45,46 @@ uses as its binary gate. See "Writing good criteria" below.
 place as items resolve. Values: `not started` | `in progress` | `done` | `blocked`.
 Do not change this manually mid-run.
 
-**`track:`** (required) — the rigor level for this item:
-- `trivial` — copy/text/config/comments only; no logic. Build check, no QA.
-- `light` — one file/function, no schema/API/auth/money touch. QA, no review.
-- `full` — everything else; multi-file; new endpoints/schema/auth/money. Full loop.
-When between tracks, choose the heavier one.
+**`risk:`** (required) — one line: **what breaks if this is wrong, and how you'd
+find out.** The second half is not optional — it is the half the orchestrator
+routes on.
 
-**`flag:`** (optional) — marks the item for elevated scrutiny. Values: `security`,
-`money`, `data-path`. Triggers: Opus model on the engineer + fixer + reviewer,
-design exploration (2–3 parallel architects before the first build), and the
-`tests+behavioral` gate including a live smoke pass. Use for auth, payments,
-migrations, or anything where a mistake is hard to reverse.
+The decisive property is **silent vs loud**. A failure the user sees on first
+page load needs no reviewer to find it; a failure you learn about from a bank
+statement three weeks later does. Say which, in plain words:
 
-**`critical:`** (optional) — marks the item for maximum scrutiny, one tier above
-`flag:`. Values: `security`, `reliability`, or any description. Triggers: **Fable
-at medium effort** on the engineer + fixer + reviewer, and design exploration with
-Fable architects. Use when a defect would be catastrophic or irreversible: auth
-systems, cryptography, authorization, PII/PHI handling, financial transactions,
-production data integrity. Composes with any track above `trivial`.
+```
+risk: a replayed event double-charges the customer, and nobody notices until
+      the bank statement — silent, and not revertible
+risk: nav renders wrong on five pages; obvious on first page load
+risk: none — copy only
+```
 
-**`research:`** (optional) — a topic `dt-research` investigates before the first
-build (e.g. `research: astro auth patterns`). Use when the item hinges on
-choosing a current external tool, library, or hosted service — the knowledge
-training data gets wrong. `flag:`/`critical:` items get a research pass
-automatically when they involve an external tool choice; this field is the
-manual trigger for everything else. Cache-first
-(`~/.claude/skills/dev-team/research-notes/`), so repeat topics are near-free.
+Write the consequence, not a rating. `risk: high` tells the orchestrator
+nothing it can act on, and ratings inflate — a factual claim about the world
+doesn't. `risk: none` is a valid and common answer; most items are not risky.
+
+**`difficulty:`** (required) — one line: **why this might not work first try**,
+or `low` plus the reason it's obvious. Names open design space, unfamiliar
+tooling, or fiddly behaviour.
+
+```
+difficulty: open — role model, column masking, and policy composition across
+            four tables are genuinely competing designs
+difficulty: low — Stripe's idempotency pattern is well-established
+```
+
+**Risk and difficulty are independent, and that is the point.** They buy
+different things: risk buys a review pass, a higher model tier, and a
+behavioral gate; difficulty buys competing outlines and more attempts. A
+one-axis "importance" score cannot express a hard-but-harmless item (a fiddly
+layout algorithm — several attempts, no reviewer) or an easy-but-dangerous one
+(a settled webhook pattern — a top-tier reviewer, no exploration), and those two
+are exactly where a run wastes the most money.
+
+The orchestrator chooses the agent team from these two lines — see
+`~/os/skills/dev-team/agent-glossary.md`. The plan does not name agents,
+models, or attempt counts.
 
 **`parallel-group:`** (optional) — consecutive items sharing the same value run
 concurrently under `/dev-team-auto` (up to 3 at once, each in its own worktree
@@ -156,28 +170,35 @@ Fewer than 2 usually means the item is under-specified.
 **Hygiene criterion:** include "Existing passing tests remain passing" when
 regression risk is real. Skip it for trivial items where it's obvious.
 
-**Speed + reliability criteria (standard for `full` items):** functionality
-criteria alone let slow or fragile code pass QA. Every `full`-track item also
-carries:
+**Speed + reliability criteria — conditional on the item, not on its size.**
+Buy each one only where it measures something. A speed criterion forces QA to
+seed data and run the app, which is the most expensive part of the gate.
 
-- One **speed** criterion: a measured number against seeded data — "median of
-  5 runs of <the operation> stays under <threshold> with <N> rows seeded."
-  Defaults when you have no better number: API route < 200ms, full page render
-  < 1s, background job < 30s. Set thresholds at ~2× the real target — the
-  criterion exists to catch regressions (an unindexed scan, an N+1 loop), not
-  to benchmark the laptop — and always name the seed size; a timing against an
-  empty DB proves nothing.
-- One **reliability** criterion matching the item's likeliest failure mode:
-  double-submit/retry creates no duplicate row; a down dependency degrades to
-  a defined fallback within a timeout instead of hanging; behavior holds under
-  both `TZ=UTC` and a non-UTC TZ; invalid input at the boundary returns the
-  defined error, not a 500.
+- **Speed** — add only when the item's cost **grows with rows or request rate**:
+  a query, a list endpoint, a job over a table, an N+1-shaped render, an
+  index-dependent lookup. Format: "median of 5 runs of <operation> stays under
+  <threshold> with <N> rows seeded." Defaults when you have no better number:
+  API route < 200ms, page render < 1s, background job < 30s. Set thresholds at
+  ~2× the real target — the criterion catches regressions (an unindexed scan, an
+  N+1 loop), it doesn't benchmark the laptop — and always name the seed size; a
+  timing against an empty DB proves nothing.
+  **Skip it silently** for pure logic, UI, copy, config, and one-shot scripts.
+  Nothing grows, so the test proves nothing. No waiver line.
+- **Reliability** — add only when a failure mode can be **pinned by a test**:
+  double-submit/retry creates no duplicate row; a down dependency degrades to a
+  defined fallback within a timeout instead of hanging; behavior holds under both
+  `TZ=UTC` and a non-UTC TZ; invalid input at the boundary returns the defined
+  error, not a 500. Skip it when the only failure mode is "the logic is wrong" —
+  the functional criteria already cover that.
 
-Waive either with one visible line in the item — `speed: N/A — <reason>` —
-never silently; a written waiver is something the Reviewer can challenge.
-`light` items take the reliability criterion when they touch a system entry
-point; `trivial` items are exempt. QA verifies speed criteria by measurement
-(running the timed test), never by inspection.
+**When the `risk:` line describes a silent or non-revertible failure, both are
+required** — that is precisely the case where tests written from the functional
+criteria miss the defect. There, waive only with a visible
+`speed: N/A — <reason>` line the Reviewer can challenge. Everywhere else their
+absence is the default, not an omission.
+
+QA verifies speed criteria by measurement (running the timed test), never by
+inspection.
 
 ---
 
@@ -194,12 +215,14 @@ to Opus/Fable) rediscovering what you already knew. Rules:
 - **State the approach when you have one.** "Reuse the existing `readManual()`
   helper" is one line that prevents an alternative-engineer fork. Leave the
   approach open only when you actually want design exploration.
-- **Right-size `track:`.** Defaulting everything to `full` wastes the loop on
-  copy edits; defaulting to `light` under-gates schema changes. Classify each
-  item; when torn, go heavier.
-- **Escalate per item, not per run.** `flag:`, `critical:`, and `research:` buy
-  targeted scrutiny exactly where the stakes or staleness risk live — cheaper
-  than raising the whole run's model tier.
+- **Write `risk:` as a consequence, never a rating.** "High" is unactionable and
+  inflates; "a duplicate charge nobody catches until the bank statement" tells
+  the orchestrator to buy a reviewer, and "obvious on first page load" tells it
+  not to. This one line decides most of what the item costs.
+- **Don't describe the process.** No agents, models, attempt counts, or gate
+  modes in the plan. You know what breaks and why it's hard; the orchestrator
+  knows what has already been mapped, what the code looks like, and what each
+  agent costs. Describing the team from the plan overrides better information.
 - **Mark disjoint items `parallel-group:`.** When the codebase scan shows two
   consecutive items touch no common file, schema, or dependency chain, tag
   them with a shared `parallel-group:` value so `/dev-team-auto` runs them
@@ -222,19 +245,22 @@ to Opus/Fable) rediscovering what you already knew. Rules:
     - Median of 5 runs, a request under the limit responds in < 200ms with 100k rows in the request log seed
     - Two concurrent requests at the limit boundary yield exactly one 429 (no double-count or double-pass)
     - Existing passing tests remain passing
+  risk: an ineffective limit lets an abuser exhaust the endpoint; nothing
+        surfaces it until the bill or an outage — silent
+  difficulty: low — standard fixed-window counter on the existing Redis client
   status: not started
-  track: full
-  flag: security
 
 - task: Rewrite session token signing to use HMAC-SHA256
   done when:
     - All tokens are signed with HMAC-SHA256 using a server-side secret
     - A token with a tampered payload fails verification and returns 401
     - Existing sessions are invalidated on deploy (no legacy unsigned tokens accepted)
+  risk: a signing flaw lets anyone forge a session; silent, unrecoverable, and
+        every issued token has to be treated as compromised
+  difficulty: low — HMAC via the stdlib crypto module; the only open question is
+        where the secret is read from
   speed: N/A — in-memory signing, no data-size dependence
   status: not started
-  track: full
-  critical: security
 
 - task: Replace inline SQL in UserRepository with parameterized queries
   done when:
@@ -242,16 +268,19 @@ to Opus/Fable) rediscovering what you already knew. Rules:
     - A test covers a value that would have triggered injection if unparameterized
     - Median of 5 runs, findByEmail stays under 50ms with 100k users seeded (parameterization didn't lose the index)
     - All existing UserRepository tests pass
+  risk: an injection path survives, or parameterization silently drops the index
+        and the table scans — neither shows up in normal use
+  difficulty: low — mechanical rewrite against the existing driver's bind API
   status: not started
-  track: full
   parallel-group: a
 
 - task: Add a /health endpoint returning build SHA and uptime
   done when:
     - GET /health returns 200 with { sha, uptimeSeconds } when the app is up
     - Returns 503 while a dependency the app requires (DB) is unreachable
+  risk: none — a broken health check fails the first time anything curls it
+  difficulty: low — one route, no state
   status: not started
-  track: light
   parallel-group: a
 
 > **⚠️ AUTONOMOUS RUN — STOP HERE**
@@ -261,11 +290,16 @@ to Opus/Fable) rediscovering what you already knew. Rules:
     - Migration runs without error on dev DB
     - Column is populated on every successful login, and a retried login write does not error or duplicate
     - Rolling back the migration restores the prior schema
+  risk: a bad migration corrupts the users table in place; recoverable only from
+        a backup, and a botched backfill is silent
+  difficulty: low — single nullable column, existing migration tooling
   speed: N/A — single-column write on an existing indexed path
   status: not started
-  track: full
-  flag: data-path
 ```
+
+Note what the examples do *not* contain: no agent names, no models, no attempt
+counts. Four of these five items are `difficulty: low` — that is normal. Most
+work is not architecturally open; it is ordinary work with varying stakes.
 
 ## Lifecycle
 

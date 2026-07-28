@@ -35,7 +35,7 @@ If the current item sits at or past a PLAN.md line beginning with `> **⚠️ AU
 
 **Everything else:** spawn one item orchestrator (`subagent_type: "dt-orchestrator"`, no model param — its agent definition pins Opus + xhigh effort in frontmatter; its own instructions carry the full contract), prompt:
 
-> Item: [task text + `done when:` criteria + any `flag:`/`critical:`/`track:` markers from PLAN.md]. Branch: [branch name]. [Or, first item with no branch: none exists — create the worktree and report the branch back.] Prior items this run: [one line each].
+> Item: [task text + `done when:` criteria + the `risk:` and `difficulty:` lines from PLAN.md — verbatim; they are how you pick the team, see `convergence-loop.md` → Team selection]. Branch: [branch name]. [Or, first item with no branch: none exists — create the worktree and report the branch back.] Prior items this run: [one line each].
 
 Do not read the inner agents' reports yourself — the returned line is your record.
 

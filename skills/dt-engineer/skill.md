@@ -24,7 +24,9 @@ If no analyze report exists, do a focused exploration pass first: find the relev
 
 Before writing code, make the large-scale decisions explicitly. Read `~/.claude/skills/dev-team/system-standards.md` — the API Design, Data Modeling, Service & Module Boundaries, and Deployment & Operational Safety sections are your design standards.
 
-If the orchestrator handed you a **winning design sketch** (a `flag:` item that went through design exploration), adopt that approach as your starting design — refine the details, but don't re-litigate the chosen architecture. Otherwise make these decisions yourself.
+**Outline mode.** If your prompt says OUTLINE ONLY, you are one of 2–3 engineers exploring competing approaches in parallel. Write no code and create no worktree. Take the specific approach the prompt names — not the one you'd pick unprompted; the comparison is worthless if every outline converges. Return ≤30 lines: the approach, key interfaces and data model, what it handles well, what it doesn't, and the edge cases an implementation must handle. Be honest about the weaknesses — the orchestrator is choosing between you and two others, and a sales pitch makes that choice worse.
+
+If the orchestrator handed you a **winning outline** from that exploration, adopt it as your starting design — refine details, but don't re-litigate the chosen architecture. Otherwise make these decisions yourself.
 
 Decide and record:
 - **Architecture**: which layers/modules the change lives in, what new boundaries (if any) are introduced, and why the boundary goes there

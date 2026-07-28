@@ -34,12 +34,8 @@ Read, in parallel where possible:
    possible (below) — you need the real file map to know which items are
    actually disjoint.
 4. **Standards** — `~/os/skills/dev-team/system-standards.md`, especially the
-   Scale & Infrastructure ladder. This drives your scale questions and your
-   `flag:`/`critical:`/`research:` suggestions.
-5. **Research-notes cache** — directory listing of
-   `~/os/skills/dev-team/research-notes/` only (never the contents), so you
-   know which topics are already researched vs. worth a `research:` flag.
-6. **Update mode only** — the existing PLAN.md, PROGRESS.md, and
+   Scale & Infrastructure ladder. This drives your scale questions.
+5. **Update mode only** — the existing PLAN.md, PROGRESS.md, and
    `git log --oneline` since the plan file's last commit, so the interview
    covers only what changed.
 
@@ -62,13 +58,22 @@ accepting it.
    relationship; when the scan doesn't give you enough confidence to be sure,
    leave them ungrouped. Mention which groups you inferred in the item-list
    recap so the user can veto one, but don't turn it into a question.
-4. Per item: testable `done when:` criteria (2–4, behavior + observable — use
-   the red-flag table in plan-md.md as your bar), `track:` sizing, and whether
-   the stakes or tool-choice earn `flag:`, `critical:`, or `research:`. For
-   `full` items, propose the standard speed + reliability criteria from
-   plan-md.md (measured threshold against a named seed size; the item's
-   likeliest failure mode) — or an explicit one-line waiver, and push back on
-   waivers that look wrong for a data-path or entry-point item.
+4. Per item, three things — and **nothing about process**. Never ask which
+   agents should run, which model, or how many attempts; that is the
+   orchestrator's call at runtime, made against the real code.
+   - Testable `done when:` criteria (2–4, behavior + observable — the red-flag
+     table in plan-md.md is your bar).
+   - **`risk:`** — you draft it, the user corrects it. Ask "what breaks if this
+     is wrong, and how would you find out?" Push back on any line missing the
+     second half: silent-vs-loud is the routing signal, and a line without it is
+     unusable. Push back harder on a rating — "high" is not a risk, it's a
+     self-assessment, and self-assessments inflate.
+   - **`difficulty:`** — same treatment. "Hard" without a named open question
+     becomes `low`. Genuinely competing designs, unfamiliar tooling, or fiddly
+     behaviour are the only things that make an item difficult; stakes do not.
+   - Speed/reliability criteria drafted **from the risk line**: when it reads
+     silent or non-revertible, propose both; otherwise propose neither and say
+     nothing about it.
 5. Scale targets — ask what load/growth the result must survive; apply the
    Scale & Infrastructure ladder to decide which items (if any) earn
    caching/queue/pooling work, and push back on infrastructure below its
@@ -77,11 +82,27 @@ accepting it.
    (after migrations, before deploy-adjacent items).
 7. Preamble content — status line, global constraints, context pointers.
 
+**Justification sweep — required, and not a question.** Before writing the file,
+walk the finished list once. Rules stated in a skill don't survive creative
+flow; this is the step that enforces the ones above.
+
+- Every `risk:` claiming a **silent** or **non-revertible** failure: name the
+  specific mechanism by which it goes unnoticed. No mechanism → rewrite the line
+  as loud. This is the check that matters — a silent-risk claim is the single
+  most expensive thing the author can write, and it is the easiest to write by
+  reflex.
+- Every `difficulty:` above `low`: name what is actually architecturally open.
+  No answer → `low`.
+- Every speed criterion: name what grows with rows or rate. Nothing → cut it.
+
+Report what changed in one line per demotion. The user may veto any of them.
+
 **Update mode — cover only:**
 1. Restate what PROGRESS.md/git say landed since the plan was written; confirm.
 2. What changed — new goals, dropped items, reordered priorities, a blocker's
    resolution.
-3. For each new/changed item: the same criteria/track/flag rigor as write mode.
+3. For each new/changed item: the same `done when:`/`risk:`/`difficulty:` rigor
+   as write mode, and run the justification sweep over the new items only.
 4. Whether the stop marker moves.
 Never re-litigate `done` items or re-open settled decisions unless the user
 raises them.
@@ -90,11 +111,24 @@ raises them.
 
 Write `PLAN.md` in the project root, exactly to the plan-md.md schema:
 preamble (title, status, global rules, context pointer, closed with `---`),
-then the ordered item blocks, stop marker where agreed. Every item starts
-`status: not started` with an explicit `track:`. Apply the "Writing items for
-cheaper agents" rules — name files, state known approaches, escalate per item.
+then the ordered item blocks, stop marker where agreed. Every item carries
+`task:`, `done when:`, `risk:`, `difficulty:`, and `status: not started`. Apply
+the "Writing items for cheaper agents" rules — name files, state known
+approaches. Name no agents, models, or attempt counts.
 
-Then show the user a 5-line summary: item count by track, flags used,
-`parallel-group:` pairs inferred (if any), stop marker position, and the
-first item that will run — and remind them the run command (`/dev-team-auto`
-for unattended, `/dev-team` for one item).
+Then show a short summary:
+
+- item count, split by **silent-risk vs loud-risk** and by **open vs low
+  difficulty** — these two counts predict the run's cost better than anything
+  else in the file
+- `parallel-group:` pairs inferred (if any), and the stop marker position
+- the first item that will run
+- **estimated cost** — for each item, the team the orchestrator will likely
+  pick (`agent-glossary.md`'s four quadrants) × ~125k tokens per spawn, listed
+  heaviest first so the expensive items are vetoable at a glance
+
+Then remind them of the run command: `/dev-team-auto` for unattended,
+`/dev-team` for one item.
+
+If the heaviest items aren't the ones the user would have named as the scary
+ones, the risk lines are wrong — say so before they run it.
