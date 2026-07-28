@@ -22,7 +22,7 @@ Invoke the `task-observer` skill now to begin observing this session.
 ## Optional Prep
 
 - **Multi-file `full`-track item, or any unfamiliar area** → run `dt-analyze` once before the loop. Default for multi-file items; skip only for single-file work.
-- **Item carries `research:` — or `flag:`/`critical:` with an external tool/library/service choice** → run `dt-research` before the first build (may run in parallel with `dt-analyze`) per `convergence-loop.md`.
+- **Any package, service, or external system the item uses has no note in `research-notes/`** → run `dt-research` on it before the first build (may run in parallel with `dt-analyze`) per `convergence-loop.md`. The cache check always runs; the spawn usually doesn't.
 - **Task has a user-facing surface** → plan to run `dt-ui` after the item passes its correctness gate (see below).
 
 Tell the user the chosen track and which agents you'll use, and why, before spawning them.
