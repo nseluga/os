@@ -2,30 +2,6 @@
 
 <!-- Check the box next to each item you approve. Run /improve-system again to apply checked items. -->
 
-- [ ] **SKILL-EDIT: Delete `grill-me` — exact duplicate of `grilling`**
-  **Type:** skill-edit
-  **Action:** delete `skills/grill-me/` (entire folder, including `SKILL.md`)
-  **Rationale:** `grill-me/SKILL.md` is 147 bytes and its entire body is "Run a `/grilling` session." — it adds no behavior, content, or distinct trigger beyond `grilling`, which already covers the same description ("interview relentlessly about a plan or design"). Pure duplication; `grilling` is the fuller, canonical version.
-  **Content:**
-  ```
-  DELETE
-  ```
-
-- [ ] **MEMORY-EDIT: Record l2detailz's direct-to-main workflow preference**
-  **Type:** memory-edit
-  **Action:** overwrite `knowledge/memory/reference-bcns-ci-setup.md` with the content below (adds one new section + tweaks the description line; everything else unchanged)
-  **Rationale:** Across three separate `bcns-client-l2detailz` sessions on 2026-07-27, Nate explicitly directed work to happen straight on `main` for small changes, bypassing the `branch`/`ship` skills — a repo-specific workflow convention not captured anywhere. The existing CI-setup memory file is the natural home (same repo family, same "operational conventions for this client" purpose) rather than a new file.
-  **Content:**
-  ```
-  ---
-  name: reference-bcns-ci-setup
-  description: Required secrets, CI gotchas, and workflow conventions for bcns client repo deploys
-  metadata: 
-    node_type: memory
-    type: reference
-    originSessionId: 9074a9b0-1c9d-43f2-a956-c4fa6cd64ab8
-  ---
-
   ## Required secrets per client repo
 
   Set these before the first push to main or CI will fail:
