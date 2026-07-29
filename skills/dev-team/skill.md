@@ -9,7 +9,7 @@ Read `~/.claude/skills/dev-team/convergence-loop.md` now — it is the engine yo
 
 Invoke the `task-observer` skill now to begin observing this session.
 
-**Before choosing a track**, read both memory sources if they exist and factor them into your track, agent, and approach choices: `.claude/dev-team/team-memory.md` (project-specific) and `~/.claude/memory/dev-team-learnings.md` (project-independent). Compact `team-memory.md` if oversized per `convergence-loop.md` → "Compaction". Then delete any `*-report.md` files left by a prior run (keep `team-memory.md`; keep `analyze-report.md` only if this task works in the area it maps).
+**Before choosing a team**, read both memory sources if they exist and factor them into your team, model, and approach choices: `.claude/dev-team/team-memory.md` (project-specific) and `~/.claude/memory/dev-team-learnings.md` (project-independent — you are the only reader of this file, since there's no nested item orchestrator here; compact it per `convergence-loop.md` → "Writing the global file" if it's past ~30 bullets, and keep the 3-5 bullets matching this item's failure family ready to inject per Efficiency rules). Compact `team-memory.md` if oversized per `convergence-loop.md` → "Compaction". Then delete any `*-report.md` files left by a prior run (keep `team-memory.md`; keep `analyze-report.md` only if this task works in the area it maps).
 
 ## Parse Arguments
 
@@ -17,28 +17,28 @@ Invoke the `task-observer` skill now to begin observing this session.
 
 **Stage flag:** `--stage` takes one or more agent names joined by `+` (e.g. `--stage engineer`, `--stage qa`, `--stage review+fix`, `--stage analyze+engineer`). If given, run exactly those agents once in the order listed — this bypasses the convergence loop for targeted, single-shot work. Without `--stage`, run the full loop below.
 
-**Model & effort selection** and **rigor/track selection** follow the **(shared)** sections in `convergence-loop.md` (Model & effort selection, Track classification). For `light` items, QA's gate mode is `tests`. Classify the item, then run the matching path from that file. The model/effort table is a **default, not a ceiling or floor**: if your read of the item says a different tier fits better (up or down one tier), deviate — record the deviation and its one-line justification in `team-memory.md`.
+**Model & effort selection** and **Team selection** follow the **(shared)** sections in `convergence-loop.md`. Read `agent-glossary.md`'s "Worked routing examples" and pick your team from the nearest of the four risk×difficulty quadrants rather than re-deriving one from scratch. The model/effort table is a **default, not a ceiling or floor**: if your read of the item says a different tier fits better, deviate — record the deviation and its one-line justification in `team-memory.md`.
 
 ## Optional Prep
 
-- **Multi-file `full`-track item, or any unfamiliar area** → run `dt-analyze` once before the loop. Default for multi-file items; skip only for single-file work.
+- **Multi-file item, or any unfamiliar area** → run `dt-analyze` once before the loop. Default for multi-file items; skip only for single-file work.
 - **Any package, service, or external system the item uses has no note in `research-notes/`** → run `dt-research` on it before the first build (may run in parallel with `dt-analyze`) per `convergence-loop.md`. The cache check always runs; the spawn usually doesn't.
 - **Task has a user-facing surface** → plan to run `dt-ui` after the item passes its correctness gate (see below).
 
-Tell the user the chosen track and which agents you'll use, and why, before spawning them.
+Tell the user the chosen team and why before spawning them.
 
 ## Run the Convergence Loop
 
 Run the loop from `convergence-loop.md` for the item, with:
-- **gate mode: `tests`** — QA writes and runs tests; the verdict comes from those tests passing against the `done when:` criteria
+- **gate mode:** decided per item, not fixed — see `convergence-loop.md` → Inputs → "gate mode" (default `tests`; `tests+behavioral` when the item touches user-visible UI, an HTTP route, models/migrations/serialization, or `risk:` reads silent)
 - **branch:** the first agent to run creates the worktree; pass its branch name to every later agent
-- **MAX_ATTEMPTS: 5**
+- **MAX_ATTEMPTS:** per `convergence-loop.md` → Inputs (5 by default; 2 when `difficulty:` is low)
 
-The Optimization Reviewer runs on the item on every pass where QA is green — an item is never marked done without a clean review.
+The Optimization Reviewer runs on the item on every pass where QA is green — an item is never marked done without a clean review, unless `dt-review` was excluded from the team per Team selection (a loud, revertible risk).
 
 ### Spawning each agent
 
-Use the **Spawn template (shared)** in `convergence-loop.md`, with **Gate mode: `tests`** for QA. That section also covers routing on each report and passing the branch name forward.
+Use the **Spawn template (shared)** in `convergence-loop.md`, with the gate mode decided above passed to QA. That section also covers routing on each report and passing the branch name forward.
 
 ### UI Specialist (when the task has a user-facing surface)
 
@@ -46,7 +46,7 @@ Once the item first reaches a passing correctness gate (QA PASS), run `dt-ui` on
 
 ## After the Loop
 
-**Log the run — do this first, before you report to the user.** Append one entry to `.claude/dev-team/team-memory.md` in the format defined in `convergence-loop.md` ("Run memory log"). Do this for every outcome, DONE or BLOCKED, on every track (including `--stage` single-shot runs). Append only; create the file with a `# Dev-team memory log` header if it doesn't exist. If the run produced a **project-independent** lesson (generalizes to any repo), also append it to the global os memory at `~/.claude/memory/dev-team-learnings.md` per the "Two destinations" rule in `convergence-loop.md` — most runs won't.
+**Log the run — do this first, before you report to the user.** Append one entry to `.claude/dev-team/team-memory.md` in the format defined in `convergence-loop.md` ("Run memory log"). Do this for every outcome, DONE or BLOCKED, on every item (including `--stage` single-shot runs). Append only; create the file with a `# Dev-team memory log` header if it doesn't exist. If the run produced a **project-independent** lesson (generalizes to any repo), also append it to the global os memory at `~/.claude/memory/dev-team-learnings.md` per the "Two destinations" rule in `convergence-loop.md` — most runs won't.
 
 Then report to the user:
 - **Outcome:** DONE or BLOCKED, and how many attempts it took
