@@ -23,6 +23,7 @@ One folder per skill. Each `SKILL.md`'s `description:` frontmatter is the canoni
 - `research-partner` — Build-time research partner standup ritual, methods pushback
 - `research-review` — Skeptical peer review of completed research work
 - `ml-engineer` — ML engineering partner for technique selection and training code
+- `storm-research` — 5-lens (practitioner/academic/skeptic/economist/historian) verified HTML research briefing
 
 ## os maintenance
 
