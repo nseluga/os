@@ -50,6 +50,32 @@ is worse than none. Exceptions: `knowledge/raw/` contents are transient
 explains folder structure only); per-project files stay
 `projects/<name>/README.md` (the dashboard's data contract).
 
+**Link maintenance (the other axis):** `INDEX.md` and `[[wikilinks]]` do
+different jobs and must not be collapsed into each other.
+
+| | `INDEX.md` | `[[wikilinks]]` |
+|---|---|---|
+| Axis | **containment** — what lives in this folder | **association** — how this file relates to another |
+| Lives | one per folder | inside file bodies |
+| Also encoded by | the filesystem, the file explorer, graph color groups | nothing else |
+
+- `INDEX.md` entries stay **backticked filenames**. Do not convert them to
+  wikilinks — the folder already encodes containment, and doing so buries the
+  real semantic edges inside one giant star per folder.
+- `[[wikilinks]]` go in **file bodies** and mean "these two files genuinely
+  relate". When you add a file that depends on or relates to another, add a
+  `**Related:**` line in the same turn you add its INDEX line.
+- Only link a real relationship. An invented link is worse than no link.
+- **In skills, executable paths stay paths.** A wikilink goes on the separate
+  `**Related:**` line, never in place of a path — an agent handed
+  `[[plan-md]]` has no file to open.
+- `knowledge/memory/MEMORY.md` is exempt: it keeps its
+  `- [Title](file.md) — hook` format, which Obsidian resolves anyway.
+
+`scripts/link-check.py` reports drift on both axes (unresolved or ambiguous
+wikilinks, and INDEX entries that are stale or missing). It runs from
+`scripts/maintenance.sh`.
+
 **Exception — always for plan/progress files:** when creating or updating a
 `PLAN.md` or `PROGRESS.md` in *any* repo, first read
 `~/os/knowledge/frameworks/plan-md.md` /
@@ -91,7 +117,7 @@ Offer; don't auto-write. One line at the end of the turn is enough.
 - `~/.claude/memory`    → `~/os/knowledge/memory`
 
 Don't move or rename `~/os` without re-pointing these symlinks.
-Health check: `ls -L ~/.claude/skills/grilling` should resolve.
+Health check: `ls -L ~/.claude/skills/grill-me` should resolve.
 
 ## Authoring a new skill
 

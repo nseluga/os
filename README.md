@@ -1,6 +1,6 @@
 # OS — Personal Operating System
 
-A single home for knowledge, skills, and projects. Built on top of Claude Code: **48 custom skills**, a structured project-tracking system covering **8 active projects**, and a persistent memory layer with **10 fact files** auto-injected into every session.
+A single home for knowledge, skills, and projects. Built on top of Claude Code: **36 custom skills**, a structured project-tracking system covering **12 active projects**, and a persistent memory layer with **18 fact files** auto-injected into every session.
 
 The system compounds — each skill added makes the next session more capable, and the memory layer means Claude Code never starts cold. All AI-assisted work on [nateseluga.com](https://nateseluga.com) was built with this as infrastructure.
 
@@ -30,7 +30,7 @@ fill in your own facts, and you can keep pulling his improvements later.
    ln -s ~/os/skills ~/.claude/skills
    ln -s ~/os/knowledge/memory ~/.claude/memory
    ```
-   Health check: `ls -L ~/.claude/skills/grilling` should resolve.
+   Health check: `ls -L ~/.claude/skills/grill-me` should resolve.
 
 3. **Fill in your own personal folders.** `knowledge/me/`, `knowledge/audience/`,
    `knowledge/library/`, and `projects/` are gitignored (see `.gitignore`) —
@@ -63,16 +63,20 @@ os/
 │   ├── memory/            # Claude Code's managed memory (auto-updated by Claude)
 │   ├── library/           # Reference docs, read on-demand (gitignored)
 │   └── raw/               # Inbox for new materials (triaged into above)
-├── skills/                # 48 Claude Code skills — reusable workflows and tools
-├── projects/              # Index entries for 8 active projects (gitignored, except _TEMPLATE.md)
-│   ├── pitcher-injury-risk/
+├── skills/                # 36 Claude Code skills — reusable workflows and tools
+├── projects/              # Index entries for 12 active projects (gitignored, except _TEMPLATE.md)
 │   ├── batting-average-ability/
+│   ├── bcns/
+│   ├── bcns-client-coventry/
+│   ├── bcns-client-delucas/
+│   ├── bcns-client-l2detailz/
+│   ├── hitter-embedding/
 │   ├── nba-shot-value/
-│   ├── patio/
-│   ├── portfolio-website/
-│   ├── project-dashboard/
 │   ├── os/
-│   └── os-evals/
+│   ├── os-evals/
+│   ├── patio/
+│   ├── pitcher-injury-risk/
+│   └── portfolio-website/
 └── scripts/               # Utility scripts
 ```
 
@@ -119,7 +123,7 @@ Reference materials kept on-disk (read when the task clearly matches):
 ### `knowledge/memory/`
 Claude Code's managed memory system — automatically updated across sessions:
 - `MEMORY.md` — index of remembered facts (auto-loaded every session)
-- 10 fact files — specific things Claude learned and should remember:
+- 18 fact files — specific things Claude learned and should remember:
   - `user_*.md` — facts about who you are, your preferences, knowledge
   - `feedback_*.md` — guidance on how to approach work (corrections + confirmations)
   - `project_*.md` — ongoing work, goals, initiatives, deadlines
@@ -128,7 +132,7 @@ Claude Code's managed memory system — automatically updated across sessions:
 Don't hand-edit the format here; Claude Code maintains it. Add your own notes to `knowledge/me/` instead.
 
 ### `skills/`
-48 Claude Code reusable workflows — custom agents, tools, and automations. Highlights:
+36 Claude Code reusable workflows — custom agents, tools, and automations. Highlights:
 
 | Skill | What it does |
 |---|---|
@@ -137,25 +141,81 @@ Don't hand-edit the format here; Claude Code maintains it. Add your own notes to
 | `research-partner` / `research-review` | Build-time research teammate (mandated pushback, teach-as-we-build) and skeptical peer review of finished work — both driven by `knowledge/frameworks/research-standards.md` |
 | `ai-usage-optimizer` | Reviews AI tool use for real compounding leverage vs. cosmetic use |
 | `dt-engineer` / `dt-qa` / `dt-review` | Engineer, QA, and Optimization Reviewer agents in the dev-team loop |
-| `grilling` / `grill-me` | Interview preparation and self-assessment |
-| `writing-great-skills` | Teaches the skill-writing pattern itself |
+| `grill-me` | Interviews you relentlessly about a plan before you build it |
+| `improve-system` | Audits this repo itself — memory, skills, knowledge — biased toward deleting rather than adding |
 
 Each skill lives in `skills/<name>/SKILL.md` with frontmatter (name, description, triggers) and an implementation body. Invoked via `/skill-name` in Claude Code.
 
 ### `projects/`
-Index entries for 8 active projects. Each is a pointer to a real repository elsewhere — not the actual codebase, just metadata (repo path, GitHub link, status, next step, priority). Used to context-switch quickly without re-explaining state.
+Index entries for 12 active projects. Each is a pointer to a real repository elsewhere — not the actual codebase, just metadata (repo path, GitHub link, status, next step, priority). Used to context-switch quickly without re-explaining state.
 **Note:** Per-project READMEs are gitignored (personal); `_TEMPLATE.md` is kept in the repo so you can add your own.
 
 | Project | What it is |
 |---|---|
 | `pitcher-injury-risk` | Multi-model MLB pitcher injury prediction (Statcast 2015–2024, survival models, IR+ composite) |
 | `batting-average-ability` | Same-season skill isolation metric with mixed-effects modeling and ICC |
+| `hitter-embedding` | Conditional-query hitter embedding on Statcast process signals, targeting platoon skill and market mispricing |
 | `nba-shot-value` | 4-model ML comparison on NBA shot probability and expected value by zone |
 | `patio` | Full-stack social betting app (React 19 + Flask + scipy house-odds engine) |
+| `bcns` | Software studio platform repo — marketing site, shared packages, hosted-web client template |
+| `bcns-client-coventry` | Contracting ops platform (leads → quotes → dispatch → closeout) plus a sub-facing PWA |
+| `bcns-client-delucas` | Restaurant management — local-first Electron desktop app |
+| `bcns-client-l2detailz` | Detailing marketing site plus admin dashboard (booking, calendar, Maps routing, lifecycle email) |
 | `portfolio-website` | This portfolio — Astro + Tailwind + MDX, built with this OS as infrastructure |
-| `project-dashboard` | Local Astro SSR dashboard that reads these README files to show project status |
-| `os` | This repo |
+| `os` | This repo, plus the local Astro SSR dashboard that reads these README files to show project status — the dashboard is not a separate project entry; it hangs off this one's `dashboard_repo:` field |
 | `os-evals` | Evaluation framework for Claude Code skill and workflow quality |
+
+---
+
+## Browsing as an Obsidian Vault (optional)
+
+The repo is plain markdown and works fine without any of this. But `~/os` opens
+directly as an [Obsidian](https://obsidian.md) vault — **Open folder as vault →
+`~/os`** — which gives you a graph view, backlinks, and fast search over the
+whole system.
+
+**What the graph shows.** Links mean *relationships*, not folder membership. A
+`**Related:**` line connects two files that genuinely depend on or explain each
+other — a skill to the framework it follows, a client project to the platform it
+was built from. Folder structure is shown by **color**, not by edges, so the
+graph stays readable instead of collapsing into one star per directory.
+
+**Color the graph by folder.** Obsidian writes `.obsidian/` on every pan and
+zoom, so it's gitignored and nothing is shared. Build your own in **Graph view →
+settings → Groups**, or paste this into `.obsidian/graph.json` under
+`colorGroups`:
+
+```json
+"colorGroups": [
+  { "query": "path:skills/",               "color": { "a": 1, "rgb": 5431378 } },
+  { "query": "path:projects/",             "color": { "a": 1, "rgb": 14701138 } },
+  { "query": "path:knowledge/frameworks/", "color": { "a": 1, "rgb": 5395026 } },
+  { "query": "path:knowledge/memory/",     "color": { "a": 1, "rgb": 11908533 } },
+  { "query": "path:knowledge/me/",         "color": { "a": 1, "rgb": 14513408 } },
+  { "query": "path:knowledge/audience/",   "color": { "a": 1, "rgb": 7183337 } }
+]
+```
+
+Tune the force sliders to your own corpus — copying someone else's settings for
+a differently-sized vault gives you a hairball or a scatter.
+
+**Turn on link auto-updating.** **Settings → Files & Links → "Automatically
+update internal links"**. Renaming or moving a file is the single most common
+way `[[links]]` break, and this fixes them as you go. It's native — no plugins,
+no tooling.
+
+**Obsidian maintains links; it never creates them.** Nothing here infers a
+relationship from content. New edges get added by hand, following the
+`**Related:**` convention documented in `CLAUDE.md` → *Link maintenance*.
+
+**A fresh fork's graph will look empty**, and that's expected: `projects/`,
+`knowledge/me/`, `knowledge/audience/`, and `knowledge/library/` are gitignored,
+so most of the linked content is content you haven't written yet.
+
+**Checking for broken links.** `python3 scripts/link-check.py` reports any
+`[[wikilink]]` that resolves to nothing (or ambiguously to several files), plus
+`INDEX.md` entries that have drifted from the folder. It prints nothing when
+clean and runs automatically from `scripts/maintenance.sh`.
 
 ---
 
@@ -200,7 +260,7 @@ Editing a skill or memory file here changes it everywhere immediately.
 ## Notes for Developers
 
 - **Don't move or rename `~/os`** without updating the symlinks in `~/.claude`, or skills and memory will silently break
-- **Health check:** `ls -L ~/.claude/skills/grilling` should resolve. If it errors, symlinks are broken
+- **Health check:** `ls -L ~/.claude/skills/grill-me` should resolve. If it errors, symlinks are broken
 - **Personal content** in `knowledge/me/`, `knowledge/audience/`, `knowledge/library/`, and `projects/` is gitignored and kept local-only (see `.gitignore`)
 - **Memory format** is auto-managed by Claude Code; hand-edit `knowledge/me/` instead if you want to add notes
 - **Skills are real code** — each `SKILL.md` contains a frontmatter header (name, description, trigger) and implementation body

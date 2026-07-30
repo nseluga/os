@@ -10,7 +10,9 @@ LOG="$HOME/.claude/os-maintenance.log"
 triage_raw() {
   local raw_dir="$OS_DIR/knowledge/raw"
   local count
-  count=$(find "$raw_dir" -maxdepth 1 -type f ! -name "README.md" | wc -l | tr -d ' ')
+  # INDEX.md and sources.md live here permanently — they are not triage input.
+  count=$(find "$raw_dir" -maxdepth 1 -type f \
+    ! -name "README.md" ! -name "INDEX.md" ! -name "sources.md" | wc -l | tr -d ' ')
 
   [ "$count" -eq 0 ] && return 0
 
@@ -32,4 +34,17 @@ Be concise. If a file's category is ambiguous, default to knowledge/me/." \
   echo "[$(date)] Triage complete" >> "$LOG"
 }
 
+check_links() {
+  local out
+  out=$(OS_DIR="$OS_DIR" python3 "$OS_DIR/scripts/link-check.py" 2>&1) || true
+
+  [ -z "$out" ] && return 0
+
+  {
+    echo "[$(date)] Link drift ($(echo "$out" | wc -l | tr -d ' ') finding(s)):"
+    echo "$out"
+  } >> "$LOG"
+}
+
 triage_raw
+check_links
