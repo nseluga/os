@@ -9,6 +9,7 @@ Prints one line per finding, nothing when clean. Exit 1 if anything is found.
 """
 import os
 import re
+import subprocess
 import sys
 import pathlib
 
@@ -20,7 +21,6 @@ SKIP_DIRS = {".git", ".claude", ".obsidian", "node_modules"}
 INDEX_EXEMPT = {"knowledge/memory/INDEX.md", "knowledge/raw/INDEX.md"}
 
 WIKILINK = re.compile(r"\[\[([^\]|#^]+)")
-INDEX_MENTION = re.compile(r"`([^`\n]+)`")          # any backtick, anywhere
 INDEX_BULLET = re.compile(r"^\s*[-*]\s+`([^`\n]+)`", re.M)  # a list entry's subject
 FENCED = re.compile(r"^```.*?^```", re.M | re.S)
 INLINE_CODE = re.compile(r"`[^`\n]*`")
@@ -29,6 +29,21 @@ INLINE_CODE = re.compile(r"`[^`\n]*`")
 def prose(text):
     """Drop fenced blocks and inline code — Obsidian renders no links there."""
     return INLINE_CODE.sub("", FENCED.sub("", text))
+
+
+def ignored(paths):
+    """Basenames of the given paths that git is configured to ignore."""
+    paths = [str(p) for p in paths]
+    if not paths:
+        return set()
+    try:
+        r = subprocess.run(
+            ["git", "-C", str(ROOT), "check-ignore", "--stdin"],
+            input="\n".join(paths), capture_output=True, text=True,
+        )
+    except OSError:
+        return set()  # no git available — report everything rather than nothing
+    return {pathlib.Path(line).name for line in r.stdout.splitlines() if line.strip()}
 
 
 def md_files():
@@ -85,7 +100,6 @@ def check_indexes(files):
         # those can be stale. But a file named anywhere in the INDEX — including
         # in prose — counts as covered, so it isn't reported as omitted.
         claimed = {e.strip().rstrip("/") for e in INDEX_BULLET.findall(text)}
-        mentioned = {e.strip().rstrip("/") for e in INDEX_MENTION.findall(text)}
         present = set()
         for child in d.iterdir():
             name = child.name
@@ -93,16 +107,20 @@ def check_indexes(files):
                 continue
             if child.is_dir() or name.endswith(".md"):
                 present.add(name)
-
         # An entry may name a file ("plan-md.md"), a folder ("dev-team"), or a
         # folder's stem — accept any spelling that points at something present.
         stems = {p.rsplit(".md", 1)[0] for p in present}
         for entry in sorted(claimed):
             if entry not in present and entry not in stems:
                 findings.append(f"index lists missing  {rel}: `{entry}`")
-        for item in sorted(present):
+
+        # Listing gitignored content is fine (projects/INDEX.md does it by
+        # design); failing to list it is not drift, since it does not ship.
+        for item in sorted(present - ignored(d / n for n in present)):
             stem = item.rsplit(".md", 1)[0]
-            if item not in mentioned and stem not in mentioned:
+            # Documented anywhere counts — several INDEXes describe their
+            # contents in an ASCII tree rather than a backticked bullet list.
+            if item not in text and stem not in text:
                 findings.append(f"index omits present  {rel}: `{item}`")
     return findings
 

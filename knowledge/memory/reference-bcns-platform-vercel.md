@@ -38,3 +38,5 @@ and Chrome profile are in play — connect Claude in Chrome from "Work Profile"
 (see [[reference-claude-in-chrome-limits]]), or auth the CLI as
 bcn-services.com. Client-repo CI is a separate pipeline:
 [[reference-bcns-ci-setup]].
+
+**Related:** [[knowledge/library/bcns/hosting-reference|hosting-reference]] is the standing platform architecture doc (stack, per-client cost model, what to watch for) — this file only covers where the platform site deploys.

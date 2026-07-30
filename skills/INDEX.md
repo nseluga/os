@@ -18,7 +18,6 @@ One folder per skill. Each `SKILL.md`'s `description:` frontmatter is the canoni
 ## Planning & review
 
 - `plan-md` — Grill the user into a schema-valid PLAN.md for dev-team execution
-- `grilling` — Interview the user relentlessly about a plan or design
 - `grill-me` — A relentless interview to sharpen a plan or design
 - `research-partner` — Build-time research partner standup ritual, methods pushback
 - `research-review` — Skeptical peer review of completed research work
@@ -47,6 +46,7 @@ One folder per skill. Each `SKILL.md`'s `description:` frontmatter is the canoni
 ## Apps & clients
 
 - `new-client-repo` — Create a new bcns client repo from the template
+- `leads` — Find, score, and track bcns sales leads in the Master Client List sheet
 - `career-advisor` — Senior career advisor reviewing portfolio sites and writeups
 
 ## Utilities

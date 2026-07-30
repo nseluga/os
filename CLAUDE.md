@@ -62,13 +62,28 @@ different jobs and must not be collapsed into each other.
 - `INDEX.md` entries stay **backticked filenames**. Do not convert them to
   wikilinks — the folder already encodes containment, and doing so buries the
   real semantic edges inside one giant star per folder.
-- `[[wikilinks]]` go in **file bodies** and mean "these two files genuinely
-  relate". When you add a file that depends on or relates to another, add a
-  `**Related:**` line in the same turn you add its INDEX line.
-- Only link a real relationship. An invented link is worse than no link.
-- **In skills, executable paths stay paths.** A wikilink goes on the separate
-  `**Related:**` line, never in place of a path — an agent handed
-  `[[plan-md]]` has no file to open.
+- `[[wikilinks]]` go in **file bodies**, and their job is **resolution**: when
+  something tells you to read "the research standards" or "the hosting
+  reference", the link is what turns that name into a path. They do not decide
+  *what* to read — they make what was named findable.
+- **This matters most where grep fails.** `projects/`, `knowledge/me/`,
+  `knowledge/audience/`, and `knowledge/library/` are gitignored, so a
+  recursive grep from the repo root silently skips all four. A file in one of
+  them that nothing links is effectively unreachable — you have to already know
+  its path to find it.
+- So the test for a missing link is not "do these two relate?" but **"is this
+  file named somewhere it can't be resolved from?"** When you add a file, link
+  it from wherever it gets referred to by name, in the same turn you add its
+  INDEX line.
+- Only link a real reference. An invented link is worse than no link.
+- **Imperative paths and links compose — they don't compete.** A skill body
+  that says "read `~/os/.../convergence-loop.md` now" states *when*; a
+  `**Related:**` link states *where it lives*. Executable paths stay paths —
+  an agent handed `[[plan-md]]` instead of a path has nothing to open — so the
+  wikilink goes on its own line, never in place of one.
+- **Use path-form links whenever the basename isn't unique**
+  (`[[projects/patio/audit|audit.md]]`). 28 files here are named `SKILL.md` and
+  24 `README.md`; a bare `[[SKILL]]` silently resolves to an arbitrary one.
 - `knowledge/memory/MEMORY.md` is exempt: it keeps its
   `- [Title](file.md) — hook` format, which Obsidian resolves anyway.
 
