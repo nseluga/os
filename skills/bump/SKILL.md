@@ -1,57 +1,45 @@
 ---
 name: bump
-description: End-of-session closer — update PROGRESS.md, offer to sync the os project index, and save any notable memory. Use when the user says "/bump", "wrap up", "end of session", "let's close out", or "what should we save from this session".
+description: End-of-session closer — bump the project's os README (frontmatter + "Where it stands") and offer to save any notable memory from the session. Use when the user says "/bump", "wrap up", "end of session", "let's close out", or "what should we save from this session".
 ---
 
-# Wrap
+# Bump
 
-Close out a session cleanly: record what was done, keep the project index current, and surface anything worth remembering. Takes ~1 minute; replaces the "remember to update things" friction at the end of every session.
+Close out a session: bring the project's `~/os` index up to date and surface anything worth remembering. Local `PROGRESS.md` is not this skill's job — the dev team writes that as it runs.
 
 ## Steps
 
 ### 1. Orient
 
-Run `git log --oneline -10` (or equivalent for the current repo) to see what landed. Also check if a `PROGRESS.md` exists at the project root.
+Run `git log --oneline -10` in the current repo to see what landed this session.
 
-### 2. Update PROGRESS.md (if it exists)
+### 2. Bump the os README
 
-Read `~/os/knowledge/frameworks/progress-md.md` and follow that schema exactly.
+Match the current repo path against the `repo:` field in each `~/os/projects/*/README.md`. No match → say so and skip to step 3.
 
-Summarize what happened this session under the relevant plan items: what was completed, what's in-progress, any blockers. Be specific — "added auth middleware" not "made progress on auth". Timestamp the entry.
+Read `~/os/projects/_TEMPLATE.md` and the matched README. Propose updates in that shape:
 
-If `PROGRESS.md` doesn't exist, **don't create it** unless the user asks. Not every project needs one.
+- **Frontmatter:** `last_active` → today, `next_step` → the single most useful next action, plus `status`/`priority` if they actually changed.
+- **"Where it stands":** a few sentences on current state — done, in flight, blockers. No dated entries, no task lists (those live in the repo's PROGRESS.md / PLAN.md).
+- Fix any drift from the template while you're there (missing fields, prose restating frontmatter).
 
-### 3. Sync the os project index
+Show the diff, ask once, then write.
 
-Find the matching project under `~/os/projects/` by comparing the current repo path to the `repo:` field in each README. If a match is found:
+### 3. Offer memory
 
-- Show the user the current `last_active`, `next_step`, and `status` fields.
-- Propose updated values based on what landed today.
-- **Ask before writing** — one confirmation is enough ("update the os index?" → yes/no).
+Review the session for anything worth persisting across conversations: a preference or correction the user gave, a non-obvious decision and its why, a repeatable pattern. Skip anything the code, git history, or CLAUDE.md already records.
 
-If no match, skip silently.
+List candidates one line each with the type (`user`/`feedback`/`project`/`reference`), or say "nothing worth saving." Write only what the user nods at — a fact file in `~/os/knowledge/memory/` plus a `MEMORY.md` index line. If a candidate is really a reusable process, say it belongs in a skill instead.
 
-### 4. Surface memory candidates
+### 4. Report
 
-Review the session for anything worth persisting across conversations:
-- A preference or correction the user gave
-- A non-obvious decision made (and why)
-- A repeatable process or pattern discovered
-
-List candidates briefly. For each, say whether it belongs in memory (user/feedback/project/reference) or should be a new/updated skill. Offer to write whichever the user nods at.
-
-Don't save things the code or git history already records.
-
-### 5. Report
-
-One-paragraph close: what changed, what's next, what (if anything) was saved.
+Two lines: what the README now says, what (if anything) was saved.
 
 ## Arguments
 
-- `$ARGUMENTS` — optional focus area (e.g. "skip memory, just update progress"). Apply as overrides.
+- `$ARGUMENTS` — optional focus (e.g. "skip memory, just the README"). Apply as an override.
 
 ## Notes
 
-- Step 3 is offer-first — never write to `~/os/projects/` without confirmation.
-- Step 4 is offer-first — never write to `~/os/knowledge/memory/` without confirmation.
-- If nothing notable happened (no commits, no decisions, no corrections), say so and skip steps 2–4.
+- Both writes are offer-first — never touch `~/os/projects/` or `~/os/knowledge/memory/` without confirmation.
+- Nothing notable happened? Say so and stop.

@@ -31,7 +31,7 @@ One folder per skill. Each `SKILL.md`'s `description:` frontmatter is the canoni
 - `ai-usage-optimizer` — Audit how well Nate uses AI systems and prescribe leverage
 - `ingest-data` — Triage files in knowledge/raw into their destinations
 - `sync-claude-sessions` — Sync learnings from recent chat histories into memory
-- `bump` — End-of-session closer update PROGRESS.md, sync project index, save memory
+- `bump` — End-of-session closer: bump the project's os README, offer session memory
 - `brief` — Morning briefing after an autonomous run changelog and next steps
 - `task-observer` — Monitors task execution for skill-improvement opportunities
 - `handoff` — Compact the current conversation into a handoff document

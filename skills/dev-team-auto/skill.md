@@ -13,7 +13,7 @@ Invoke the `task-observer` skill now to begin observing this session.
 
 Read these in parallel before doing anything else:
 1. `PLAN.md` — the full plan, execution order, and any stop markers
-2. `PROGRESS.md` — find the first item that is NOT marked `done`; that is where you start
+2. `PROGRESS.md` — find the first item that is NOT marked `done`; that is where you start. Also read `~/os/knowledge/frameworks/progress-md.md` once — every PROGRESS.md write this run follows that schema. If PROGRESS.md doesn't exist, create it from that schema before the first item.
 3. `.claude/dev-team/engineer-report.md` if it exists — get the branch name if a prior session already created a worktree
 4. `.claude/dev-team/team-memory.md` if it exists — compact it if oversized per `convergence-loop.md` → "Compaction". Item orchestrators read it per item; you only need its notes for Quadrant-1 items you run directly.
 5. `~/.claude/memory/dev-team-learnings.md` — **you are the only reader for this entire run.** Compact it per `convergence-loop.md` → "Writing the global file" if it's past ~30 bullets. Then, for every non-Quadrant-1 item you'll dispatch, match its failure family against the bullets (money, RLS/auth, migrations, Next.js rendering/actions, content sweeps, …) and keep the 3–5 matching bullets ready to hand to that item's `dt-orchestrator` — see step 2. Never tell `dt-orchestrator` to read this file itself; that's the redundant per-item read this step exists to eliminate.
@@ -44,7 +44,12 @@ Do not read the inner agents' reports yourself — the returned line is your rec
 
 ### 3. Record the outcome and move on
 
-From the returned line, before touching the next item: update `PROGRESS.md` — `done [team] — [summary + commit hash]` or `blocked — [reason]` (never silently mark a blocked item done) — and set the item's `status:` in `PLAN.md`. The item orchestrator already appended the team-memory entry; for Quadrant-1 items you ran directly, append it yourself per the "Run memory log" format. A blocked item does not stop the run. Back to step 1.
+From the returned line, before touching the next item, write both trackers — never batch these to the end of the run:
+
+- `PROGRESS.md` — append a dated entry for the item per the progress-md schema: `done [team] — [summary + commit hash]` or `blocked — [reason]` (never silently mark a blocked item done). One entry per item, written as soon as it finishes.
+- `PLAN.md` — set that item's `status:`.
+
+The item orchestrator already appended the team-memory entry; for Quadrant-1 items you ran directly, append it yourself per the "Run memory log" format. A blocked item does not stop the run. Back to step 1.
 
 ## Shut Down
 
@@ -52,7 +57,7 @@ Stop when you hit a `⚠️ AUTONOMOUS RUN — STOP HERE` marker or when all pre
 
 Before exiting:
 1. Commit any uncommitted changes on the worktree branch: `chore: autonomous session checkpoint — [list completed items]`
-2. Write a final PROGRESS.md update.
+2. Write a final PROGRESS.md entry for the run: items done, items blocked, next item.
 3. Merge the worktree branch back into the working branch (recorded at startup): `git merge [worktree-branch] --no-edit` from the main repo checkout (not the worktree path).
 4. Remove the worktree: `git worktree remove [worktree-path]`
 5. Write a summary for the user covering: items DONE, items BLOCKED and why (unmet criteria + Root Cause), the next item, and what the human needs to do before the next session can proceed.

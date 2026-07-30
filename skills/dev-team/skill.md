@@ -48,12 +48,16 @@ Once the item first reaches a passing correctness gate (QA PASS), run `dt-ui` on
 
 **Log the run — do this first, before you report to the user.** Append one entry to `.claude/dev-team/team-memory.md` in the format defined in `convergence-loop.md` ("Run memory log"). Do this for every outcome, DONE or BLOCKED, on every item (including `--stage` single-shot runs). Append only; create the file with a `# Dev-team memory log` header if it doesn't exist. If the run produced a **project-independent** lesson (generalizes to any repo), also append it to the global os memory at `~/.claude/memory/dev-team-learnings.md` per the "Two destinations" rule in `convergence-loop.md` — most runs won't.
 
+**Then update the trackers** — only if they already exist; this skill never creates them:
+- `PROGRESS.md` — append a dated entry for the item per `~/os/knowledge/frameworks/progress-md.md`: `done [team] — [summary + commit hash]` or `blocked — [reason]`. Never mark a blocked item done.
+- `PLAN.md` — set the item's `status:` (skip for `--stage` runs and for tasks that came from `TASK.md`).
+
 Then report to the user:
 - **Outcome:** DONE or BLOCKED, and how many attempts it took
 - **Branch name** (from the engineer/ui report) and the final QA `VERDICT`
 - **Review findings:** count by severity and how many were fixed
 - **If BLOCKED:** which `done when:` criteria are still unmet and the last Root Cause hint
 - Any disputed/deferred findings and any UI Backend Flags
-- **Next step:** `git merge [branch]` to bring the work into the current branch when satisfied
+- **Next step:** `git merge [branch]` to bring the work into the current branch when satisfied — then `/bump` if the project's os README needs to catch up
 
 Do not merge automatically. The user reviews and merges.

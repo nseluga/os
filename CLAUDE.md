@@ -35,6 +35,12 @@ os/
 Do not read these files automatically. Pull them on demand when a task makes
 the content clearly relevant.
 
+**Naming a project loads its repo config.** When Nate names a project ("work
+in bcns"), read `projects/<name>/README.md` plus the `CLAUDE.md` and
+`.claude/settings.json` at that README's `repo:` path — before doing any work.
+Reading settings.json tells you what hooks/permissions the repo expects; it
+does not activate them (that needs launching Claude from the repo dir).
+
 **Index maintenance:** indexed folders carry an `INDEX.md` with a
 one-line-per-file entry (`knowledge/` and its subfolders, `skills/`,
 `projects/`, `agents/`). When you add, remove, or repurpose a file in one,

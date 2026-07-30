@@ -41,7 +41,7 @@ Read, in parallel where possible:
 
 ## Interview
 
-Use the grilling method (`~/os/skills/grilling/SKILL.md`): one question at a
+Use the grill-me method (`~/os/skills/grill-me/SKILL.md`): one question at a
 time, concrete tradeoffs per option, always give your recommendation, walk
 dependencies in order. Push back on anything that will hurt the run —
 over-scoped items, untestable criteria, premature infrastructure — before
