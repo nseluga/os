@@ -37,3 +37,9 @@ knowledge/raw/**/*.mp4
 # Same policy as Impeccable (a plugin, so it never lands here): tools reinstall,
 # config commits. Reinstall via the Higgsfield marketplace.
 skills/higgsfield-*/
+
+# leads skill: venv and the local identifier config (sheet id, SA emails).
+# The skill code is public and reads every identifier from skills/leads/.env
+skills/leads/.venv/
+skills/leads/.env
+__pycache__/

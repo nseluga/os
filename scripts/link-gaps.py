@@ -92,6 +92,11 @@ for tgt in files:
         if src.parent==tgt.parent: continue   # same folder: containment resolves it
         # an INDEX naming its own subtree is containment, which stays backticked by design
         if src.name=='INDEX.md' and str(tgt).startswith(str(src.parent)+os.sep): continue
+        # a skill pack is self-contained: SKILL.md <-> its own references/
+        def pack(x):
+            q=x.relative_to(ROOT).parts
+            return q[1] if len(q)>2 and q[0]=='skills' else None
+        if pack(src) and pack(src)==pack(tgt): continue
         if L is None: L=linked(src)
         if tgt in L: continue
         rows.append((rel[src],hit,rel[tgt]))

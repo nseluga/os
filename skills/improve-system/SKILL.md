@@ -1,6 +1,6 @@
 ---
 name: improve-system
-description: Audit and improve the ~/os system — memory, skills, and knowledge. Use when the user says "/improve-system", "audit the system", "clean up my os", "improve my setup", or "run a system pass". Biases toward removing, not adding. Not for syncing memory from sessions (use /sync-claude-sessions) or a targeted single-skill edit.
+description: Audit and improve the ~/os system — memory, skills, knowledge, projects, agents, and link/index drift. Use when the user says "/improve-system", "audit the system", "clean up my os", "improve my setup", or "run a system pass". Biases toward removing, not adding. Not for syncing memory from sessions (use /sync-claude-sessions) or a targeted single-skill edit.
 ---
 
 # Improve System
@@ -102,6 +102,24 @@ Read the most recent 10 session files from `~/.claude/chat-histories/`. Extract 
 - `ls ~/os/knowledge/` to see the structure
 - `ls ~/os/knowledge/me/` and `ls ~/os/knowledge/frameworks/` and `ls ~/os/knowledge/library/` (directory listings only, don't read every file)
 
+**Whole-vault link drift (run the checker — don't re-derive it):**
+```bash
+OS_DIR=~/os python3 ~/os/scripts/link-check.py
+```
+One line per finding: unresolved `[[wikilinks]]` and INDEX.md entries that are stale or missing, across every folder in the vault. Exit 1 means drift, empty output means clean.
+
+**Projects:**
+```bash
+grep -H '^last_active:\|^status:' ~/os/projects/*/README.md
+```
+Flag `active`/`in-progress` projects whose `last_active` is 30+ days old, and any README missing a frontmatter field that `~/os/projects/_TEMPLATE.md` defines.
+
+**Agents:**
+- `ls ~/os/agents/` and read each `.md` — same finding types as skills (bloat, stubs, duplication of a sibling skill).
+
+**Coverage check:**
+- `ls -d ~/os/*/` — any top-level directory not named above is itself a finding: it either needs a signal source here or needs deleting.
+
 **Change log:**
 - `~/os/outputs/change-log.md` if it exists (to avoid re-proposing already-applied items)
 
@@ -121,6 +139,9 @@ Look for ALL of the following. For each finding, note its type, evidence, and pr
 | **Skill bloat** | A skill with steps that are never reached, or a skill that duplicates another |
 | **Empty/stub skill** | A skill folder missing a SKILL.md, or a SKILL.md with only the template placeholder text |
 | **Dead knowledge file** | A file in `knowledge/` that is empty, a stub, or clearly superseded |
+| **Link drift** | Any line printed by `scripts/link-check.py` |
+| **Stale project index** | `status: active`/`in-progress` with `last_active` 30+ days old, or frontmatter missing fields `projects/_TEMPLATE.md` defines |
+| **Unaudited directory** | A top-level `~/os/` directory with no signal source in 2.1 |
 
 ### 2.3 — Sort findings into three buckets
 
@@ -135,6 +156,11 @@ Only items that are ALL of the following:
 Examples that qualify: removing a broken MEMORY.md index line (file verified to not exist), fixing a typo in a link path, deleting a genuinely empty file (0 bytes or only whitespace).
 
 Examples that do NOT qualify: changing the meaning of a memory entry, resolving a contradiction, editing a skill.
+
+**Link drift splits across buckets** — check which side of the line each finding falls on:
+- `index lists missing` → **Bucket A**. Deleting a line that points at nothing is mechanical.
+- `index omits present` → **Bucket B**. Adding an entry means authoring its one-line description, which is writing, not fixing.
+- unresolved `[[wikilink]]` → **Bucket B** unless the target is an obvious rename with exactly one candidate.
 
 Apply auto-approve items immediately. For each, append to `~/os/outputs/change-log.md`:
 ```

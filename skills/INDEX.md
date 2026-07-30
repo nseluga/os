@@ -26,7 +26,7 @@ One folder per skill. Each `SKILL.md`'s `description:` frontmatter is the canoni
 
 ## os maintenance
 
-- `improve-system` — Audit and improve the ~/os system memory, skills, knowledge
+- `improve-system` — Audit and improve the ~/os system: memory, skills, knowledge, projects, agents, link/index drift
 - `ai-usage-optimizer` — Audit how well Nate uses AI systems and prescribe leverage
 - `ingest-data` — Triage files in knowledge/raw into their destinations
 - `sync-claude-sessions` — Sync learnings from recent chat histories into memory
