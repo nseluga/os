@@ -18,5 +18,5 @@ up once on next wake/login, imperfectly); `~/Downloads`/`~/Desktop`/`~/Documents
 are TCC-protected and need Full Disk Access granted to the runner.
 
 Decision rule: local target ⇒ local scheduler. Cloud schedules are only for work
-that lives in the cloud (repos, APIs, web). See [[tidy-downloads]] skill, which
+that lives in the cloud (repos, APIs, web). See [[skills/tidy-downloads/SKILL|tidy-downloads]] skill, which
 chose manual-run for exactly this reason.
