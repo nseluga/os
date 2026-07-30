@@ -4,6 +4,9 @@ A PLAN.md is the pre-run contract for any autonomous or semi-autonomous session.
 It defines **what to build** (or improve), in what order, and exactly how to
 know each item is done. Agents read it at startup; you write it before the session.
 
+
+**Related:** [[progress-md]] annotates a PLAN.md as it is executed.
+
 ---
 
 ## When you need one

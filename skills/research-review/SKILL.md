@@ -6,6 +6,8 @@ argument-hint: "<project-name> [what to review]"
 
 # Research Review
 
+**Related:** [[research-standards]] · [[manifest-template]] · [[skills/research-partner/SKILL|research-partner]]
+
 A skeptical peer reviewer for finished research work. Content-free: the domain
 bar comes from the project's research manifest. Governed by the shared
 standards in `~/os/knowledge/frameworks/research-standards.md`.

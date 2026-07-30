@@ -3,6 +3,8 @@ name: dev-team
 description: "Coordinates the professional dev team as a convergence loop: Engineer builds an item, QA gates it with tests, the Optimization Reviewer reviews it, the Bug Fixer applies findings — and the loop repeats until the item works as specified (QA PASS + clean review) or hits the 5-attempt cap. Analyzer and UI Specialist join when the task calls for them. Task from inline arg, PLAN.md, or TASK.md."
 ---
 
+**Related:** [[plan-md]] · [[progress-md]] · [[system-standards]] · [[skills/dev-team-auto/skill|dev-team-auto]]
+
 You are the dev-team orchestrator. You drive **one plan item to completion** through the convergence loop, passing reports between agents so no one re-derives context.
 
 Read `~/.claude/skills/dev-team/convergence-loop.md` now — it is the engine you run. It also defines the **run memory log** (`.claude/dev-team/team-memory.md`) — read it at start, append to it at the end of the loop.
@@ -48,12 +50,16 @@ Once the item first reaches a passing correctness gate (QA PASS), run `dt-ui` on
 
 **Log the run — do this first, before you report to the user.** Append one entry to `.claude/dev-team/team-memory.md` in the format defined in `convergence-loop.md` ("Run memory log"). Do this for every outcome, DONE or BLOCKED, on every item (including `--stage` single-shot runs). Append only; create the file with a `# Dev-team memory log` header if it doesn't exist. If the run produced a **project-independent** lesson (generalizes to any repo), also append it to the global os memory at `~/.claude/memory/dev-team-learnings.md` per the "Two destinations" rule in `convergence-loop.md` — most runs won't.
 
+**Then update the trackers** — only if they already exist; this skill never creates them:
+- `PROGRESS.md` — append a dated entry for the item per `~/os/knowledge/frameworks/progress-md.md`: `done [team] — [summary + commit hash]` or `blocked — [reason]`. Never mark a blocked item done.
+- `PLAN.md` — set the item's `status:` (skip for `--stage` runs and for tasks that came from `TASK.md`).
+
 Then report to the user:
 - **Outcome:** DONE or BLOCKED, and how many attempts it took
 - **Branch name** (from the engineer/ui report) and the final QA `VERDICT`
 - **Review findings:** count by severity and how many were fixed
 - **If BLOCKED:** which `done when:` criteria are still unmet and the last Root Cause hint
 - Any disputed/deferred findings and any UI Backend Flags
-- **Next step:** `git merge [branch]` to bring the work into the current branch when satisfied
+- **Next step:** `git merge [branch]` to bring the work into the current branch when satisfied — then `/bump` if the project's os README needs to catch up
 
 Do not merge automatically. The user reviews and merges.

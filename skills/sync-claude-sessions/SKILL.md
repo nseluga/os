@@ -5,6 +5,8 @@ description: Review recent Claude Code chat histories and sync any learnings int
 
 # Sync Claude Sessions
 
+**Related:** [[MEMORY]]
+
 Scan recent chat histories, extract learnings worth persisting, and propose memory file writes. Interactive — proposes each change before writing.
 
 ## When to use

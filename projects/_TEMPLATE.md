@@ -5,8 +5,8 @@ READMEs formatted this way. Claude: this is the canonical shape for every file i
 projects/*/README.md.
 
 Two parts:
-  1. YAML frontmatter — machine-parseable, read by the project-dashboard. Keep the
-     field names and value formats exactly as below.
+  1. YAML frontmatter — machine-parseable, read by the dashboard and other os
+     tooling. Keep the field names and value formats exactly as below.
   2. Body — human/Claude-facing. Lean. See "Body conventions" at the bottom.
 
 This file (_TEMPLATE.md) is a reference, not a project — the leading underscore keeps

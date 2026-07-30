@@ -18,7 +18,6 @@ One folder per skill. Each `SKILL.md`'s `description:` frontmatter is the canoni
 ## Planning & review
 
 - `plan-md` — Grill the user into a schema-valid PLAN.md for dev-team execution
-- `grilling` — Interview the user relentlessly about a plan or design
 - `grill-me` — A relentless interview to sharpen a plan or design
 - `research-partner` — Build-time research partner standup ritual, methods pushback
 - `research-review` — Skeptical peer review of completed research work
@@ -27,11 +26,11 @@ One folder per skill. Each `SKILL.md`'s `description:` frontmatter is the canoni
 
 ## os maintenance
 
-- `improve-system` — Audit and improve the ~/os system memory, skills, knowledge
+- `improve-system` — Audit and improve the ~/os system: memory, skills, knowledge, projects, agents, link/index drift
 - `ai-usage-optimizer` — Audit how well Nate uses AI systems and prescribe leverage
 - `ingest-data` — Triage files in knowledge/raw into their destinations
 - `sync-claude-sessions` — Sync learnings from recent chat histories into memory
-- `bump` — End-of-session closer update PROGRESS.md, sync project index, save memory
+- `bump` — End-of-session closer: bump the project's os README, offer session memory
 - `brief` — Morning briefing after an autonomous run changelog and next steps
 - `task-observer` — Monitors task execution for skill-improvement opportunities
 - `handoff` — Compact the current conversation into a handoff document
@@ -47,6 +46,7 @@ One folder per skill. Each `SKILL.md`'s `description:` frontmatter is the canoni
 ## Apps & clients
 
 - `new-client-repo` — Create a new bcns client repo from the template
+- `leads` — Find, score, and track bcns sales leads in the Master Client List sheet
 - `career-advisor` — Senior career advisor reviewing portfolio sites and writeups
 
 ## Utilities

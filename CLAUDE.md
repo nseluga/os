@@ -35,6 +35,12 @@ os/
 Do not read these files automatically. Pull them on demand when a task makes
 the content clearly relevant.
 
+**Naming a project loads its repo config.** When Nate names a project ("work
+in bcns"), read `projects/<name>/README.md` plus the `CLAUDE.md` and
+`.claude/settings.json` at that README's `repo:` path — before doing any work.
+Reading settings.json tells you what hooks/permissions the repo expects; it
+does not activate them (that needs launching Claude from the repo dir).
+
 **Index maintenance:** indexed folders carry an `INDEX.md` with a
 one-line-per-file entry (`knowledge/` and its subfolders, `skills/`,
 `projects/`, `agents/`). When you add, remove, or repurpose a file in one,
@@ -43,6 +49,47 @@ is worse than none. Exceptions: `knowledge/raw/` contents are transient
 (never indexed); `knowledge/memory/`'s file index is `MEMORY.md` (auto-loaded; its `INDEX.md`
 explains folder structure only); per-project files stay
 `projects/<name>/README.md` (the dashboard's data contract).
+
+**Link maintenance (the other axis):** `INDEX.md` and `[[wikilinks]]` do
+different jobs and must not be collapsed into each other.
+
+| | `INDEX.md` | `[[wikilinks]]` |
+|---|---|---|
+| Axis | **containment** — what lives in this folder | **association** — how this file relates to another |
+| Lives | one per folder | inside file bodies |
+| Also encoded by | the filesystem, the file explorer, graph color groups | nothing else |
+
+- `INDEX.md` entries stay **backticked filenames**. Do not convert them to
+  wikilinks — the folder already encodes containment, and doing so buries the
+  real semantic edges inside one giant star per folder.
+- `[[wikilinks]]` go in **file bodies**, and their job is **resolution**: when
+  something tells you to read "the research standards" or "the hosting
+  reference", the link is what turns that name into a path. They do not decide
+  *what* to read — they make what was named findable.
+- **This matters most where grep fails.** `projects/`, `knowledge/me/`,
+  `knowledge/audience/`, and `knowledge/library/` are gitignored, so a
+  recursive grep from the repo root silently skips all four. A file in one of
+  them that nothing links is effectively unreachable — you have to already know
+  its path to find it.
+- So the test for a missing link is not "do these two relate?" but **"is this
+  file named somewhere it can't be resolved from?"** When you add a file, link
+  it from wherever it gets referred to by name, in the same turn you add its
+  INDEX line.
+- Only link a real reference. An invented link is worse than no link.
+- **Imperative paths and links compose — they don't compete.** A skill body
+  that says "read `~/os/.../convergence-loop.md` now" states *when*; a
+  `**Related:**` link states *where it lives*. Executable paths stay paths —
+  an agent handed `[[plan-md]]` instead of a path has nothing to open — so the
+  wikilink goes on its own line, never in place of one.
+- **Use path-form links whenever the basename isn't unique**
+  (`[[projects/patio/audit|audit.md]]`). 28 files here are named `SKILL.md` and
+  24 `README.md`; a bare `[[SKILL]]` silently resolves to an arbitrary one.
+- `knowledge/memory/MEMORY.md` is exempt: it keeps its
+  `- [Title](file.md) — hook` format, which Obsidian resolves anyway.
+
+`scripts/link-check.py` reports drift on both axes (unresolved or ambiguous
+wikilinks, and INDEX entries that are stale or missing). It runs from
+`scripts/maintenance.sh`.
 
 **Exception — always for plan/progress files:** when creating or updating a
 `PLAN.md` or `PROGRESS.md` in *any* repo, first read
@@ -85,7 +132,7 @@ Offer; don't auto-write. One line at the end of the turn is enough.
 - `~/.claude/memory`    → `~/os/knowledge/memory`
 
 Don't move or rename `~/os` without re-pointing these symlinks.
-Health check: `ls -L ~/.claude/skills/grilling` should resolve.
+Health check: `ls -L ~/.claude/skills/grill-me` should resolve.
 
 ## Authoring a new skill
 
