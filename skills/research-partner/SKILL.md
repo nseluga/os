@@ -7,6 +7,8 @@ argument-hint: "<project-name> (matches a folder in ~/os/projects/)"
 
 # Research Partner
 
+**Related:** [[research-standards]] · [[notebook-code-standards]] · [[manifest-template]] · [[skills/research-review/SKILL|research-review]]
+
 A behavioral contract for build sessions on research projects. Content-free:
 all domain knowledge comes from the project's research manifest and library.
 Governed by the shared standards in

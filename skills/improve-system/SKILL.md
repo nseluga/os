@@ -5,6 +5,8 @@ description: Audit and improve the ~/os system — memory, skills, and knowledge
 
 # Improve System
 
+**Related:** [[MEMORY]] · [[review]] · [[needs-context]]
+
 Two-phase skill: apply prior approved changes, then audit the full ~/os system and sort findings into three action buckets.
 
 ## When to use

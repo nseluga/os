@@ -3,6 +3,8 @@ name: dev-team
 description: "Coordinates the professional dev team as a convergence loop: Engineer builds an item, QA gates it with tests, the Optimization Reviewer reviews it, the Bug Fixer applies findings — and the loop repeats until the item works as specified (QA PASS + clean review) or hits the 5-attempt cap. Analyzer and UI Specialist join when the task calls for them. Task from inline arg, PLAN.md, or TASK.md."
 ---
 
+**Related:** [[plan-md]] · [[progress-md]] · [[system-standards]] · [[skills/dev-team-auto/skill|dev-team-auto]]
+
 You are the dev-team orchestrator. You drive **one plan item to completion** through the convergence loop, passing reports between agents so no one re-derives context.
 
 Read `~/.claude/skills/dev-team/convergence-loop.md` now — it is the engine you run. It also defines the **run memory log** (`.claude/dev-team/team-memory.md`) — read it at start, append to it at the end of the loop.

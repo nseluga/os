@@ -5,6 +5,8 @@ description: Use when the user wants to process, sort, or triage files in knowle
 
 # ingest-data
 
+**Related:** [[sources]]
+
 Triage everything in `~/os/knowledge/raw/` and distribute it to the right destination. Leave raw/ empty (or containing only its README).
 
 ## When to use

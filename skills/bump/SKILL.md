@@ -5,6 +5,8 @@ description: End-of-session closer — bump the project's os README (frontmatter
 
 # Bump
 
+**Related:** [[_TEMPLATE]]
+
 Close out a session: bring the project's `~/os` index up to date and surface anything worth remembering. Local `PROGRESS.md` is not this skill's job — the dev team writes that as it runs.
 
 ## Steps

@@ -5,6 +5,8 @@ description: Create a new bcns client repo from the bcns-app-template Template R
 
 # New client repo
 
+**Related:** [[_TEMPLATE]]
+
 ## When to use
 
 - Trigger phrases: "new client repo", "spin up a repo for <client>", "onboard <client>", "/new-client-repo"

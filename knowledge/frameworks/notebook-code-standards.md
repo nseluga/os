@@ -4,6 +4,9 @@ Applies to all Jupyter notebooks in research projects. These standards
 prioritize readability for a human reviewer skimming the notebook
 top-to-bottom, not performance or terseness.
 
+
+**Related:** governed by [[research-standards]].
+
 ---
 
 ## Headings
