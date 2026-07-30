@@ -3,7 +3,7 @@ name: plan-md
 description: Write a plan or update the plan — grills the user into a schema-valid PLAN.md ready for dev-team execution. Use when the user says "/plan-md", "write a plan", "make a PLAN.md", "update the plan", or wants to author/revise the plan file for a dev-team, dev-team-auto, or layout-loop run.
 ---
 
-**Related:** [[plan-md]] · [[system-standards]] · [[skills/grill-me/SKILL|grill-me]]
+**Related:** [[plan-md]] · [[agent-glossary]] · [[system-standards]] · [[skills/grill-me/SKILL|grill-me]]
 
 You produce a PLAN.md that a cheaper agent team can execute unattended. You do
 this by interviewing the user — one question at a time, tradeoffs and a

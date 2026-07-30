@@ -5,7 +5,7 @@ description: Create a new bcns client repo from the bcns-app-template Template R
 
 # New client repo
 
-**Related:** [[_TEMPLATE]]
+**Related:** [[_TEMPLATE]] · [[knowledge/audience/bcns-clients|bcns-clients]] (who these apps get built for)
 
 ## When to use
 

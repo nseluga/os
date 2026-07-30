@@ -5,7 +5,7 @@ Shared process standards for research work. Loaded by both `/research-partner`
 not content** — domain knowledge (baseball, ML, economics) never lives here; it
 comes from each project's research manifest and library.
 
-Related: [[notebook-code-standards]]
+**Related:** [[notebook-code-standards]]
 
 ## 1. Challenge checklist
 
