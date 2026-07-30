@@ -18,3 +18,4 @@
 - [Hosting only in work profile](feedback-hosting-work-profile-only.md) — Vercel/DNS/registrar work via Claude in Chrome happens ONLY in the work Chrome profile; confirm the window with switch_browser, never infer it from deviceId or a logged-in dashboard
 - [bcns platform Vercel](reference-bcns-platform-vercel.md) — platform site lives on the bcn-services.com Vercel account / `bcns` team / `bcn-services/bcns` repo, reachable only from Chrome "Work Profile" — not the personal scope
 - [vercel.json precedence](reference-vercel-json-precedence.md) — vercel.json overrides dashboard settings and its paths resolve relative to Root Directory; the monorepo double-nesting trap
+- [GCP auth under bcn-services.com](reference-gcp-auth-bcns.md) — SA keys blocked by Secure by Default and Sheets/Drive ADC scopes blocked on gcloud's client; use impersonation, and Places API (New) takes OAuth so needs no API key
