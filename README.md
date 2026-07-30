@@ -64,19 +64,9 @@ os/
 │   ├── library/           # Reference docs, read on-demand (gitignored)
 │   └── raw/               # Inbox for new materials (triaged into above)
 ├── skills/                # 36 Claude Code skills — reusable workflows and tools
-├── projects/              # Index entries for 12 active projects (gitignored, except _TEMPLATE.md)
-│   ├── batting-average-ability/
-│   ├── bcns/
-│   ├── bcns-client-coventry/
-│   ├── bcns-client-delucas/
-│   ├── bcns-client-l2detailz/
-│   ├── hitter-embedding/
-│   ├── nba-shot-value/
-│   ├── os/
-│   ├── os-evals/
-│   ├── patio/
-│   ├── pitcher-injury-risk/
-│   └── portfolio-website/
+├── projects/              # One index entry per project (gitignored, except _TEMPLATE.md)
+│   ├── _TEMPLATE.md       # Copy this per project you want tracked
+│   └── <project-name>/    # README.md — repo path, status, next step
 └── scripts/               # Utility scripts
 ```
 
@@ -147,23 +137,18 @@ Don't hand-edit the format here; Claude Code maintains it. Add your own notes to
 Each skill lives in `skills/<name>/SKILL.md` with frontmatter (name, description, triggers) and an implementation body. Invoked via `/skill-name` in Claude Code.
 
 ### `projects/`
-Index entries for 12 active projects. Each is a pointer to a real repository elsewhere — not the actual codebase, just metadata (repo path, GitHub link, status, next step, priority). Used to context-switch quickly without re-explaining state.
-**Note:** Per-project READMEs are gitignored (personal); `_TEMPLATE.md` is kept in the repo so you can add your own.
+One index entry per project — a pointer to a real repository elsewhere, not the
+codebase itself. Each is just metadata: repo path, GitHub link, status, next
+step, priority, and a short "where it stands" summary. The point is to
+context-switch into a project without re-explaining its state.
 
-| Project | What it is |
-|---|---|
-| `pitcher-injury-risk` | Multi-model MLB pitcher injury prediction (Statcast 2015–2024, survival models, IR+ composite) |
-| `batting-average-ability` | Same-season skill isolation metric with mixed-effects modeling and ICC |
-| `hitter-embedding` | Conditional-query hitter embedding on Statcast process signals, targeting platoon skill and market mispricing |
-| `nba-shot-value` | 4-model ML comparison on NBA shot probability and expected value by zone |
-| `patio` | Full-stack social betting app (React 19 + Flask + scipy house-odds engine) |
-| `bcns` | Software studio platform repo — marketing site, shared packages, hosted-web client template |
-| `bcns-client-coventry` | Contracting ops platform (leads → quotes → dispatch → closeout) plus a sub-facing PWA |
-| `bcns-client-delucas` | Restaurant management — local-first Electron desktop app |
-| `bcns-client-l2detailz` | Detailing marketing site plus admin dashboard (booking, calendar, Maps routing, lifecycle email) |
-| `portfolio-website` | This portfolio — Astro + Tailwind + MDX, built with this OS as infrastructure |
-| `os` | This repo, plus the local Astro SSR dashboard that reads these README files to show project status — the dashboard is not a separate project entry; it hangs off this one's `dashboard_repo:` field |
-| `os-evals` | Evaluation framework for Claude Code skill and workflow quality |
+The frontmatter is a data contract, so tooling can read it. A project whose work
+spans two repos keeps one entry with a second path field (e.g.
+`dashboard_repo:`) rather than a second entry.
+
+**Everything under `projects/` is gitignored** except `_TEMPLATE.md` — the
+entries are personal. Your fork starts empty here; copy `_TEMPLATE.md` per
+project you want tracked.
 
 ---
 
@@ -236,10 +221,15 @@ Editing a skill or memory file here changes it everywhere immediately.
 4. **During work:** Claude Code may save learnings to `knowledge/memory/` for use in future conversations
 
 ### For GitHub Visitors
-- **Interested in the projects?** Start at `knowledge/me/` — it has links to all active work
-- **Curious about the skills?** Browse `skills/` — each is a self-contained Claude Code automation
+What you can see here is the *system* — the skills, frameworks, and structure.
+The content that fills it (`knowledge/me/`, `knowledge/audience/`,
+`knowledge/library/`, and every entry under `projects/`) is gitignored, so those
+folders will look empty from GitHub. That's intentional, not a broken clone.
+
+- **Curious about the skills?** Browse `skills/` — each is a self-contained Claude Code automation, and `skills/INDEX.md` is the map
 - **Want to understand the thinking?** Check `knowledge/frameworks/` for mental models and decision methods
-- **Just exploring?** Start with this README, then `knowledge/me/INDEX.md`
+- **Interested in the projects themselves?** They live in their own repos — see [github.com/nseluga](https://github.com/nseluga)
+- **Want to run it yourself?** [Setting This Up For Yourself](#setting-this-up-for-yourself)
 
 ---
 
@@ -273,4 +263,6 @@ Editing a skill or memory file here changes it everywhere immediately.
 Harvey Mudd College, Class of 2027  
 Software engineering · ML/AI · Data science · Baseball analytics
 
-See `knowledge/me/INDEX.md` for full bio and working style.
+[nateseluga.com](https://nateseluga.com) · [github.com/nseluga](https://github.com/nseluga)
+
+(Bio and working style live in `knowledge/me/`, which is gitignored — local only.)
