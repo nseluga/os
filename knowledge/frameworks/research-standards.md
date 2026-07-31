@@ -95,7 +95,6 @@ Every settled decision gets an append-only entry in the project's decision log
 - **Alternatives:** what was considered and rejected
 - **Rationale:** why, in terms a skeptical reviewer would accept
 - **Reference:** supporting citation(s), or "none — judgment call"
-- **Tier:** 1/2/3, and whether it was a user override
 - **Revisit if:** the condition under which this should be reopened
 ```
 

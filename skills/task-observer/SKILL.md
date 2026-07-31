@@ -35,6 +35,12 @@ and takes the observation log with it. The observation log lives at
 `[workspace folder]/skill-observations/log.md` unless the user's
 configuration pins it elsewhere.
 
+**Pinned for this user:** the observation log always lives at
+`~/os/outputs/skill-observations/log.md`, regardless of which repo or
+worktree the session is running in. Use that path for every read/write in
+this file and in `references/weekly-review.md` — never the per-project
+`~/.claude/projects/<project-id>/` default above.
+
 ## Reference files — load on demand, not up front
 
 - `references/weekly-review.md` — the comprehensive review procedure
