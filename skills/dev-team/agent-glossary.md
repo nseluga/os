@@ -107,9 +107,8 @@ difficulty: open — layout algorithm, tick budget, and collision strategy are
 **Team:** 2 × `dt-engineer` in parallel, **outline only** (Opus/high — one
 prompted for a physics-tick approach, one for precomputed layout) → pick →
 1 × `dt-engineer` builds the winner (Sonnet/high) → `dt-qa` (`tests`).
-MAX_ATTEMPTS 5.
-**Skipped:** `dt-review` — difficulty is not risk. This item may take four
-attempts, and none of them are made better by a reviewer; a wrong layout is its
+MAX_ATTEMPTS 3.
+**Skipped:** `dt-review` — difficulty is not risk. This item may take every attempt, and none of them are made better by a reviewer; a wrong layout is its
 own bug report.
 
 ```

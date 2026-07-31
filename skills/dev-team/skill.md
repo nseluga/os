@@ -1,6 +1,6 @@
 ---
 name: dev-team
-description: "Coordinates the professional dev team as a convergence loop: Engineer builds an item, QA gates it with tests, the Optimization Reviewer reviews it, the Bug Fixer applies findings — and the loop repeats until the item works as specified (QA PASS + clean review) or hits the 5-attempt cap. Analyzer and UI Specialist join when the task calls for them. Task from inline arg, PLAN.md, or TASK.md."
+description: "Coordinates the professional dev team as a convergence loop: Engineer builds an item, QA gates it with tests, the Optimization Reviewer reviews it, the Bug Fixer applies findings — and the loop repeats until the item works as specified (QA PASS + clean review) or hits the attempt cap. Analyzer and UI Specialist join when the task calls for them. Task from inline arg, PLAN.md, or TASK.md."
 ---
 
 **Related:** [[plan-md]] · [[progress-md]] · [[system-standards]] · [[skills/dev-team-auto/skill|dev-team-auto]]
@@ -34,7 +34,7 @@ Tell the user the chosen team and why before spawning them.
 Run the loop from `convergence-loop.md` for the item, with:
 - **gate mode:** decided per item, not fixed — see `convergence-loop.md` → Inputs → "gate mode" (default `tests`; `tests+behavioral` when the item touches user-visible UI, an HTTP route, models/migrations/serialization, or `risk:` reads silent)
 - **branch:** the first agent to run creates the worktree; pass its branch name to every later agent
-- **MAX_ATTEMPTS:** per `convergence-loop.md` → Inputs (5 by default; 2 when `difficulty:` is low)
+- **MAX_ATTEMPTS:** per `convergence-loop.md` → Inputs (3 by default; 2 when `difficulty:` is low)
 
 The Optimization Reviewer runs on the item on every pass where QA is green — an item is never marked done without a clean review, unless `dt-review` was excluded from the team per Team selection (a loud, revertible risk).
 

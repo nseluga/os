@@ -33,22 +33,28 @@ for it, and say so in the declaration below. Effort is not a spawn parameter;
 express it in the prompt as a thinking keyword: **minimal** (none), **medium**
 (`think`), **high** (`think hard`).
 
-- **Builders** (`dt-engineer`, `dt-fix`): Sonnet/medium for a bounded change;
-  Sonnet/high when build quality sets how many fix cycles you pay for later;
-  Opus/high when the risk line reads silent or non-revertible; Fable/medium when
-  a defect is unrecoverable (auth, crypto, authorization boundary, PII/PHI leak,
-  irreversible money, destroyed production data).
+- **Builders** (`dt-engineer`): Sonnet/medium for a bounded change; Sonnet/high
+  when build quality sets how many fix cycles you pay for later; silent or
+  non-revertible risk → **outline at Opus/high, implement at Sonnet/high** (see
+  Design exploration); Fable/medium when a defect is unrecoverable (auth, crypto,
+  authorization boundary, PII/PHI leak, irreversible money, destroyed production
+  data) — one model throughout, no split.
+- **`dt-fix`**: Sonnet/medium — it applies findings someone else reasoned out.
+  Raised only by the escalation ramp.
 - **`dt-review`**: Opus/high — it is the floor, not an escalation. You only
   spawn a reviewer on an item whose risk earns one, so there is no cheap-review
   case; a reviewer below the builder that wrote the code finds nothing. Fable
   when the defect would be unrecoverable.
 - **`dt-analyze`** Sonnet/medium (Haiku for its `Explore` fan-out, per its skill);
   **`dt-research`** Sonnet/medium.
-- **Hard floor: `dt-qa` never runs below Sonnet.** It judges coverage and
-  classifies bug vs design-level, which steers the whole loop. A weak gate
-  passes broken code with false confidence.
+- **`dt-qa`** — never below Sonnet. Sonnet/medium default; **Opus/high when risk
+  is silent or non-revertible**, where a false PASS is the failure the gate
+  exists to prevent; Fable when unrecoverable. Tier by risk, then hold — the ramp
+  raises the *builder*, never the gate; a FAIL is already correct information.
+  QA is the loop's heaviest agent, but control that with gate mode and output
+  bounds, not by dropping its tier.
 
-The escalation ramp in Efficiency rules raises any of these on repeated failure — they are starting points, not ceilings.
+The escalation ramp in Efficiency rules raises builders on repeated failure — their tiers are starting points, not ceilings.
 
 **`dt-analyze`** runs before the loop when the item spans multiple files or works
 in an area no report has mapped this run. Skip it for single-file items and for
@@ -80,25 +86,30 @@ of what these guidelines actually produce, so they can be tuned on evidence.
 
 ## Design exploration
 
-**The opening move of the engineering phase, when `difficulty:` is open.** Don't make one engineer commit to an approach blind, and don't pay several to build competing versions either. Spawn 2–3 `dt-engineer` agents **in parallel to outline only** — no code, no worktree — compare the outlines, then hand the winner to a single engineer who implements it.
+**The opening move of the engineering phase.** Outline at the top tier, implement at Sonnet/high — deciding *what* to build is cheap reasoning; building it is expensive typing, and only the first is worth the top tier.
 
-**Exploration is bought by `difficulty:`, not by `risk:`.** A settled pattern gets one engineer however badly it fails; an open design space gets several however harmless the failure.
+**Two signals buy an outline pass, in different shapes:**
 
-0. **Gauge the design space first.** One clearly-shaped approach (constrained by existing patterns, an established interface, or a plan-prescribed architecture) = **narrow**: one engineer builds, skip the rest of this section. Genuinely competing architectures (different data models, module boundaries, or consistency tradeoffs) = **open**: explore.
+| | outlines | why |
+|---|---|---|
+| `difficulty:` open | **2–3, competing** | the design space has real alternatives |
+| `risk:` silent or non-revertible, `difficulty:` low | **1** | the approach is settled; you're buying a stated design, not alternatives |
+| both | **2–3, competing** | one pass covers both — never run two |
+| neither | **none** — one Sonnet engineer builds | |
 
-1. **How many.** 2 when the risk is loud; 3 when it is silent or non-revertible.
+A risk-bought single outline only makes sense on an item already buying `dt-review` — that reviewer is what makes the cheaper implementer safe. No reviewer, no split.
 
-2. **Outline, don't build.** Each returns ≤30 lines: the approach, key interfaces and data model, what it handles well, what it doesn't, and the edge cases an implementation must handle. No code, no worktree, no branch — that is what keeps this affordable enough to run three of.
+1. **Gauge the design space.** One clearly-shaped approach (constrained by existing patterns, an established interface, or a plan-prescribed architecture) = **narrow**. Genuinely competing architectures (different data models, module boundaries, or consistency tradeoffs) = **open** → 2 competing outlines when the risk is loud, 3 when it is silent or non-revertible.
 
-3. **Prompt each one differently.** Name the approach you want it to take ("event-sourced", "single denormalised table", "compute at read time"). Engineers given the same prompt return the same design; the parallel spawn only pays for itself if the approaches genuinely diverge.
+2. **Outline at Opus/high, don't build.** Each returns ≤30 lines: the approach, key interfaces and data model, what it handles well, what it doesn't, and the edge cases an implementation must handle. No code, no worktree, no branch — that is what keeps this affordable enough to run three of.
+
+3. **Prompt each one differently** (competing outlines only). Name the approach you want it to take ("event-sourced", "single denormalised table", "compute at read time"). Engineers given the same prompt return the same design; the parallel spawn only pays for itself if the approaches genuinely diverge.
 
 4. **Picking.** Choose on the item's priorities — correctness, reliability, efficiency, fit with existing patterns — and record the choice in one line.
 
-5. **Implement once.** Hand the winning outline **verbatim** to a single `dt-engineer` in its spawn prompt; it implements that outline rather than re-deriving the design. Only this engineer creates a worktree.
+5. **Implement once, at Sonnet/high.** Hand the outline **verbatim** to a single `dt-engineer`; it implements that outline rather than re-deriving the design. Only this engineer creates a worktree. Keep it on Sonnet unless the item is the unrecoverable-defect tier — the escalation ramp raises it if the build actually fails.
 
 6. **Keep the runner-up outlines.** On a later design-level QA failure the loop hands the next-best outline to an engineer instead of re-deriving alternatives from scratch — the exploration is already paid for.
-
-`difficulty: low` → one engineer, no exploration.
 
 ## Spawn template (shared)
 
@@ -118,6 +129,7 @@ Use this prompt:
 > [If dt-analyze ran:] The shared codebase map is `.claude/dev-team/analyze-report.md` — treat its file locations, data flows, and patterns as ground truth. Do NOT re-explore what it already covers; only open the files it points you to.
 > [If dt-research ran:] The research brief is `.claude/dev-team/research-brief.md` — its Recommendation is the default tool/library/pattern choice. Override only on a concrete conflict with the codebase, recorded in your report.
 > Report discipline: your report is the next agent's context — lead with the machine-readable lines (VERDICT/Branch/severity), findings-only, one line each, ≤40 lines, no narration. Full rules: Efficiency rules → "Report discipline" in `convergence-loop.md`.
+> Context discipline: don't re-read a file already quoted in a report you were given, or one you just edited. Prefer grep + a line range over a whole file. Bound command output — compact test flags (`pytest -q --tb=line --maxfail=3` or the repo's equivalent), `2>&1 | tail -30` on builds and installs, and after a failure re-run only the failing test.
 
 After each agent finishes, route on its report from `.claude/dev-team/` before spawning the next: read only the `VERDICT`/`Branch`/severity lines you need to pick the next step. Extract the branch name from the first engineer report and pass it to every later agent. Agents editing the same worktree run sequentially.
 
@@ -128,7 +140,7 @@ After each agent finishes, route on its report from `.claude/dev-team/` before s
   - `tests` — QA verdict comes from written + executed tests. The default.
   - `tests+behavioral` — QA runs tests AND exercises the running path, including a **live smoke pass** (real server + real dev DB, not mocks) and browser QA for web UI. Buy it only when the item changes user-visible UI or an HTTP route, or touches models/migrations/serialization — or when the `risk:` line says the failure is silent, since a silent failure is precisely the one tests written from the criteria will miss.
 - **branch** — the shared worktree branch every agent for this item edits
-- **MAX_ATTEMPTS** — build cycles before the item is marked BLOCKED. **5** by default; **2** when `difficulty:` is low, since a settled approach that fails twice is misdiagnosed rather than under-attempted. Set by `difficulty:`, never by `risk:` — hammering a high-stakes item you already understand just buys more of the same build.
+- **MAX_ATTEMPTS** — build cycles before the item is marked BLOCKED. **3** by default; **2** when `difficulty:` is low, since a settled approach that fails twice is misdiagnosed rather than under-attempted. Set by `difficulty:`, never by `risk:` — hammering a high-stakes item you already understand just buys more of the same build. A BLOCKED line with a Root Cause is cheaper than a fourth build at the top tier.
 
 ## Roles used
 
@@ -222,7 +234,8 @@ loop:
 - **Escalate before you loop (effort → model → stop).** Read the QA Root Cause each attempt and compare it to the previous one. When the same Root Cause survives a fix, do not just re-run the same build at the same power:
   1. **First recurrence** → re-run the builder (`dt-fix`/`dt-engineer`) at **one higher effort** on the same model (raise `think` → `think hard`).
   2. **Still the same cause, or a design-level cause** → escalate the builder **one model tier** (Sonnet → Opus) for the next build.
-  3. **Already at Opus and the same cause persists** → escalate to **Fable** for one final build attempt. If Fable also fails, mark **BLOCKED**.
+  3. **Already at Opus and the same cause persists** → mark **BLOCKED**. Same cause surviving three rising-power attempts is a misdiagnosis, not an under-powered build. Escalate to **Fable** for one final attempt only on the unrecoverable-defect tier, where a BLOCKED item costs more than the build.
+- **Bound every command's output** — it is re-sent on all of that agent's later turns, so an unbounded test run or build log is paid for many times. In the spawn prompt for any agent running commands: compact test flags (`pytest -q --tb=line --maxfail=3` or the repo's equivalent), `2>&1 | tail -30` on builds and installs, then re-run only the failing test with full traceback for detail.
 - **Detect a stuck loop.** If a BUILD step reports "nothing to change" yet QA still FAILs, mark BLOCKED immediately — the loop cannot converge.
 - **Scope QA confirmation passes to the fixed surfaces.** First-attempt QA runs the item's full check set. Re-gating after a fix runs only the previously-failing checks plus tests covering the files in the fix report's Changes Made; repeat the live smoke pass only if the fix touched routes/models/migrations/serialization. State the scope in QA's spawn prompt; widen it at your discretion if a fix looks like it could ripple.
 - **Report hygiene between items.** Before spawning the first agent of a new item, delete the previous item's `.claude/dev-team/*-report.md` files. Always keep `team-memory.md`; keep `analyze-report.md` only if the new item works in the area it maps. The spawn template's "Reports present so far" list names only current-item reports.

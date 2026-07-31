@@ -3,6 +3,8 @@
 - [Review infra config](feedback-review-infra-config.md) — infrastructure-as-code always gets an agent review before real deployment; catches blockers that fail at runtime
 - [Explain concepts plainly](feedback-explain-concepts-plainly.md) — Lead with plain English when introducing Claude Code workflow concepts; user asked "what do these mean?" after a rules cheat sheet
 - [Surface tradeoffs proactively](feedback-surface-tradeoffs-proactively.md) — Include risks/tradeoffs with any config recommendation; user had to ask "are there drawbacks?" before I volunteered them
+- [Reason through proposals, don't ratify them](feedback-reason-dont-ratify.md) — evaluate what Nate proposes before building it; concede a wrong counter-proposal and re-derive rather than defend
+- [Reference file density](feedback-reference-file-density.md) — per-item reference files (convergence-loop.md, agent defs) carry rules only, no rationale prose; check `wc -w` after editing
 - [Recommendations with model/effort](feedback_recommendations_with_model_effort.md) — When presenting options, include model + effort + token reasoning to help Nate make informed calls on whether to pursue an approach
 - [User is learning Claude Code tooling](user-learning-claude-code.md) — Peer-level on the codebase, but building fluency on hooks/skills/agents/memory — explain those as new unless shown otherwise
 - [Library notes format](feedback-library-notes-format.md) — one file per document, never a combined NOTES.md; never write stubs before reading the source

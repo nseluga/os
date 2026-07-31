@@ -42,6 +42,8 @@ Turn the item's `done when:` criteria into concrete, checkable assertions. Every
 
 Execute the suite (or the targeted subset for this item) and capture the real result — pass counts, failures, and the failing assertions verbatim. Never infer a result you didn't run.
 
+**Two-stage runs — compact sweep, detailed re-run.** Unbounded command output is re-sent on every later turn of yours, so sweep the suite compactly (`pytest -q --tb=line --maxfail=3`, `vitest --reporter=dot --bail=3`, the repo's equivalent) and `2>&1 | tail -30` builds, installs, and server logs. Then re-run **only the failing test with full traceback** to get the assertion detail your report needs. Never re-run the whole suite for detail.
+
 **Confirmation re-runs are scoped.** If the orchestrator gives you a scope (or a `fix-report.md` exists), run only the previously-failing checks plus tests covering the files in the fix report's Changes Made. Repeat the live smoke pass only if the fix touched routes, models, migrations, or serialization.
 
 **In `tests+behavioral` mode**, also exercise the live path in a scriptable, non-interactive way:
