@@ -109,6 +109,30 @@ skipped — below stop marker
 
 ---
 
+## Multiple rounds
+
+A project outlives any one PLAN.md. When a round finishes and a new plan
+replaces it, **the ledger is not reset** — the new round's table is added above
+the previous one, and the Current-position pointer is rewritten to describe the
+new round. Older sections stay untouched forever.
+
+```markdown
+# Project — Progress
+
+## Current position          <- rewritten each round; describes the newest only
+## v4 — the brain shell      <- newest round, one row per PLAN.md item
+## v3 — the os dashboard     <- prior round, left exactly as it was
+## v2 archive (stages 0–7)   <- older still
+```
+
+Name each section for the round, and note the ship date on completed ones. A
+reader scanning top-to-bottom gets newest-first history; an agent resuming a run
+reads only the Current position and the top section.
+
+Do not summarize or prune old sections to save space. The per-item rows — which
+track ran, what shipped, which commit — are the record that makes replacing
+PLAN.md lossless.
+
 ## Relationship to [[plan-md]]
 
 PROGRESS.md does not replace [[plan-md|PLAN.md]] — it annotates it. PLAN.md is the source
@@ -128,4 +152,9 @@ of truth for what to do; PROGRESS.md is the source of truth for what happened.
 | Before a run | Does not exist yet — the agent creates it |
 | During a run | Agent appends/updates rows; do not edit |
 | After a run | Read to find blocked items; decide whether to requeue, split, or drop them |
-| When the project is complete | Delete alongside PLAN.md — no reason to keep a fully-resolved ledger in the repo |
+| When the round is complete | Nothing. The ledger stays; the next round appends a new section above it (see "Multiple rounds") |
+
+**PROGRESS.md is permanent and append-only.** It is never deleted, never split
+into `PROGRESS-v3-done.md`, and never reset when a new [[plan-md|PLAN.md]]
+replaces the old one. It is the only place the project's full history lives —
+which is exactly what makes replacing PLAN.md safe.

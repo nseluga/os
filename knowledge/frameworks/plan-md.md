@@ -311,4 +311,10 @@ work is not architecturally open; it is ordinary work with varying stakes.
 | Before a session | Author PLAN.md; all items at `status: not started` |
 | During a run | Agents update `status:` in place; do not edit mid-run |
 | After a run | Review [[progress-md|PROGRESS.md]] for blocked items; move the stop marker; update `os/projects/README.md` if a milestone was hit |
-| When the project is complete | Delete or archive PLAN.md — a fully-done plan left in place will be picked up by the next run |
+| When the round is complete | **Replace** PLAN.md wholesale with the next round's plan. A fully-done plan left in place will be picked up by the next run |
+
+**One PLAN.md per repo — never split, never suffixed.** There is no
+`PLAN-v2-done.md`. Nothing is lost by replacing the file, because
+[[progress-md|PROGRESS.md]] already records what every item did and keeps that
+history permanently. The plan is the contract for the *current* round only;
+the ledger is the archive.

@@ -15,7 +15,6 @@ If the user passed arguments, treat them as a description of what the next sessi
 Output must be no longer than 30 lines total:
 - What was just done (a few bullets)
 - Key decisions and why, only where non-obvious - skip anything self-evident from the diff
-- Suggested skills for the next agent to invoke
 - Next step
 
 If it doesn't fit in 30 lines, cut detail rather than sections.
