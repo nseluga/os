@@ -59,9 +59,10 @@ Stop when you hit a `⚠️ AUTONOMOUS RUN — STOP HERE` marker or when all pre
 
 Before exiting:
 1. Commit any uncommitted changes on the worktree branch: `chore: autonomous session checkpoint — [list completed items]`
-2. Write a final PROGRESS.md entry for the run: items done, items blocked, next item.
-3. Merge the worktree branch back into the working branch (recorded at startup): `git merge [worktree-branch] --no-edit` from the main repo checkout (not the worktree path).
-4. Remove the worktree: `git worktree remove [worktree-path]`
-5. Write a summary for the user covering: items DONE, items BLOCKED and why (unmet criteria + Root Cause), the next item, and what the human needs to do before the next session can proceed.
+2. Run the project's full test suite once, on the worktree branch — the cross-item regression check each item's `dt-qa` skipped per-item (see `convergence-loop.md` → Efficiency rules). Record pass/fail counts. A failure here doesn't block the merge (every item was already gated individually) but must be surfaced in step 5 — it means two items touched overlapping surface in a way no single item's scoped QA would catch.
+3. Write a final PROGRESS.md entry for the run: items done, items blocked, next item.
+4. Merge the worktree branch back into the working branch (recorded at startup): `git merge [worktree-branch] --no-edit` from the main repo checkout (not the worktree path).
+5. Remove the worktree: `git worktree remove [worktree-path]`
+6. Write a summary for the user covering: items DONE, items BLOCKED and why (unmet criteria + Root Cause), the final full-suite regression result, the next item, and what the human needs to do before the next session can proceed.
 
 Do not merge into main. Do not push to remote. The user reviews and pushes when ready.

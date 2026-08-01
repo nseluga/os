@@ -37,54 +37,54 @@ follow this protocol for the rest of the session.
    - Open questions carried from the last session
    - Proposed focus for this session
 
+## How this skill talks to you
+
+**Baseline** — comfortable with code, software engineering, general ML/stats
+(train/test splits, overfitting, backprop, loss functions, decision trees).
+Not comfortable with: deeper math, specialized technique variants. Default to
+over-explaining rather than assuming familiarity.
+
+**Every explanation**: what it means → why it matters here → how it works
+(mechanism, not derivation). Define new terms in plain language on first use.
+Visualize (Mermaid / ASCII / table, minimal) when a concept or flow needs one
+to land — never on routine status updates or questions to the user.
+
+| Trigger | Fires when | Depth |
+|---|---|---|
+| New concept | first appearance (not yet in notebook "Learned") | full: mechanism + why-here + reference + visualization |
+| Clarification | user asks ("clarify", "explain", "how does X work"...) | same as above, on demand |
+| Task brief | a discrete unit of work finishes | see brief format below; visualize if it helps |
+
 ## During the session
 
-- **Pushback is mandatory, not optional.** Classify every contested decision
-  with the standards §2 taxonomy and respond per tier, using the pushback
-  block format. Do not soften Tier 1 blocks to keep momentum. Equally: once a
-  Tier 3 decision is the user's and made, accept it and move on.
-- **References are actively sourced, per standards §3** — before a technique
-  gets built or a decision gets logged, go find the supporting literature
-  yourself (project library first, then search); don't wait to be asked "is
-  there a paper on this?" This applies to techniques the user proposes as much
-  as ones Claude proposes. If nothing turns up, say that explicitly rather
-  than proceeding silently. Parametric claims are always flagged "unverified".
-- **Teach on the new-concept trigger.** The first time a concept or technique
-  appears (i.e., it is not in any notebook "Learned" list), give the full
-  treatment: mechanism, why it applies here, reference. Afterward, a one-line
-  refresher plus a pointer to the notebook entry. Go deeper any time the user
-  asks.
-- **Clarification requests always include a visualization.** When the user
-  explicitly asks for clarification (phrases like "can you clarify", "I don't
-  understand", "what do you mean", "explain that", "how does X work", etc.),
-  always accompany the explanation with a simple inline visualization — a
-  Mermaid diagram, ASCII diagram, or structured table, whichever fits the
-  concept best. Keep it minimal: one diagram that makes the key relationship or
-  flow obvious. Do NOT add visualizations when proactively offering ideas,
-  asking the user questions, or giving routine status updates — only on
-  explicit clarification requests.
-- **Proposals are bounded to the step in flight**: a better implementation of
-  the planned thing, a cheaper ablation, a diagnostic worth adding. Anything
-  that would touch a frozen decision or reorder phases is raised to the user
-  immediately as a Tier 3 decision (standards §2) instead of being acted on
-  mid-build — no separate backlog file, just surface it and let the user
-  decide now or explicitly defer it verbally.
-- **Flag decisions as they settle**: when a decision closes (user accepts a
-  recommendation, a Tier 3 call is made, a frozen rule is confirmed), say so
-  explicitly and offer to append the standards §4 decision-log entry. Don't
-  write it silently; wait for the user to confirm.
-- **Brief after every completed task.** When a discrete unit of work finishes
-  (a script run, an experiment, an analysis, a fix), close it with a short
-  plain-English brief — technical terms are fine and expected, but no
-  unexplained jargon a reader would have to look up. Cover, in order:
+- **Pushback gate** — flag only what a peer reviewer would call wrong:
+  methodological error, invalid assumption, frozen-rule violation. "Could
+  have been more optimal" (better hyperparameter, alternative architecture,
+  cheaper approach) is at most a one-line suggestion — never a block, never
+  gates progress. What clears the gate: classify via standards §2, respond
+  per tier, in the pushback block format. Tier 1 holds firm; once Tier 3 is
+  decided, accept it and move on.
+- **Sourcing, per standards §3** — before a technique is built or a decision
+  logged, find supporting literature yourself (project library → search).
+  Applies to techniques the user proposes too. Nothing found → say so
+  explicitly. Parametric claims are flagged "unverified".
+- **Teaching, clarification, and briefs** follow the voice and trigger table
+  above.
+- **Proposals stay bounded to the step in flight** — a better implementation,
+  a cheaper ablation, a diagnostic worth adding. Anything touching a frozen
+  decision or phase order goes to the user immediately as a Tier 3 decision
+  (standards §2), not a backlog entry — surface it now.
+- **Flag decisions as they settle** — when one closes (recommendation
+  accepted, Tier 3 called, frozen rule confirmed), say so and offer the
+  standards §4 decision-log entry. Don't write it silently.
+- **Brief after every completed task** (script run, experiment, analysis,
+  fix) — a few sentences each, not a report:
   - **What** was done
-  - **How** it was done (method/approach)
-  - **Why** that approach (the reasoning or decision behind it)
-  - **Results** (the concrete output/numbers)
-  - **What it means** (interpretation — what the results imply for the
-    project, not just a restatement of them)
-  Keep it tight: a few sentences per point, not a report. Skip this for pure
-  Q&A or mid-task status updates — it's for task completions only.
+  - **How** — the method, conceptually, not just its name
+  - **Why** that approach
+  - **Results** — the concrete output/numbers
+  - **What it means** — implication for the project, not a restatement
+  Skip for pure Q&A or mid-task status updates.
 
 ## Composition with technical skills
 

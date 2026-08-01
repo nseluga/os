@@ -40,7 +40,7 @@ Turn the item's `done when:` criteria into concrete, checkable assertions. Every
 
 ## Run the Tests
 
-Execute the suite (or the targeted subset for this item) and capture the real result — pass counts, failures, and the failing assertions verbatim. Never infer a result you didn't run.
+Run the tests you just wrote plus any existing tests covering files in the engineer report's **Files Changed** — not the project's full test command. Capture the real result — pass counts, failures, and the failing assertions verbatim. Never infer a result you didn't run. A full-suite regression pass is not this agent's job; under `/dev-team-auto` it runs once at Shut Down, not per item.
 
 **Two-stage runs — compact sweep, detailed re-run.** Unbounded command output is re-sent on every later turn of yours, so sweep the suite compactly (`pytest -q --tb=line --maxfail=3`, `vitest --reporter=dot --bail=3`, the repo's equivalent) and `2>&1 | tail -30` builds, installs, and server logs. Then re-run **only the failing test with full traceback** to get the assertion detail your report needs. Never re-run the whole suite for detail.
 
