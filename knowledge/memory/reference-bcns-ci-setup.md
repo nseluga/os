@@ -5,6 +5,7 @@ metadata:
   node_type: memory
   type: reference
   originSessionId: 9074a9b0-1c9d-43f2-a956-c4fa6cd64ab8
+  modified: 2026-08-01T22:56:02.119Z
 ---
 
 ## Required secrets per client repo
@@ -34,6 +35,13 @@ Find project-ref in `supabase/.temp/project-ref`. Password from Supabase dashboa
 - **GITHUB_TOKEN name is reserved**: can't store a custom secret named `GITHUB_TOKEN` in repo settings — it's shadowed by the auto-generated token. Use `GH_PACKAGES_TOKEN`.
 - **IPv6 on Supabase direct URL**: `db.<ref>.supabase.co` is IPv6-only. GitHub Actions runners are IPv4 only. Always use pooler URL for `supabase db push`.
 - **Ship release will fail without droplet**: expected — migrate + build passing is the meaningful signal during local dev.
+
+## pnpm 11 install gotchas (debugged 2026-08-01, adding @sentry/nextjs)
+
+Both surface only in CI (pnpm 11), never locally on pnpm 9 — so a dependency add that installs clean locally can still fail the pipeline twice in a row.
+
+- **`minimumReleaseAge` supply-chain policy** rejects transitive deps published within the last 24h. A package with a wide build-tooling tree (`@sentry/nextjs` → unplugin, Node auto-instrumentation) resolves to whatever the registry's latest is at install time, so this trips on packages you never named. Fix: pin the offenders to aged versions in `overrides` — and pin them in **both** `package.json` and `pnpm-workspace.yaml`, since pnpm ≥10 reads overrides only from the yaml and pnpm 9 only from package.json. Failures come one at a time (each fix reveals the next), so expect several rounds. Bump the pins periodically as they age out.
+- **`ERR_PNPM_IGNORED_BUILDS`**: pnpm 11 hard-fails the install on any unlisted postinstall script instead of skipping it with a warning like pnpm 9. Every new dep with a build script needs an explicit entry in `allowBuilds:` in `pnpm-workspace.yaml` (e.g. `"@sentry/cli": true` alongside `esbuild: true`). `allowBuilds` is not part of the lockfile config check, so adding one won't trip `ERR_PNPM_LOCKFILE_CONFIG_MISMATCH`.
 
 ## PAT management
 

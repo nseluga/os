@@ -5,6 +5,12 @@ Claude Code sessions** — skills, memory, knowledge, and project indexes all
 live here. Skills (`~/.claude/skills`) and memory (`~/.claude/memory`) are
 symlinked from it and load automatically.
 
+## Communication style
+
+Be extremely concise. Sacrifice grammar for the sake of concision. Apply this
+both when answering Nate directly and when writing skill instructions/output
+templates.
+
 ## Structure
 
 ```
@@ -30,7 +36,7 @@ os/
 | `knowledge/audience/` | Notes on target readers/users | When writing, designing UX, or tailoring communication |
 | `knowledge/library/` | Reference docs (gitignored) | Only when the task clearly matches a specific doc's topic |
 | `projects/<name>/README.md` | Per-project index — real repo path, goals, context | When working on or discussing a named project |
-| `knowledge/memory/MEMORY.md` | Index of remembered facts and preferences | Auto-loaded every session (via `autoMemoryDirectory`); relevant fact files are auto-injected as `<system-reminder>`s. Follow links when a fact seems relevant. |
+| `knowledge/memory/MEMORY.md` | Index of remembered facts and preferences | Auto-loaded every session (via `autoMemoryDirectory`). Individual fact files are NOT auto-loaded — a `UserPromptSubmit` hook (`~/.claude/memory-relevance-hook.py`) keyword-matches each prompt against the index and surfaces candidate files as a system-reminder; still Read them yourself when they look relevant, and don't rely on the hook alone since it's a keyword match, not a relevance judgment. |
 
 Do not read these files automatically. Pull them on demand when a task makes
 the content clearly relevant.
@@ -95,6 +101,10 @@ wikilinks, and INDEX entries that are stale or missing). It runs from
 `PLAN.md` or `PROGRESS.md` in *any* repo, first read
 `~/os/knowledge/frameworks/plan-md.md` /
 `~/os/knowledge/frameworks/progress-md.md` and follow that schema.
+
+**Exception — always before writing a memory file:** read
+`~/os/knowledge/frameworks/memory-writing.md` and phrase the new `MEMORY.md`
+index line per that guide, so the memory-relevance hook can actually find it.
 
 ## Flagging findings for the os repo
 
