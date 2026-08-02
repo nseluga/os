@@ -32,8 +32,6 @@ knowledge/raw/**/*.gif
 knowledge/raw/**/*.webp
 knowledge/raw/**/*.mp4
 
-# leads skill: venv and the local identifier config (sheet id, SA emails).
-# The skill code is public and reads every identifier from skills/leads/.env
-skills/leads/.venv/
-skills/leads/.env
+# leads skill: entirely private (sales lead data/logic), not for the public repo
+skills/leads/
 __pycache__/
