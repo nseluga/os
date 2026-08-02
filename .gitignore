@@ -32,12 +32,6 @@ knowledge/raw/**/*.gif
 knowledge/raw/**/*.webp
 knowledge/raw/**/*.mp4
 
-# Marketplace-installed third-party skill packs. ~/.claude/skills symlinks to
-# skills/, so anything installed as a skill lands physically in this PUBLIC repo.
-# Same policy as Impeccable (a plugin, so it never lands here): tools reinstall,
-# config commits. Reinstall via the Higgsfield marketplace.
-skills/higgsfield-*/
-
 # leads skill: venv and the local identifier config (sheet id, SA emails).
 # The skill code is public and reads every identifier from skills/leads/.env
 skills/leads/.venv/

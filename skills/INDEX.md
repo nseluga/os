@@ -54,15 +54,19 @@ One folder per skill. Each `SKILL.md`'s `description:` frontmatter is the canoni
 - `find-skills` — Discover and install agent skills
 - `tidy-downloads` — Sort a messy folder into meaningful subfolders
 
-## Installed elsewhere — not in this repo
+## Installed elsewhere, vendored here
 
-Third-party tooling is installed, never vendored: this repo is **public**, and a
-committed copy forks a package we don't maintain. Both reinstall from their source.
+Impeccable stays uninstalled from this repo (a plugin, never symlinked in).
+Higgsfield and `prototype` land physically here by accident of the
+`~/.claude/skills` symlink; they're now tracked rather than gitignored so the
+repo is reproducible as-run, with source credited in `THIRD_PARTY.md` — not
+Nate's own work.
 
-| Tool | Installs as | Lives at | Why not here |
+| Tool | Installs as | Lives at | Why not authored here |
 |---|---|---|---|
 | **Impeccable** | plugin | `~/.claude/plugins/cache/impeccable/impeccable/<ver>/` | Plugins aren't symlinked into `~/os`, so it never lands here. Ships 4 agents + a `hooks.json` a plain skill folder can't. |
-| **Higgsfield** | skills | `skills/higgsfield-*/` — **gitignored** | `~/.claude/skills` symlinks to `skills/`, so these land physically in this repo by accident of the symlink. Marketplace-managed and versioned; committing them forks them. |
+| **Higgsfield** | skills | `skills/higgsfield-*/` | Marketplace-managed and versioned; reinstall via the Higgsfield marketplace to update. See `THIRD_PARTY.md`. |
+| **prototype** (`mattpocock/skills`) | skill | `skills/prototype/` | Vendored via `npx skills add mattpocock/skills --skill=prototype`. Used by `plan-md`'s justification sweep to settle open design questions before the plan is written. See `THIRD_PARTY.md`. |
 
 Both are consumed by the `design` skill — see `skills/design/SKILL.md` for how.
 Impeccable's `hooks.json` is active **plugin-wide**: it runs `detect.mjs` on every
