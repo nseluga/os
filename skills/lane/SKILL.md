@@ -90,7 +90,7 @@ accepting it.
    agents should run, which model, or how many attempts; that is the
    orchestrator's call at runtime, made against the real code.
    - Testable `done when:` criteria (2–4, behavior + observable — the red-flag
-     table in plan-md.md is your bar).
+     table in lane-md.md is your bar).
    - **`risk:`** — you draft it, the user corrects it. Ask "what breaks if this
      is wrong, and how would you find out?" Push back on any line missing the
      second half: silent-vs-loud is the routing signal, and a line without it is
