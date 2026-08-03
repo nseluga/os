@@ -64,7 +64,13 @@ Active when the working branch matches `lane/*` and `MAP.md` exists at repo root
   in the final summary. `/merge-lane` appends them to the canonical file in
   merge order. Reading it at Start Up is unchanged.
 - **Do not merge or remove the worktree at shutdown** (Shut Down steps 4–5).
-  Stop after the full-suite run. `/merge-lane` owns everything downstream.
+  Merge the worktree branch into the lane branch, then stop. `/merge-lane` owns
+  everything downstream of the lane branch.
+- **Push and keep one PR open.** After the full-suite run: push the lane branch,
+  then open a PR into `integration` if none is open, or let the existing one
+  pick up the new commits. One PR per lane, not per item — the Reviewer merges
+  it per review session. Put the returned team-memory entries in the PR body.
+  Never merge the PR yourself.
 - **`protected:` paths in MAP.md are off-limits.** An item that requires
   changing one → mark it `blocked — needs amendment: <path>`, name it in the
   summary, and move on. Never edit a protected path. Never stub around it.

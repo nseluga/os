@@ -1,7 +1,7 @@
 # MAP.md Reference
 
 Repo-level partition into **lanes** — independently workable areas, one owner
-each, one branch each. Nate writes it. Teammates read their entry and run
+each, one branch each. The Reviewer writes it. Assignees read their entry and run
 [[lane-md|/lane]] inside it.
 
 One MAP.md per repo, on `main`. Skip it entirely for solo repos — write a
@@ -66,7 +66,7 @@ lanes, or sequence them.
 
 ## Foundation pass
 
-Runs before any fork. Nate only — never assign it.
+Runs before any fork. Reviewer only — never assign it.
 
 1. Draw the map. Run the `owns:` overlap check; fix any intersection.
 2. For each `depends on:` edge, write the contract as **real code on `main`** —
@@ -80,7 +80,7 @@ Runs before any fork. Nate only — never assign it.
 
 ## Amendment path
 
-Agent hits `protected:` → stops, reports → Nate amends on `main` → lanes rebase.
+Agent hits `protected:` → stops, reports → Reviewer amends on `main` → lanes rebase.
 
 Amendments are normal. A round with zero of them froze too much.
 
@@ -91,14 +91,22 @@ Amendments are normal. A round with zero of them froze too much.
 ```
 main ───────────────────────────────────────►
   └─ integration ─────────────────────────────►
-       ├─ lane/<name>  ──●──●──●──┘
-       └─ lane/<name>  ─────●──●──┘   ● = one dev-team-auto item
+       ├─ lane/<name>  ──●──●──●──┘ PR
+       └─ lane/<name>  ─────●──●──┘ PR
+
+  ● = one item (QA PASS + clean review), pushed as it lands
+  PR = one open PR per lane; Reviewer merges it per review session
 ```
 
 - One lane = one branch = one person.
-- Merge to `integration` on **every DONE item**, via `/merge-lane`.
+- **Assignee:** push after each item; keep **one PR open** into `integration`
+  (`/ship`). Never blocked — keep committing while the PR sits.
+- **Reviewer:** review and merge that PR **per review session, not per item**
+  (`/merge-lane`). A fresh PR opens for work done since.
 - Rebase onto `integration` after each merge, or the lane drifts.
-- Nate promotes `integration` → `main`. Lanes never touch `main`.
+- Reviewer promotes `integration` → `main`. Lanes never touch `main`.
+
+Branch protection: require PR review on `main` and `integration`.
 
 ---
 
@@ -160,10 +168,11 @@ protected:
 
 | Phase | Action |
 |---|---|
-| Round start | Nate writes MAP.md; runs foundation pass; cuts `integration` |
+| Round start | Reviewer writes MAP.md; runs foundation pass; cuts `integration` |
 | Lane start | Assignee runs `/lane <name>` — branch + LANE.md |
-| Per item | `/dev-team-auto` → DONE → `/merge-lane` |
-| Blocked on protected | Amendment: Nate edits `main`, lanes rebase |
+| Per item | `/dev-team-auto` (or `/dev-team`) → DONE → push, PR open |
+| Per review session | Reviewer runs `/merge-lane` on the lane's PR |
+| Blocked on protected | Amendment: Reviewer edits `main`, lanes rebase |
 | Round end | Promote `integration` → `main`; replace MAP.md wholesale |
 
 MAP_PROGRESS.md is append-only across rounds — never reset.

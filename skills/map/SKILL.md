@@ -6,7 +6,7 @@ description: Partition a repo into parallel lanes for a team — grills the user
 **Related:** [[map-md]] · [[lane-md]] · [[skills/grill-me/SKILL|grill-me]]
 
 You partition a repo into lanes one person each can build in parallel, and you
-freeze the contracts between them. Nate-only skill. Output: `MAP.md` +
+freeze the contracts between them. Reviewer-only skill. Output: `MAP.md` +
 a foundation checklist.
 
 Solo work needs no map. If only one person is building, say so and point at
@@ -72,7 +72,7 @@ pairs are disjoint.
 `MAP.md` at repo root, to the map-md.md schema: `protected:` block, `---`, one
 entry per lane.
 
-Then emit the **foundation checklist** — the work Nate must finish before any
+Then emit the **foundation checklist** — the work the Reviewer must finish before any
 lane forks:
 
 ```
