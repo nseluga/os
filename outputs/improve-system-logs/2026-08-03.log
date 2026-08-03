@@ -1,0 +1,29 @@
+=== improve-system run: Mon Aug  3 07:08:59 EDT 2026 ===
+```
+System pass complete — 2026-08-03
+
+Phase 1 (applied from prior review): 0 applied / 0 skipped
+Phase 2 (this audit):
+  Auto-applied: 1 fix    → change-log.md
+  Needs sign-off: 6 items → outputs/review.md
+  More context: 3 questions → outputs/needs-context.md
+```
+
+**⚠️ A scheduled headless `/improve-system` (PID 34773, launchd, started 07:08) was running while I ran.** It has no lock and writes the same three output files. My writes may be overwritten when it finishes — re-check `review.md` before acting on it.
+
+**Auto-applied:** stripped the orphaned Content block from `review.md` — the 2026-07-27 scheduled run died on `ENOTFOUND` mid-write and left a bare Content block with no item wrapper. Its CI half was already verbatim in `reference-bcns-ci-setup.md`; its git-workflow half is re-proposed below.
+
+**Review needed (`outputs/review.md`):**
+- Weekly improve-system job has no lock — concurrent runs clobber each other
+- `dev-team-learnings.md` at 5,086 words / 30 bullets — past its own compaction threshold, and ~⅓ are code-review standards sitting where `dt-review` never reads them
+- `design` skill — Impeccable's direction verbs buried under "Anti-slop by detection", after all four rounds (answers your `needs-context.md` note)
+- l2detailz straight-to-main convention, never applied from the 2026-07-27 run
+- `skills/INDEX.md` omits the three vendored higgsfield skills (link-check drift)
+- `find-skills` + `git-guardrails-claude-code` are third-party but not in `THIRD_PARTY.md`
+
+**Questions (`outputs/needs-context.md`):** MAP.md/lane-plan redesign still live? · uncommitted `plan-md` changes finished? · should answered needs-context questions auto-convert to review items?
+
+Clean: no broken MEMORY.md links, no stub skills, no stale project indexes (`patio` is closest at 25 days), no contradictions.
+
+Run `/improve-system` again after checking boxes in `~/os/outputs/review.md`.
+=== done: Mon Aug  3 08:20:19 EDT 2026 ===
