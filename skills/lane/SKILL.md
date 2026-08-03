@@ -31,9 +31,12 @@ Never silently overwrite an existing plan.
 
 1. Read the lane's entry in MAP.md: `area:`, `owns:`, `depends on:`.
 2. Read the repo-level `protected:` list.
-3. Locate the frozen contracts + fixtures the `depends on:` edges name. **Not
-   found → stop and report.** The foundation pass is incomplete; planning
-   against an unfrozen contract is what the map layer exists to prevent.
+3. Per `depends on:` edge:
+   - **parallel** — locate the frozen contract + fixture it names. **Not found
+     → stop and report.** The foundation pass is incomplete; planning against
+     an unfrozen contract is what the map layer exists to prevent.
+   - **sequenced** — check the predecessor's MAP_PROGRESS.md row. Not merged →
+     **stop.** Nothing exists to build against; that is what sequenced means.
 4. Not on a `lane/<name>` branch → create one off the foundation commit
    (`/branch` flow), then continue.
 

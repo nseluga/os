@@ -62,6 +62,22 @@ Every edge names a frozen artifact, or the lanes are not two lanes:
 **Can't name the artifact → it is an unresolved design question.** Merge the two
 lanes, or sequence them.
 
+Two forms — they are not interchangeable:
+
+```markdown
+depends on: ingest (Lead rows — contract lib/types.ts)   # parallel, frozen
+depends on: enrich (sequenced — starts after enrich merges)
+```
+
+**Parallel** — the shape is frozen and fixtured; both lanes run at once.
+**Sequenced** — the shape isn't pinnable, so there is nothing to build against.
+`/lane` refuses to start a sequenced lane until its predecessor's
+MAP_PROGRESS.md row reads merged.
+
+`/foundation` decides which. `/map` writes the parallel form by default;
+`/foundation` rewrites the edge to sequenced when the interview can't pin the
+shape — and that rewrite lands in MAP.md, not just in the conversation.
+
 ---
 
 ## Foundation pass

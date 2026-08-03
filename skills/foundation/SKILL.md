@@ -53,7 +53,11 @@ title: string, confidence: number } | null` is.**
 
 **Push back hard on:**
 - Any shape the user can't state without opening a file — that means it isn't
-  decided. **Don't freeze a guess.** Sequence those lanes instead, and say so.
+  decided. **Don't freeze a guess.** Sequence those lanes instead — and edit
+  the edge in MAP.md to the sequenced form (see `map-md.md` → `depends on:`).
+  Saying it in chat is not enough; the assignee reads the file, not the log.
+  Report every edge you demoted, and re-check assignees — a sequenced lane
+  can't run beside its predecessor, so one person may now hold both.
 - Nullability left unstated. It is the single most common source of a contract
   that compiles in both lanes and fails at runtime in one.
 - A shape that only serves one lane — that isn't a contract, it's that lane's
