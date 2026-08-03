@@ -15,7 +15,7 @@ Invoke the `task-observer` skill now to begin observing this session.
 
 ## Parse Arguments
 
-**Task:** any text that is not a flag is the task description. If no task text is given, read `LANE.md` from the project root (fall back to `PLAN.md` if absent — pre-lane repos); if neither exists, read `TASK.md`. If none exist, ask the user before proceeding. Capture the item's `done when:` criteria — QA turns these into the gate.
+**Task:** any text that is not a flag is the task description. If no task text is given, read `LANE.md` from the project root, else `FOUNDATION.md` (a `/foundation` contract plan on `main`), else `PLAN.md` (pre-lane repos); if none exist, read `TASK.md`; if that's missing too, ask the user before proceeding. Capture the item's `done when:` criteria — QA turns these into the gate.
 
 **Stage flag:** `--stage` takes one or more agent names joined by `+` (e.g. `--stage engineer`, `--stage qa`, `--stage review+fix`, `--stage analyze+engineer`). If given, run exactly those agents once in the order listed — this bypasses the convergence loop for targeted, single-shot work. Without `--stage`, run the full loop below.
 

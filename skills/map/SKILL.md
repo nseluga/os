@@ -1,13 +1,14 @@
 ---
 name: map
-description: Partition a repo into parallel lanes for a team — grills the user into a schema-valid MAP.md plus the foundation contracts lanes build against. Use when the user says "/map", "draw the lanes", "split this repo up", "map the project", "set up lanes", or is dividing work across 2+ people.
+description: Partition a repo into parallel lanes for a team — grills the user into a schema-valid MAP.md naming every cross-lane dependency. Use when the user says "/map", "draw the lanes", "split this repo up", "map the project", "set up lanes", or is dividing work across 2+ people.
 ---
 
-**Related:** [[map-md]] · [[lane-md]] · [[skills/grill-me/SKILL|grill-me]]
+**Related:** [[map-md]] · [[lane-md]] · [[skills/foundation/SKILL|foundation]] · [[skills/grill-me/SKILL|grill-me]]
 
 You partition a repo into lanes one person each can build in parallel, and you
-freeze the contracts between them. Reviewer-only skill. Output: `MAP.md` +
-a foundation checklist.
+name what sits between them. Reviewer-only. Output: `MAP.md`.
+
+`/foundation` freezes those contracts next; `/lane` plans one lane after that.
 
 Solo work needs no map. If only one person is building, say so and point at
 `/lane`.
@@ -46,13 +47,7 @@ Cover, in order:
 4. **`owns:` globs per lane** — draft from the scan, user corrects.
 5. **`depends on:` edges** — for each, name the artifact to freeze. No name →
    push back: merge the lanes or sequence them. Do not accept a deferred
-   integration.
-5b. **Pin each contract's actual shape.** Not "a Lead type" — the fields, their
-   types, and nullability; the table columns; the route's request/response and
-   error codes. Draft from the codebase scan, the user corrects. **This is the
-   step that decides the round** — every lane builds against what is settled
-   here, so an agent must never be left to invent it later. Can't pin a shape →
-   that edge isn't ready: sequence those lanes instead of freezing a guess.
+   integration. Name the artifact only; `/foundation` pins its shape next.
 6. **`protected:` list** — the contracts from step 5, plus schema/migrations,
    config keys, shared design tokens. Keep short.
 7. **Assignees** — match lane difficulty to skill. Give the least experienced
@@ -78,42 +73,22 @@ pairs are disjoint.
 `MAP.md` at repo root, to the map-md.md schema: `protected:` block, `---`, one
 entry per lane.
 
-Then write **`LANE.md` at repo root on `main`** — the foundation work, as
-schema-valid items per `~/os/knowledge/frameworks/lane-md.md`. Not a checklist:
-this file gets executed.
-
-- One item per contract, using the shapes pinned in interview step 5b **verbatim
-  in `done when:`** — field names, types, nullability, columns, status codes.
-  The agent transcribes a decided shape; it never designs one.
-- Every contract item's `done when:` includes **a fixture that validates against
-  it**. The fixture is what lets a lane test against a producer that doesn't
-  exist yet — without it, lanes queue instead of running parallel.
-- `risk:` is silent for these: all lanes build against the shape, so wrong here
-  is wrong everywhere at once and nothing surfaces it until merge.
-- `difficulty: low` — the shape was decided in the interview.
-
-Preamble: `# <Project> — Foundation`, one line saying these are the contracts
-every lane builds against and that they land on `main` before any lane forks.
-
-Then tell the user, in order:
+Then hand off to `/foundation`, which pins each contract's shape, writes the
+plan that builds them, and cuts `integration`:
 
 ```
-1. /dev-team-auto          build + QA the contracts
-2. review, commit to main
-3. add those paths to protected: in MAP.md
-4. git checkout -b integration
-5. hand out: /lane <name> per assignee
+/foundation     freeze the contracts named by every `depends on:` edge
 ```
 
-`/lane` refuses to plan a lane whose contracts and fixtures aren't on disk, so
-steps 1–4 gate the whole round.
+Do not write contracts, a foundation plan, or lane branches here. `/map`
+partitions; `/foundation` freezes; `/lane` plans one lane.
 
 ## Update mode
 
 1. Restate what MAP_PROGRESS.md says landed; confirm.
 2. New or dropped lanes; reassignments.
-3. Contract amendments — a lane hit a `protected:` path. Amend on `main`, then
-   tell every live lane to rebase.
+3. Contract amendments — a lane hit a `protected:` path. Re-run `/foundation`
+   to amend, then tell every live lane to rebase.
 4. Re-run the overlap check over the full set, not just the new lanes.
 
 Never re-litigate a merged lane.

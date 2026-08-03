@@ -69,17 +69,19 @@ lanes, or sequence them.
 Runs before any fork. Reviewer only — never assign it.
 
 1. Draw the map. Run the `owns:` overlap check; fix any intersection.
-2. Pin every contract's **actual shape** in the interview — fields, types,
+2. `/foundation` pins every contract's **actual shape** — fields, types,
    nullability, columns, status codes. Can't pin it → sequence those lanes
    instead of freezing a guess.
-3. `/map` writes those as items in **`LANE.md` on `main`**. Each item's
-   `done when:` states the shape verbatim and requires **≥1 fixture that
-   validates against it**.
+3. `/foundation` writes those as items in **`FOUNDATION.md` on `main`** — not
+   `LANE.md`, which belongs only on lane branches. Each item's `done when:`
+   states the shape verbatim and requires **≥1 fixture that validates against
+   it**.
 4. Run `/dev-team-auto` (or `/dev-team`) on it. Contracts get built and QA'd
    like any other work — a contract with a passing fixture test is what makes
    the freeze trustworthy.
-5. Review, commit to `main`. Add those paths to `protected:`.
-6. Cut `integration` from that commit. Lane branches fork from `integration`.
+5. Re-run `/foundation` — it verifies each fixture validates, sets
+   `protected:` in MAP.md, commits `main`, and cuts `integration`.
+6. Lane branches fork from `integration`.
 
 The agent transcribes a shape you decided; it never designs one. That is the
 whole reason step 2 is an interview and not a delegation.
@@ -176,11 +178,11 @@ protected:
 
 | Phase | Action |
 |---|---|
-| Round start | Reviewer writes MAP.md; runs foundation pass; cuts `integration` |
+| Round start | `/map` → `/foundation` → `/dev-team-auto` → `/foundation` (lock) |
 | Lane start | Assignee runs `/lane <name>` — branch + LANE.md |
 | Per item | `/dev-team-auto` (or `/dev-team`) → DONE → push, PR open |
 | Per review session | Reviewer runs `/merge-lane` on the lane's PR |
-| Blocked on protected | Amendment: Reviewer edits `main`, lanes rebase |
+| Blocked on protected | Amendment: re-run `/foundation`, lanes rebase |
 | Round end | Promote `integration` → `main`; replace MAP.md wholesale |
 
 MAP_PROGRESS.md is append-only across rounds — never reset.

@@ -11,6 +11,9 @@ know each item is done. Agents read it at startup; you write it before the sessi
 Solo repo → one LANE.md at root, no map. Team round → one LANE.md per lane
 branch, generated from that lane's MAP.md entry, never merged back.
 
+`LANE.md` never appears on `main` or `integration`. The contract plan that
+lives on `main` is `FOUNDATION.md` — same schema, written by `/foundation`.
+
 ---
 
 ## When you need one

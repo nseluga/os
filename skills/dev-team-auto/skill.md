@@ -14,8 +14,8 @@ Invoke the `task-observer` skill now to begin observing this session.
 ## Start Up
 
 Read these in parallel before doing anything else:
-1. `LANE.md` — the full plan, execution order, and any stop markers. Fall back to `PLAN.md` if absent (pre-lane repos); the schema is identical.
-2. `LANE_PROGRESS.md` (fall back to `PROGRESS.md`) — find the first item that is NOT marked `done`; that is where you start. Also read `~/os/knowledge/frameworks/progress-md.md` once — every LANE_PROGRESS.md write this run follows that schema. If LANE_PROGRESS.md doesn't exist, create it from that schema before the first item.
+1. `LANE.md` — the full plan, execution order, and any stop markers. If absent, use `FOUNDATION.md` (a `/foundation` contract plan on `main`), else `PLAN.md` (pre-lane repos). Same schema in all three.
+2. `LANE_PROGRESS.md` (or `PROGRESS.md`) — find the first item that is NOT marked `done`; that is where you start. Also read `~/os/knowledge/frameworks/progress-md.md` once — every LANE_PROGRESS.md write this run follows that schema. If LANE_PROGRESS.md doesn't exist, create it from that schema before the first item.
 3. `.claude/dev-team/engineer-report.md` if it exists — get the branch name if a prior session already created a worktree
 4. `.claude/dev-team/team-memory.md` if it exists — compact it if oversized per `convergence-loop.md` → "Compaction". Item orchestrators read it per item; you only need its notes for Quadrant-1 items you run directly.
 5. `~/.claude/memory/dev-team-learnings.md` — **you are the only reader for this entire run.** Compact it per `convergence-loop.md` → "Writing the global file" if it's past ~30 bullets. Then, for every non-Quadrant-1 item you'll dispatch, match its failure family against the bullets (money, RLS/auth, migrations, Next.js rendering/actions, content sweeps, …) and keep the 3–5 matching bullets ready to hand to that item's `dt-orchestrator` — see step 2. Never tell `dt-orchestrator` to read this file itself; that's the redundant per-item read this step exists to eliminate.
