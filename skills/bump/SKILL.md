@@ -7,7 +7,7 @@ description: End-of-session closer — bump the project's os README (frontmatter
 
 **Related:** [[_TEMPLATE]]
 
-Close out a session: bring the project's `~/os` index up to date and surface anything worth remembering. Local `PROGRESS.md` is not this skill's job — the dev team writes that as it runs.
+Close out a session: bring the project's `~/os` index up to date and surface anything worth remembering. Local `LANE_PROGRESS.md` is not this skill's job — the dev team writes that as it runs.
 
 ## Steps
 
@@ -22,7 +22,7 @@ Match the current repo path against the `repo:` field in each `~/os/projects/*/R
 Read `~/os/projects/_TEMPLATE.md` and the matched README. Propose updates in that shape:
 
 - **Frontmatter:** `last_active` → today, `next_step` → the single most useful next action, plus `status`/`priority` if they actually changed.
-- **"Where it stands":** a few sentences on current state — done, in flight, blockers. No dated entries, no task lists (those live in the repo's PROGRESS.md / PLAN.md).
+- **"Where it stands":** a few sentences on current state — done, in flight, blockers. No dated entries, no task lists (those live in the repo's LANE_PROGRESS.md / LANE.md).
 - Fix any drift from the template while you're there (missing fields, prose restating frontmatter).
 
 Show the diff, ask once, then write.

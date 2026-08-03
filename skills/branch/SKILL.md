@@ -18,6 +18,8 @@ Suggest a prefix if the context is clear:
 - `fix/` — bug fix
 - `wip/` — exploratory / not ready to PR
 - `chore/` — housekeeping
+- `lane/` — a lane from `MAP.md` (team rounds). Cut from `integration`, not the
+  default branch. Prefer `/lane <name>`, which does this and writes LANE.md.
 
 If the user already included a prefix, use it as-is.
 

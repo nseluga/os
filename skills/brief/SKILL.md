@@ -9,7 +9,7 @@ Read what an autonomous run produced while you were away. Leads with what change
 
 ## Step 1 — Find the run
 
-Check for a recent artifact: `.claude/dev-team/team-memory.md` (most recent entry) + `PROGRESS.md` if it exists.
+Check for a recent artifact: `.claude/dev-team/team-memory.md` (most recent entry) + `LANE_PROGRESS.md` if it exists.
 
 **If no artifact is found:** say so and stop. Don't hallucinate a report.
 

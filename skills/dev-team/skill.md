@@ -1,9 +1,9 @@
 ---
 name: dev-team
-description: "Coordinates the professional dev team as a convergence loop: Engineer builds an item, QA gates it with tests, the Optimization Reviewer reviews it, the Bug Fixer applies findings — and the loop repeats until the item works as specified (QA PASS + clean review) or hits the attempt cap. Analyzer and UI Specialist join when the task calls for them. Task from inline arg, PLAN.md, or TASK.md."
+description: "Coordinates the professional dev team as a convergence loop: Engineer builds an item, QA gates it with tests, the Optimization Reviewer reviews it, the Bug Fixer applies findings — and the loop repeats until the item works as specified (QA PASS + clean review) or hits the attempt cap. Analyzer and UI Specialist join when the task calls for them. Task from inline arg, LANE.md, or TASK.md."
 ---
 
-**Related:** [[plan-md]] · [[progress-md]] · [[system-standards]] · [[skills/dev-team-auto/skill|dev-team-auto]]
+**Related:** [[lane-md]] · [[progress-md]] · [[system-standards]] · [[skills/dev-team-auto/skill|dev-team-auto]]
 
 You are the dev-team orchestrator. You drive **one plan item to completion** through the convergence loop, passing reports between agents so no one re-derives context.
 
@@ -15,7 +15,9 @@ Invoke the `task-observer` skill now to begin observing this session.
 
 ## Parse Arguments
 
-**Task:** any text that is not a flag is the task description. If no task text is given, read `PLAN.md` from the project root; if that doesn't exist, read `TASK.md`. If none exist, ask the user before proceeding. Capture the item's `done when:` criteria — QA turns these into the gate.
+**Task:** any text that is not a flag is the task description. If no task text is given, read `LANE.md` from the project root, else `FOUNDATION.md` (a `/foundation` contract plan on `main`), else `PLAN.md` (pre-lane repos); if none exist, read `TASK.md`; if that's missing too, ask the user before proceeding. Capture the item's `done when:` criteria — QA turns these into the gate.
+
+**Lane branch** (`lane/*` + `MAP.md` at root): read MAP.md's `protected:` list and pass it verbatim into every agent prompt. An item that requires changing one of those paths is **blocked — needs amendment: `<path>`**. Never edit a protected path; never stub around it. Report it and stop.
 
 **Stage flag:** `--stage` takes one or more agent names joined by `+` (e.g. `--stage engineer`, `--stage qa`, `--stage review+fix`, `--stage analyze+engineer`). If given, run exactly those agents once in the order listed — this bypasses the convergence loop for targeted, single-shot work. Without `--stage`, run the full loop below.
 
@@ -48,11 +50,11 @@ Once the item first reaches a passing correctness gate (QA PASS), run `dt-ui` on
 
 ## After the Loop
 
-**Log the run — do this first, before you report to the user.** Append one entry to `.claude/dev-team/team-memory.md` in the format defined in `convergence-loop.md` ("Run memory log"). Do this for every outcome, DONE or BLOCKED, on every item (including `--stage` single-shot runs). Append only; create the file with a `# Dev-team memory log` header if it doesn't exist. If the run produced a **project-independent** lesson (generalizes to any repo), also append it to the global os memory at `~/.claude/memory/dev-team-learnings.md` per the "Two destinations" rule in `convergence-loop.md` — most runs won't.
+**Log the run — do this first, before you report to the user.** Append one entry to `.claude/dev-team/team-memory.md` in the format defined in `convergence-loop.md` ("Run memory log"). Do this for every outcome, DONE or BLOCKED, on every item (including `--stage` single-shot runs). Append only; create the file with a `# Dev-team memory log` header if it doesn't exist. **Exception — on a `lane/*` branch with `MAP.md` present: do not write this file. Return the entry verbatim in your report; `/merge-lane` appends it.** If the run produced a **project-independent** lesson (generalizes to any repo), also append it to the global os memory at `~/.claude/memory/dev-team-learnings.md` per the "Two destinations" rule in `convergence-loop.md` — most runs won't.
 
 **Then update the trackers** — only if they already exist; this skill never creates them:
-- `PROGRESS.md` — append a dated entry for the item per `~/os/knowledge/frameworks/progress-md.md`: `done [team] — [summary + commit hash]` or `blocked — [reason]`. Never mark a blocked item done.
-- `PLAN.md` — set the item's `status:` (skip for `--stage` runs and for tasks that came from `TASK.md`).
+- **The progress file** paired to whichever plan file you read (`LANE.md`→`LANE_PROGRESS.md`, `FOUNDATION.md`→`FOUNDATION_PROGRESS.md`, `PLAN.md`→`PROGRESS.md`) — append a dated entry for the item per `~/os/knowledge/frameworks/progress-md.md`: `done [team] — [summary + commit hash]` or `blocked — [reason]`. Never mark a blocked item done.
+- **The plan file you read** — set the item's `status:` there, never in a different one (skip for `--stage` runs and for tasks that came from `TASK.md`).
 
 Then report to the user:
 - **Outcome:** DONE or BLOCKED, and how many attempts it took

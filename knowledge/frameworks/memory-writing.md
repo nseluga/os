@@ -6,7 +6,7 @@ the file as a candidate for Claude to `Read`; no match means the fact stays
 invisible until Claude happens to open the file some other way. The index
 line's phrasing is the only thing standing between a fact and being found.
 
-**Related:** [[plan-md]] and [[progress-md]] are the equivalent
+**Related:** [[lane-md]] and [[progress-md]] are the equivalent
 phrasing-schema files for plan/progress work — this is that file for memory.
 
 ## The rule

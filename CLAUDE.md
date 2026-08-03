@@ -85,7 +85,7 @@ different jobs and must not be collapsed into each other.
 - **Imperative paths and links compose — they don't compete.** A skill body
   that says "read `~/os/.../convergence-loop.md` now" states *when*; a
   `**Related:**` link states *where it lives*. Executable paths stay paths —
-  an agent handed `[[plan-md]]` instead of a path has nothing to open — so the
+  an agent handed `[[lane-md]]` instead of a path has nothing to open — so the
   wikilink goes on its own line, never in place of one.
 - **Use path-form links whenever the basename isn't unique**
   (`[[projects/patio/audit|audit.md]]`). 28 files here are named `SKILL.md` and
@@ -98,8 +98,8 @@ wikilinks, and INDEX entries that are stale or missing). It runs from
 `scripts/maintenance.sh`.
 
 **Exception — always for plan/progress files:** when creating or updating a
-`PLAN.md` or `PROGRESS.md` in *any* repo, first read
-`~/os/knowledge/frameworks/plan-md.md` /
+`LANE.md` or `LANE_PROGRESS.md` in *any* repo, first read
+`~/os/knowledge/frameworks/lane-md.md` /
 `~/os/knowledge/frameworks/progress-md.md` and follow that schema.
 
 **Exception — always before writing a memory file:** read
