@@ -6,7 +6,7 @@ whichever plan file the run resolved:
 | Plan file | Progress file | Lives on |
 |---|---|---|
 | `LANE.md` | `LANE_PROGRESS.md` | a lane branch |
-| `FOUNDATION.md` | `FOUNDATION_PROGRESS.md` | `main` |
+| `FOUNDATION.md` | `FOUNDATION_PROGRESS.md` — only if an item escalates to `/dev-team`; `/foundation` builds inline and tracks in `status:` | `main` |
 | `PLAN.md` | `PROGRESS.md` | solo repos |
 
 Written below in terms of `LANE.md`/`LANE_PROGRESS.md`; applies identically to

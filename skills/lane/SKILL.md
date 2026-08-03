@@ -165,6 +165,7 @@ Protected — do not edit. Stop and report if an item requires changing one:
 
 Frozen contracts — build and test against these; they will not move:
   <contract file + fixture path per `depends on:` edge>
+Test against the fixture, not the producing lane. Do not wait for it to exist.
 ```
 
 Then show a short summary:

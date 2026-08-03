@@ -76,11 +76,13 @@ Runs before any fork. Reviewer only — never assign it.
    `LANE.md`, which belongs only on lane branches. Each item's `done when:`
    states the shape verbatim and requires **≥1 fixture that validates against
    it**.
-4. Run `/dev-team-auto` (or `/dev-team`) on it. Contracts get built and QA'd
-   like any other work — a contract with a passing fixture test is what makes
-   the freeze trustworthy.
-5. Re-run `/foundation` — it verifies each fixture validates, sets
-   `protected:` in MAP.md, commits `main`, and cuts `integration`.
+4. `/foundation` builds them **inline in the same session**, item by item, and
+   shows you each diff. Transcription, not design — the shapes were pinned in
+   step 2, so the convergence loop buys nothing. One item escalates to
+   `/dev-team` when it needs a backfill over existing rows, touches an
+   unfamiliar subsystem, or fails typecheck twice.
+5. Same run verifies each fixture validates, sets `protected:` in MAP.md,
+   commits `main`, and cuts `integration`.
 6. Lane branches fork from `integration`.
 
 The agent transcribes a shape you decided; it never designs one. That is the

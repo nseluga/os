@@ -1,6 +1,6 @@
 ---
 name: foundation
-description: Freeze the contracts lanes build against — pins each shared shape, writes FOUNDATION.md for the dev team to build, then locks protected: and cuts the integration branch. Reviewer-only, runs after /map and before any lane starts. Use when the user says "/foundation", "freeze the contracts", "set up the foundation", or has a MAP.md but no integration branch yet.
+description: Freeze the contracts lanes build against — pins each shared shape, writes FOUNDATION.md, builds it inline with the user, then locks protected: and cuts the integration branch. Reviewer-only, runs after /map and before any lane starts. Use when the user says "/foundation", "freeze the contracts", "set up the foundation", or has a MAP.md but no integration branch yet.
 ---
 
 **Related:** [[map-md]] · [[lane-md]] · [[skills/map/SKILL|map]] · [[skills/grill-me/SKILL|grill-me]]
@@ -15,9 +15,9 @@ contracts and fixtures aren't on disk.
 
 `FOUNDATION.md` at repo root?
 
-- **Absent → author mode.** Interview the shapes, write the plan.
-- **Present, items not all `done` in `FOUNDATION_PROGRESS.md` → resume.**
-  Report what's left; the build hasn't finished.
+- **Absent → author mode.** Interview the shapes, write the plan, **build it
+  inline**, then lock. One session, no handoff.
+- **Present, items not all `done` → resume.** Build the remaining items inline.
 - **Present, all items `done` → lock mode.** Verify, set `protected:`, cut
   `integration`.
 
@@ -73,11 +73,9 @@ Repo root, on `main`. Schema-valid items per `lane-md.md`.
 - `difficulty: low` — the shape was decided in the interview.
 - Order by real dependency: schema/migrations → types that mirror them → route
   contracts that carry them.
-- **Tag disjoint items `parallel-group:`.** Infer it yourself from the scan —
-  don't ask. Two contracts serving different edges usually share no file and no
-  table, and `/dev-team-auto` runs same-group items concurrently. Leave items
-  ungrouped when a type mirrors a table the previous item creates, or when two
-  contracts touch the same file.
+- **Tag disjoint items `parallel-group:`** — only matters for an escalated item
+  (below). Infer it from the scan, don't ask. Leave ungrouped when a type
+  mirrors a table the previous item creates, or two contracts touch one file.
 
 Preamble: `# <Project> — Foundation`, plus one line — these are the contracts
 every lane builds against; they land on `main` before any lane forks.
@@ -85,18 +83,36 @@ every lane builds against; they land on `main` before any lane forks.
 **The agent transcribes a shape you decided. It never designs one.** That is
 why this is an interview and not a delegation.
 
-### Then tell the user
+Show the item list. On approval, build it.
 
-```
-/dev-team-auto        build + QA the contracts
-/foundation           re-run to verify, lock protected:, cut integration
-```
+---
 
-The run tracks itself in `FOUNDATION_PROGRESS.md` and writes `status:` back into
-`FOUNDATION.md` — the plan/progress pairing in
-`~/os/knowledge/frameworks/progress-md.md`.
+## Build mode — inline, with the user
 
-Say which items you grouped `parallel-group:` so the user can veto one.
+Foundation items are transcription, not design: the shape was pinned in the
+interview. Build them yourself, in order, in this session. **Do not dispatch
+`/dev-team-auto` for the whole file.**
+
+Per item:
+
+1. Write the code — migration, type, route contract, config key.
+2. Write the fixture. **Every item ships one.** A fixture is what lets a
+   consuming lane build and test before its producing lane exists; without it
+   the two lanes serialize.
+3. Run the project typecheck + the fixture's own validation. Red → fix now.
+4. Set `status: done` in `FOUNDATION.md`. Show the user the diff for that item
+   before moving on — they correct a wrong shape here for free, and nowhere
+   downstream is it free.
+
+No `FOUNDATION_PROGRESS.md` — `status:` in the plan file is the whole ledger for
+a session that doesn't leave the room. Create one only if you escalate.
+
+**Escalate one item to `/dev-team` when** it needs a backfill over existing
+rows, touches a subsystem you had to scan to understand, or the typecheck
+fails twice. Run `/dev-team` on that item alone, then come back. Escalating
+every item means the shapes weren't pinned — go back to the interview.
+
+Then roll straight into lock mode.
 
 ---
 
