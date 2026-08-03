@@ -47,6 +47,12 @@ Cover, in order:
 5. **`depends on:` edges** — for each, name the artifact to freeze. No name →
    push back: merge the lanes or sequence them. Do not accept a deferred
    integration.
+5b. **Pin each contract's actual shape.** Not "a Lead type" — the fields, their
+   types, and nullability; the table columns; the route's request/response and
+   error codes. Draft from the codebase scan, the user corrects. **This is the
+   step that decides the round** — every lane builds against what is settled
+   here, so an agent must never be left to invent it later. Can't pin a shape →
+   that edge isn't ready: sequence those lanes instead of freezing a guess.
 6. **`protected:` list** — the contracts from step 5, plus schema/migrations,
    config keys, shared design tokens. Keep short.
 7. **Assignees** — match lane difficulty to skill. Give the least experienced
@@ -72,22 +78,35 @@ pairs are disjoint.
 `MAP.md` at repo root, to the map-md.md schema: `protected:` block, `---`, one
 entry per lane.
 
-Then emit the **foundation checklist** — the work the Reviewer must finish before any
-lane forks:
+Then write **`LANE.md` at repo root on `main`** — the foundation work, as
+schema-valid items per `~/os/knowledge/frameworks/lane-md.md`. Not a checklist:
+this file gets executed.
+
+- One item per contract, using the shapes pinned in interview step 5b **verbatim
+  in `done when:`** — field names, types, nullability, columns, status codes.
+  The agent transcribes a decided shape; it never designs one.
+- Every contract item's `done when:` includes **a fixture that validates against
+  it**. The fixture is what lets a lane test against a producer that doesn't
+  exist yet — without it, lanes queue instead of running parallel.
+- `risk:` is silent for these: all lanes build against the shape, so wrong here
+  is wrong everywhere at once and nothing surfaces it until merge.
+- `difficulty: low` — the shape was decided in the interview.
+
+Preamble: `# <Project> — Foundation`, one line saying these are the contracts
+every lane builds against and that they land on `main` before any lane forks.
+
+Then tell the user, in order:
 
 ```
-FOUNDATION — before any lane starts
-[ ] <contract file> — <what shape, which edge it serves>  + fixture at <path>
-[ ] <migration/schema>
-[ ] commit to main
-[ ] cut `integration` from that commit
+1. /dev-team-auto          build + QA the contracts
+2. review, commit to main
+3. add those paths to protected: in MAP.md
+4. git checkout -b integration
+5. hand out: /lane <name> per assignee
 ```
 
-One line per `depends on:` edge. Contracts are **real code with a fixture**, not
-a path list — a fixture is what lets a lane test against a producer that does
-not exist yet.
-
-Finally, one line per lane: `/lane <name>` is the assignee's start command.
+`/lane` refuses to plan a lane whose contracts and fixtures aren't on disk, so
+steps 1–4 gate the whole round.
 
 ## Update mode
 

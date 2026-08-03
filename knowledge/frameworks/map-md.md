@@ -69,12 +69,20 @@ lanes, or sequence them.
 Runs before any fork. Reviewer only — never assign it.
 
 1. Draw the map. Run the `owns:` overlap check; fix any intersection.
-2. For each `depends on:` edge, write the contract as **real code on `main`** —
-   migration + schema, shared types, route contract. Not a path list.
-3. Ship ≥1 fixture per shape, so a lane can test against a contract whose
-   producer does not exist yet.
-4. Contract compiles. Commit to `main`. These paths are now `protected:`.
-5. Cut `integration` from that commit. Lane branches fork from `integration`.
+2. Pin every contract's **actual shape** in the interview — fields, types,
+   nullability, columns, status codes. Can't pin it → sequence those lanes
+   instead of freezing a guess.
+3. `/map` writes those as items in **`LANE.md` on `main`**. Each item's
+   `done when:` states the shape verbatim and requires **≥1 fixture that
+   validates against it**.
+4. Run `/dev-team-auto` (or `/dev-team`) on it. Contracts get built and QA'd
+   like any other work — a contract with a passing fixture test is what makes
+   the freeze trustworthy.
+5. Review, commit to `main`. Add those paths to `protected:`.
+6. Cut `integration` from that commit. Lane branches fork from `integration`.
+
+The agent transcribes a shape you decided; it never designs one. That is the
+whole reason step 2 is an interview and not a delegation.
 
 ---
 
