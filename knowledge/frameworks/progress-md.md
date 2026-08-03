@@ -1,4 +1,17 @@
-# LANE_PROGRESS.md Reference
+# Progress file reference
+
+**Plan file → progress file pairing.** The progress file is named after
+whichever plan file the run resolved:
+
+| Plan file | Progress file | Lives on |
+|---|---|---|
+| `LANE.md` | `LANE_PROGRESS.md` | a lane branch |
+| `FOUNDATION.md` | `FOUNDATION_PROGRESS.md` | `main` |
+| `PLAN.md` | `PROGRESS.md` | solo repos |
+
+Written below in terms of `LANE.md`/`LANE_PROGRESS.md`; applies identically to
+the other pairs. The run writes `status:` back to the plan file it read — never
+to a different one.
 
 LANE_PROGRESS.md is the running ledger for an autonomous session. It tracks what
 happened to each LANE.md item — done, blocked, or not yet reached — so that a

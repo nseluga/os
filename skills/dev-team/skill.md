@@ -51,8 +51,8 @@ Once the item first reaches a passing correctness gate (QA PASS), run `dt-ui` on
 **Log the run — do this first, before you report to the user.** Append one entry to `.claude/dev-team/team-memory.md` in the format defined in `convergence-loop.md` ("Run memory log"). Do this for every outcome, DONE or BLOCKED, on every item (including `--stage` single-shot runs). Append only; create the file with a `# Dev-team memory log` header if it doesn't exist. **Exception — on a `lane/*` branch with `MAP.md` present: do not write this file. Return the entry verbatim in your report; `/merge-lane` appends it.** If the run produced a **project-independent** lesson (generalizes to any repo), also append it to the global os memory at `~/.claude/memory/dev-team-learnings.md` per the "Two destinations" rule in `convergence-loop.md` — most runs won't.
 
 **Then update the trackers** — only if they already exist; this skill never creates them:
-- `LANE_PROGRESS.md` — append a dated entry for the item per `~/os/knowledge/frameworks/progress-md.md`: `done [team] — [summary + commit hash]` or `blocked — [reason]`. Never mark a blocked item done.
-- `LANE.md` — set the item's `status:` (skip for `--stage` runs and for tasks that came from `TASK.md`).
+- **The progress file** paired to whichever plan file you read (`LANE.md`→`LANE_PROGRESS.md`, `FOUNDATION.md`→`FOUNDATION_PROGRESS.md`, `PLAN.md`→`PROGRESS.md`) — append a dated entry for the item per `~/os/knowledge/frameworks/progress-md.md`: `done [team] — [summary + commit hash]` or `blocked — [reason]`. Never mark a blocked item done.
+- **The plan file you read** — set the item's `status:` there, never in a different one (skip for `--stage` runs and for tasks that came from `TASK.md`).
 
 Then report to the user:
 - **Outcome:** DONE or BLOCKED, and how many attempts it took

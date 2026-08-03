@@ -16,8 +16,8 @@ contracts and fixtures aren't on disk.
 `FOUNDATION.md` at repo root?
 
 - **Absent → author mode.** Interview the shapes, write the plan.
-- **Present, items not all `done` → resume.** Report what's left; the build
-  hasn't finished.
+- **Present, items not all `done` in `FOUNDATION_PROGRESS.md` → resume.**
+  Report what's left; the build hasn't finished.
 - **Present, all items `done` → lock mode.** Verify, set `protected:`, cut
   `integration`.
 
@@ -85,6 +85,10 @@ why this is an interview and not a delegation.
 /dev-team-auto        build + QA the contracts
 /foundation           re-run to verify, lock protected:, cut integration
 ```
+
+The run tracks itself in `FOUNDATION_PROGRESS.md` and writes `status:` back into
+`FOUNDATION.md` — the plan/progress pairing in
+`~/os/knowledge/frameworks/progress-md.md`.
 
 ---
 
