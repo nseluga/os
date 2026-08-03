@@ -53,7 +53,6 @@ One folder per skill. Each `SKILL.md`'s `description:` frontmatter is the canoni
 ## Utilities
 
 - `tidy-downloads` — Sort a messy folder into meaningful subfolders
-- `humanizer` — Strip AI-writing tells from text and match Nate's voice via `style_reference/`
 
 ## Installed elsewhere, vendored here
 
