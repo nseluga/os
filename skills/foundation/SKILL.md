@@ -71,7 +71,13 @@ Repo root, on `main`. Schema-valid items per `lane-md.md`.
 - `risk:` — silent. Every lane builds against this; wrong here is wrong
   everywhere at once and nothing surfaces it until merge.
 - `difficulty: low` — the shape was decided in the interview.
-- Order: schema/migrations first, then types, then route contracts.
+- Order by real dependency: schema/migrations → types that mirror them → route
+  contracts that carry them.
+- **Tag disjoint items `parallel-group:`.** Infer it yourself from the scan —
+  don't ask. Two contracts serving different edges usually share no file and no
+  table, and `/dev-team-auto` runs same-group items concurrently. Leave items
+  ungrouped when a type mirrors a table the previous item creates, or when two
+  contracts touch the same file.
 
 Preamble: `# <Project> — Foundation`, plus one line — these are the contracts
 every lane builds against; they land on `main` before any lane forks.
@@ -89,6 +95,8 @@ why this is an interview and not a delegation.
 The run tracks itself in `FOUNDATION_PROGRESS.md` and writes `status:` back into
 `FOUNDATION.md` — the plan/progress pairing in
 `~/os/knowledge/frameworks/progress-md.md`.
+
+Say which items you grouped `parallel-group:` so the user can veto one.
 
 ---
 
