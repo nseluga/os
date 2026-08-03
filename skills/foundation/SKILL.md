@@ -37,8 +37,10 @@ No `MAP.md` → stop. Run `/map` first.
 
 ### Interview — pin every shape
 
-One edge at a time. grill-me method: draft from the scan, user corrects, push
-back before accepting.
+Read `~/os/skills/grill-me/SKILL.md` before the first question and conduct the
+interview by it: one edge at a time, concrete tradeoffs per option, always
+recommend, explore the codebase instead of asking what the code already
+answers. Draft from the scan, user corrects, push back before accepting.
 
 For each `depends on:` edge, pin the **actual shape** — never a name:
 

@@ -69,9 +69,11 @@ Read, in parallel where possible:
 
 ## Interview
 
-Use the grill-me method (`~/os/skills/grill-me/SKILL.md`): one question at a
-time, concrete tradeoffs per option, always give your recommendation, walk
-dependencies in order. Push back on anything that will hurt the run —
+Read `~/os/skills/grill-me/SKILL.md` before the first question and conduct the
+interview by it: one question at a time, concrete tradeoffs per option, always
+give your recommendation, walk dependencies in order, explore the codebase
+instead of asking what the code already answers. Push back on anything that
+will hurt the run —
 over-scoped items, untestable criteria, premature infrastructure — before
 accepting it.
 

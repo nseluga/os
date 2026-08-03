@@ -4,8 +4,9 @@ Repo-level partition into **lanes** — independently workable areas, one owner
 each, one branch each. The Reviewer writes it. Assignees read their entry and run
 [[lane-md|/lane]] inside it.
 
-One MAP.md per repo, on `main`. Skip it entirely for solo repos — write a
-LANE.md and go.
+One MAP.md per repo, on `main`. Lane count follows the work, not the headcount —
+a solo builder maps the same lanes and works them one at a time. Skip it only
+when the round is one indivisible piece of work; write a LANE.md and go.
 
 **Related:** [[lane-md]] annotates one lane · [[progress-md]] tracks both layers.
 
@@ -126,7 +127,8 @@ main ─────────────────────────
   PR = one open PR per lane; Reviewer merges it per review session
 ```
 
-- One lane = one branch = one person.
+- One lane = one branch = one owner. One person may own several lanes; they
+  still get separate branches and PRs, merged in dependency order.
 - **Assignee:** push after each item; keep **one PR open** into `integration`
   (`/ship`). Never blocked — keep committing while the PR sits.
 - **Reviewer:** review and merge that PR **per review session, not per item**

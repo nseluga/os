@@ -34,7 +34,7 @@ entry. No feature code, no cloud infra — it ends at "ready to start developmen
    **classic PAT with `read:packages`** (the `gh` OAuth token cannot download from
    GitHub Packages). If missing, stop and show the fix from `~/bcns/SETUP.md`
    ("Shared packages" section) before creating anything.
-3. **Create**: `gh repo create nseluga/bcns-client-<slug> --template nseluga/bcns-app-template --private --clone` from `~` (clones to `~/bcns-client-<slug>`). Template repo generation is async — if the clone comes up empty, wait a few seconds and `git pull`.
+3. **Create**: `gh repo create bcn-services/bcns-client-<slug> --template bcn-services/bcns-app-template --private --clone` from `~` (clones to `~/bcns-client-<slug>`). All client repos and the template itself live under the `bcn-services` GitHub org, never the personal `nseluga` account. Template repo generation is async — if the clone comes up empty, wait a few seconds and `git pull`.
 4. **Stamp**: read `TEMPLATE.md` in the new repo and apply every entry in
    "Required at creation". Write `CLIENT.md`: display name, the brief, and each
    config decision — undecided ones recorded as open questions. If a config

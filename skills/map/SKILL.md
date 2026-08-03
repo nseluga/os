@@ -1,17 +1,20 @@
 ---
 name: map
-description: Partition a repo into parallel lanes for a team — grills the user into a schema-valid MAP.md naming every cross-lane dependency. Use when the user says "/map", "draw the lanes", "split this repo up", "map the project", "set up lanes", or is dividing work across 2+ people.
+description: Partition a repo into parallel lanes — grills the user into a schema-valid MAP.md naming every cross-lane dependency. Use when the user says "/map", "draw the lanes", "split this repo up", "map the project", "set up lanes", or is breaking a round of work into separable pieces. Applies solo as well as across a team.
 ---
 
 **Related:** [[map-md]] · [[lane-md]] · [[skills/foundation/SKILL|foundation]] · [[skills/grill-me/SKILL|grill-me]]
 
-You partition a repo into lanes one person each can build in parallel, and you
-name what sits between them. Reviewer-only. Output: `MAP.md`.
+You partition a repo into lanes that can be built in parallel, and you name what
+sits between them. Reviewer-only. Output: `MAP.md`.
 
 `/foundation` freezes those contracts next; `/lane` plans one lane after that.
 
-Solo work needs no map. If only one person is building, say so and point at
-`/lane`.
+**Lane count follows the work, not the headcount.** Cut lanes where the work
+separates. A team runs them at once; solo runs them one at a time — same map
+either way. Never collapse a round into one long lane because one person is
+building. Skip `/map` only when the round is one indivisible piece of work —
+say so and point at `/lane`.
 
 ## Mode
 
@@ -33,25 +36,26 @@ amendments). Never silently overwrite.
 
 ## Interview
 
-grill-me method: one question at a time, tradeoffs per option, always
-recommend, walk dependencies in order.
+Read `~/os/skills/grill-me/SKILL.md` before the first question and conduct the
+interview by it: one question at a time, concrete tradeoffs per option, always
+recommend, walk dependencies in order, explore the codebase instead of asking
+what the code already answers.
 
 Cover, in order:
 
 1. **Round goal** — what must exist when all lanes merge.
-2. **Team** — who, how many, relative skill. Fewer lanes than people is fine;
-   more lanes than people is not.
-3. **Candidate lanes** — propose them from the scan, don't ask cold. Aim for
+2. **Candidate lanes** — propose them from the scan, don't ask cold. Aim for
    vertical slices, not layers: a lane that owns a feature end-to-end
    parallelizes; a "backend lane" + "frontend lane" split serializes.
-4. **`owns:` globs per lane** — draft from the scan, user corrects.
-5. **`depends on:` edges** — for each, name the artifact to freeze. No name →
+3. **`owns:` globs per lane** — draft from the scan, user corrects.
+4. **`depends on:` edges** — for each, name the artifact to freeze. No name →
    push back: merge the lanes or sequence them. Do not accept a deferred
    integration. Name the artifact only; `/foundation` pins its shape next.
-6. **`protected:` list** — the contracts from step 5, plus schema/migrations,
+5. **`protected:` list** — the contracts from step 4, plus schema/migrations,
    config keys, shared design tokens. Keep short.
-7. **Assignees** — match lane difficulty to skill. Give the least experienced
-   person the lane with the fewest `depends on:` edges.
+6. **Assignees** — who builds each lane. Match lane difficulty to skill; give
+   the least experienced person the lane with the fewest `depends on:` edges.
+   Solo → one name on every lane, worked in dependency order.
 
 **Push back on:** lanes that share a `owns:` glob, lanes split by layer rather
 than feature, any edge whose contract can't be named, a `protected:` list long
