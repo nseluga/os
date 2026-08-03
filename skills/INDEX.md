@@ -6,7 +6,7 @@ One folder per skill. Each `SKILL.md`'s `description:` frontmatter is the canoni
 
 - `design` — Interactive design skill: five drafts side by side, narrow to one, then tweak it live in the browser. Prompts with real reference images from `knowledge/library/inspiration/`; Impeccable's detector is the anti-slop floor. Ships `tweaks.js`, the in-page control panel.
 - `dev-team` — Coordinates the dev team convergence loop for one plan item
-- `dev-team-auto` — Autonomous dev team drives PLAN.md items through convergence loop
+- `dev-team-auto` — Autonomous dev team drives LANE.md items through convergence loop
 - `dt-analyze` — Code Analyzer maps the codebase before other agents work
 - `dt-engineer` — Engineer owns large-scale design and implements in worktree
 - `dt-fix` — Bug Fixer applies reviewer findings and QA failures
@@ -17,7 +17,9 @@ One folder per skill. Each `SKILL.md`'s `description:` frontmatter is the canoni
 
 ## Planning & review
 
-- `plan-md` — Grill the user into a schema-valid PLAN.md for dev-team execution
+- `lane` — Grill the user into a schema-valid LANE.md for dev-team execution (one lane, or a whole solo repo)
+- `map` — Partition a repo into parallel lanes for a team; emit MAP.md + the foundation contract checklist
+- `merge-lane` — Land a lane item on `integration`: overlap check, merge, archive progress, harvest memory, full suite
 - `grill-me` — A relentless interview to sharpen a plan or design
 - `research-partner` — Build-time research partner standup ritual, methods pushback
 - `research-review` — Skeptical peer review of completed research work
@@ -41,7 +43,6 @@ One folder per skill. Each `SKILL.md`'s `description:` frontmatter is the canoni
 - `branch` — Create a new git branch from main and enter an isolated worktree
 - `ship` — Stage, commit, push, and open a PR in one command
 - `resolving-merge-conflicts` — Resolve an in-progress git merge/rebase conflict
-- `git-guardrails-claude-code` — Hooks that block dangerous git commands before execution
 
 ## Apps & clients
 
@@ -51,8 +52,8 @@ One folder per skill. Each `SKILL.md`'s `description:` frontmatter is the canoni
 
 ## Utilities
 
-- `find-skills` — Discover and install agent skills
 - `tidy-downloads` — Sort a messy folder into meaningful subfolders
+- `humanizer` — Strip AI-writing tells from text and match Nate's voice via `style_reference/`
 
 ## Installed elsewhere, vendored here
 
@@ -66,8 +67,15 @@ Nate's own work.
 |---|---|---|---|
 | **Impeccable** | plugin | `~/.claude/plugins/cache/impeccable/impeccable/<ver>/` | Plugins aren't symlinked into `~/os`, so it never lands here. Ships 4 agents + a `hooks.json` a plain skill folder can't. |
 | **Higgsfield** | skills | `skills/higgsfield-*/` | Marketplace-managed and versioned; reinstall via the Higgsfield marketplace to update. See `THIRD_PARTY.md`. |
-| **prototype** (`mattpocock/skills`) | skill | `skills/prototype/` | Vendored via `npx skills add mattpocock/skills --skill=prototype`. Used by `plan-md`'s justification sweep to settle open design questions before the plan is written. See `THIRD_PARTY.md`. |
+| **prototype** (`mattpocock/skills`) | skill | `skills/prototype/` | Vendored via `npx skills add mattpocock/skills --skill=prototype`. Used by `lane`'s justification sweep to settle open design questions before the plan is written. See `THIRD_PARTY.md`. |
 
 Both are consumed by the `design` skill — see `skills/design/SKILL.md` for how.
 Impeccable's `hooks.json` is active **plugin-wide**: it runs `detect.mjs` on every
 `Edit`/`Write` and a deep pass at `Stop`, in every repo, whether or not `design` is running.
+
+- `higgsfield-generate` — Higgsfield image/video/3D/audio generation (vendored)
+- `higgsfield-marketplace-cards` — Marketplace listing images and A+ content modules (vendored)
+- `higgsfield-product-photoshoot` — Brand product photography sets (vendored)
+- `prototype` — Throwaway prototype to settle a design question (vendored)
+- `find-skills` — Discover and install agent skills (vendored, [vercel-labs/skills](https://github.com/vercel-labs/skills))
+- `git-guardrails-claude-code` — Hooks that block dangerous git commands before execution (vendored, [mattpocock/skills](https://github.com/mattpocock/skills))

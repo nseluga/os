@@ -1,19 +1,23 @@
-# PLAN.md Reference
+# LANE.md Reference
 
-A PLAN.md is the pre-run contract for any autonomous or semi-autonomous session.
+A LANE.md is the pre-run contract for any autonomous or semi-autonomous session.
 It defines **what to build** (or improve), in what order, and exactly how to
 know each item is done. Agents read it at startup; you write it before the session.
 
 
-**Related:** [[progress-md]] annotates a PLAN.md as it is executed.
+**Related:** [[progress-md]] annotates a LANE.md as it is executed ·
+[[map-md]] partitions a repo into lanes when a team shares it.
+
+Solo repo → one LANE.md at root, no map. Team round → one LANE.md per lane
+branch, generated from that lane's MAP.md entry, never merged back.
 
 ---
 
 ## When you need one
 
-Use PLAN.md when:
+Use LANE.md when:
 - Running `/dev-team-auto` (it requires one — the outer loop iterates over it)
-- Running `/dev-team` on a multi-item backlog (it reads PLAN.md if no inline arg is given)
+- Running `/dev-team` on a multi-item backlog (it reads LANE.md if no inline arg is given)
 - Any overnight/unattended run where you want a stop marker or a resumable queue
 
 Skip it (use an inline arg or TASK.md) when:
@@ -105,7 +109,7 @@ not the executing agent.
 Everything above the first item block (`- task:` for dev-team) is an
 optional **preamble**: orientation the orchestrator reads for global guidance
 but does not execute as an item. Recommended by default for every file-based
-PLAN.md; the only thing that varies is depth. Skip it only for a throwaway
+LANE.md; the only thing that varies is depth. Skip it only for a throwaway
 inline/TASK.md task.
 
 The loop reads top-to-bottom and is LLM-driven, so a clearly-separated preamble
@@ -125,10 +129,70 @@ Close the preamble with a `---` rule before the first item.
   than duplicating it. The preamble is a lean orientation; the exhaustive spec
   lives in the auto-loaded `CLAUDE.md` or the project README. Duplicated context
   drifts — link, don't copy.
+- **`## Not yet specified`** and **`## Out of scope`** — the two sections below.
+  Both are optional in the sense that a plan with nothing to put in them omits
+  them; neither is optional when there is something to put in them.
 
 The item list remains the contract; the preamble only frames it. Keep it short
 enough that it never competes with the items for attention. (The examples below
 omit the preamble for brevity — a real file should carry one.)
+
+### Lane-mode preamble block (team rounds only)
+
+When the repo has a `MAP.md`, the preamble additionally carries, verbatim:
+
+```markdown
+Lane: <name> — <area line from MAP.md>
+
+Protected — do not edit. Stop and report if an item requires changing one:
+  <protected: paths from MAP.md>
+
+Frozen contracts — build and test against these; they will not move:
+  <contract file + fixture path per `depends on:` edge>
+```
+
+Items scope to this lane only. An item requiring a `protected:` change is not a
+lane item — it is an amendment request.
+
+### `## Not yet specified`
+
+In-scope questions you can't yet phrase sharply enough to write an item for.
+
+```markdown
+## Not yet specified
+
+- <the suspected question, as loosely as the view allows> — revisit after <item>
+```
+
+**Item or not-yet-specified?** Test: can you state the question precisely *now*
+— not answer it.
+
+- **Item** — question is sharp, even if unanswered or blocked behind three items.
+- **Not yet specified** — can't phrase it that sharply yet. Don't pre-slice into
+  item-sized pieces; one entry may become several items, or none.
+
+An entry graduates to a real item when an earlier item makes it specifiable —
+delete it from this section in the same edit. Leftovers roll into the next
+round's plan.
+
+Not a backlog. If you'd never do it this round, it's out of scope.
+
+### `## Out of scope`
+
+Work this round consciously ruled out. Scope, not sharpness, lands work here.
+
+```markdown
+## Out of scope
+
+- <the thing> — <why it's out: deferred, superseded, someone else's, not worth it>
+```
+
+The `why` is required — without it the line reads as an oversight and gets
+re-proposed every round.
+
+Never graduates within the round. An item that turns out to sit past the goal is
+**deleted** and left as one line here — never `status: blocked`, which claims the
+opposite.
 
 ## The stop marker
 
@@ -238,7 +302,7 @@ to Opus/Fable) rediscovering what you already knew. Rules:
 
 ---
 
-## Example PLAN.md — dev-team
+## Example LANE.md — dev-team
 
 ```markdown
 - task: Add rate limiting to /api/submit
@@ -308,13 +372,13 @@ work is not architecturally open; it is ordinary work with varying stakes.
 
 | Phase | Action |
 |---|---|
-| Before a session | Author PLAN.md; all items at `status: not started` |
+| Before a session | Author LANE.md; all items at `status: not started` |
 | During a run | Agents update `status:` in place; do not edit mid-run |
-| After a run | Review [[progress-md|PROGRESS.md]] for blocked items; move the stop marker; update `os/projects/README.md` if a milestone was hit |
-| When the round is complete | **Replace** PLAN.md wholesale with the next round's plan. A fully-done plan left in place will be picked up by the next run |
+| After a run | Review [[progress-md|LANE_PROGRESS.md]] for blocked items; move the stop marker; update `os/projects/README.md` if a milestone was hit |
+| When the round is complete | **Replace** LANE.md wholesale with the next round's plan. A fully-done plan left in place will be picked up by the next run |
 
-**One PLAN.md per repo — never split, never suffixed.** There is no
+**One LANE.md per repo — never split, never suffixed.** There is no
 `PLAN-v2-done.md`. Nothing is lost by replacing the file, because
-[[progress-md|PROGRESS.md]] already records what every item did and keeps that
+[[progress-md|LANE_PROGRESS.md]] already records what every item did and keeps that
 history permanently. The plan is the contract for the *current* round only;
 the ledger is the archive.

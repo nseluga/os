@@ -135,7 +135,7 @@ After each agent finishes, route on its report from `.claude/dev-team/` before s
 
 ## Inputs
 
-- **item** — the task text plus its `done when:` acceptance criteria (from PLAN.md, TASK.md, or the inline arg)
+- **item** — the task text plus its `done when:` acceptance criteria (from LANE.md, TASK.md, or the inline arg)
 - **gate mode** — **decided per item, not per run.** Seeded live runs and browser QA are the most expensive part of the gate; don't buy them for code no user or route can reach.
   - `tests` — QA verdict comes from written + executed tests. The default.
   - `tests+behavioral` — QA runs tests AND exercises the running path, including a **live smoke pass** (real server + real dev DB, not mocks) and browser QA for web UI. Buy it only when the item changes user-visible UI or an HTTP route, or touches models/migrations/serialization — or when the `risk:` line says the failure is silent, since a silent failure is precisely the one tests written from the criteria will miss.

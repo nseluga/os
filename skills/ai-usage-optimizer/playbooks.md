@@ -48,7 +48,7 @@ route it through the dev-team rather than doing it inline.
 ```
 Is it a single small edit?            → do it inline
 Multi-file, has acceptance criteria?  → /dev-team (interactive) 
-Whole PLAN.md to grind overnight?     → /dev-team-auto (unattended, experimental branch)
+Whole LANE.md to grind overnight?     → /dev-team-auto (unattended, experimental branch)
 Just need one role right now?         → /dt-<role> standalone
 ```
 

@@ -1,7 +1,7 @@
-# PROGRESS.md Reference
+# LANE_PROGRESS.md Reference
 
-PROGRESS.md is the running ledger for an autonomous session. It tracks what
-happened to each PLAN.md item — done, blocked, or not yet reached — so that a
+LANE_PROGRESS.md is the running ledger for an autonomous session. It tracks what
+happened to each LANE.md item — done, blocked, or not yet reached — so that a
 run can be resumed, audited, and handed off without reading the full transcript.
 
 ---
@@ -9,22 +9,24 @@ run can be resumed, audited, and handed off without reading the full transcript.
 ## Who writes it
 
 **`/dev-team-auto`** — writes a row the moment each item resolves (DONE or
-BLOCKED), before touching the next item. The two writes (PROGRESS.md row +
+BLOCKED), before touching the next item. The two writes (LANE_PROGRESS.md row +
 team-memory entry) are treated as one atomic action.
 
-**`/dev-team` (interactive)** — does **not** write PROGRESS.md. It reports
-results to you in the conversation. PROGRESS.md is exclusively for unattended runs. It reports
-results to you in the conversation. PROGRESS.md is exclusively for unattended runs.
+**`/dev-team` (interactive)** — writes a row **only if the file already exists**;
+it never creates one. Otherwise it reports results in the conversation.
 
-You never hand-edit PROGRESS.md mid-run. Read it to check status; let the agent
+**`/merge-lane`** — archives a lane's LANE_PROGRESS.md to `progress/<lane>.md`
+on `integration`, and updates that lane's row in MAP_PROGRESS.md.
+
+You never hand-edit LANE_PROGRESS.md mid-run. Read it to check status; let the agent
 write to it.
 
 ---
 
 ## When you need one
 
-PROGRESS.md is created automatically by the agent on first item completion — you
-do not create it yourself. It exists as long as a PLAN.md is active.
+LANE_PROGRESS.md is created automatically by the agent on first item completion — you
+do not create it yourself. It exists as long as a LANE.md is active.
 
 Read it when:
 - Checking what an overnight run accomplished before the agent has reported back
@@ -36,7 +38,7 @@ Read it when:
 
 ## Format
 
-A Markdown table with one row per PLAN.md item, in the same order as PLAN.md.
+A Markdown table with one row per LANE.md item, in the same order as LANE.md.
 
 ```markdown
 # Progress
@@ -48,12 +50,12 @@ A Markdown table with one row per PLAN.md item, in the same order as PLAN.md.
 
 ### The preamble (recommended)
 
-A PROGRESS.md should open with a short preamble the agent maintains alongside
-the rows — the same "lean orientation, don't duplicate" rule as PLAN.md:
+A LANE_PROGRESS.md should open with a short preamble the agent maintains alongside
+the rows — the same "lean orientation, don't duplicate" rule as LANE.md:
 
 - An **H1 title**.
-- A one-line **what-this-is** note, including the reconciliation rule: *PLAN.md
-  is the contract; this tracks where we are in it — if they disagree, PLAN.md
+- A one-line **what-this-is** note, including the reconciliation rule: *LANE.md
+  is the contract; this tracks where we are in it — if they disagree, LANE.md
   wins for scope.*
 - A **Current position** pointer — `Status` / `Next` / `Blockers` / `Last
   updated` — that names the resume point explicitly. dev-team-auto resumes at
@@ -66,22 +68,26 @@ never lags the rows. Then the per-item table follows as below.
 
 ### dev-team-auto row conventions
 
+Rows are a log for the user to read, not a technical record — plain English,
+one sentence, no jargon (no track names, commit hashes, VERDICT labels).
+Technical detail belongs in the commit message, not here.
+
 **Done:**
 ```
-done [track] — [one-line summary of what was built] — [commit hash]
+done — [one plain sentence: what changed, in user-facing terms]
 ```
 Example:
 ```
-done full — rate limiting via Redis middleware on /api/submit — a3f92c1
+done — Requests to /api/submit are now rate-limited.
 ```
 
 **Blocked:**
 ```
-blocked — VERDICT: FAIL — [unmet done-when criteria] — Root Cause: [hint]
+blocked — [one plain sentence: what's stuck and why, no internals]
 ```
 Example:
 ```
-blocked — VERDICT: FAIL — parameterized bulk insert not supported by ORM — Root Cause: design-level gap, no workaround found in 5 attempts
+blocked — Couldn't add last_login_at; it doesn't get set when someone logs in via Google.
 ```
 
 **Not yet reached (below stop marker or not started):**
@@ -95,23 +101,23 @@ skipped — below stop marker
 
 ---
 
-## Example PROGRESS.md — dev-team-auto
+## Example LANE_PROGRESS.md — dev-team-auto
 
 ```markdown
 # Progress
 
 | Item | Status |
 |------|--------|
-| Add rate limiting to /api/submit | done full — rate limiting via Redis middleware, configurable via env vars — a3f92c1 |
-| Replace inline SQL in UserRepository | done light — all UserRepository queries parameterized, injection test added — b7d04e3 |
-| Add last_login_at column to users table | blocked — VERDICT: FAIL — column not populated on OAuth login path — Root Cause: OAuth callback skips the login hook where timestamp is set |
+| Add rate limiting to /api/submit | done — Requests to /api/submit are now rate-limited. |
+| Replace inline SQL in UserRepository | done — Database queries are safe from SQL injection. |
+| Add last_login_at column to users table | blocked — Couldn't add last_login_at; it doesn't get set when someone logs in via Google. |
 ```
 
 ---
 
 ## Multiple rounds
 
-A project outlives any one PLAN.md. When a round finishes and a new plan
+A project outlives any one LANE.md. When a round finishes and a new plan
 replaces it, **the ledger is not reset** — the new round's table is added above
 the previous one, and the Current-position pointer is rewritten to describe the
 new round. Older sections stay untouched forever.
@@ -120,7 +126,7 @@ new round. Older sections stay untouched forever.
 # Project — Progress
 
 ## Current position          <- rewritten each round; describes the newest only
-## v4 — the brain shell      <- newest round, one row per PLAN.md item
+## v4 — the brain shell      <- newest round, one row per LANE.md item
 ## v3 — the os dashboard     <- prior round, left exactly as it was
 ## v2 archive (stages 0–7)   <- older still
 ```
@@ -131,17 +137,39 @@ reads only the Current position and the top section.
 
 Do not summarize or prune old sections to save space. The per-item rows — which
 track ran, what shipped, which commit — are the record that makes replacing
-PLAN.md lossless.
+LANE.md lossless.
 
-## Relationship to [[plan-md]]
+## Relationship to [[lane-md]]
 
-PROGRESS.md does not replace [[plan-md|PLAN.md]] — it annotates it. PLAN.md is the source
-of truth for what to do; PROGRESS.md is the source of truth for what happened.
+LANE_PROGRESS.md does not replace [[lane-md|LANE.md]] — it annotates it. LANE.md is the source
+of truth for what to do; LANE_PROGRESS.md is the source of truth for what happened.
 
-- PLAN.md `status:` field is also updated in place by the agent — it mirrors
-  PROGRESS.md but is the field other agents read to find their resume point.
-- If PLAN.md and PROGRESS.md disagree, trust PROGRESS.md — it was written
-  after the work, not before.
+- LANE.md `status:` field is also updated in place by the agent — it mirrors
+  LANE_PROGRESS.md but is the field other agents read to find their resume point.
+- **On disagreement:** LANE.md wins for **scope** (what is in this round);
+  LANE_PROGRESS.md wins for **state** (what actually happened), since it was
+  written after the work. These never conflict — they answer different questions.
+
+---
+
+## Two layers (team rounds)
+
+When `MAP.md` exists, progress mirrors the plan layers. Nothing appends between
+them — different granularities.
+
+| | Plan | Progress | Written by | Lives on |
+|---|---|---|---|---|
+| Map | `MAP.md` | `MAP_PROGRESS.md` — one row per **lane** | `/merge-lane` | `integration` |
+| Lane | `LANE.md` | `LANE_PROGRESS.md` — one row per **item** | `/dev-team-auto` | `lane/<name>` |
+
+**Archive rule.** `LANE_PROGRESS.md` never merges to `integration` at root —
+every lane writes that path and they would conflict on every merge.
+`/merge-lane` moves it to `progress/<lane>.md`, appending if the file exists.
+
+MAP_PROGRESS.md needs no locking: it is written only during a merge, and merges
+are serialized.
+
+Schema for MAP_PROGRESS.md is in [[map-md]].
 
 ---
 
@@ -154,7 +182,7 @@ of truth for what to do; PROGRESS.md is the source of truth for what happened.
 | After a run | Read to find blocked items; decide whether to requeue, split, or drop them |
 | When the round is complete | Nothing. The ledger stays; the next round appends a new section above it (see "Multiple rounds") |
 
-**PROGRESS.md is permanent and append-only.** It is never deleted, never split
-into `PROGRESS-v3-done.md`, and never reset when a new [[plan-md|PLAN.md]]
+**LANE_PROGRESS.md is permanent and append-only.** It is never deleted, never split
+into `PROGRESS-v3-done.md`, and never reset when a new [[lane-md|LANE.md]]
 replaces the old one. It is the only place the project's full history lives —
-which is exactly what makes replacing PLAN.md safe.
+which is exactly what makes replacing LANE.md safe.

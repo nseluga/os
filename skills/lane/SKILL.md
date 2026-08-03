@@ -1,11 +1,11 @@
 ---
-name: plan-md
-description: Write a plan or update the plan — grills the user into a schema-valid PLAN.md ready for dev-team execution. Use when the user says "/plan-md", "write a plan", "make a PLAN.md", "update the plan", or wants to author/revise the plan file for a dev-team, dev-team-auto, or layout-loop run.
+name: lane
+description: Write or update a lane plan — grills the user into a schema-valid LANE.md ready for dev-team execution. Use when the user says "/lane", "write a plan", "make a LANE.md", "update the plan", "start a lane", or wants to author/revise the plan file for a dev-team or dev-team-auto run.
 ---
 
-**Related:** [[plan-md]] · [[agent-glossary]] · [[system-standards]] · [[skills/grill-me/SKILL|grill-me]]
+**Related:** [[lane-md]] · [[map-md]] · [[agent-glossary]] · [[system-standards]] · [[skills/grill-me/SKILL|grill-me]]
 
-You produce a PLAN.md that a cheaper agent team can execute unattended. You do
+You produce a LANE.md that a cheaper agent team can execute unattended. You do
 this by interviewing the user — one question at a time, tradeoffs and a
 recommendation per question — and writing a file that validates against the
 canonical schema. The interview is the product: a plan written without
@@ -13,15 +13,38 @@ resistance is a plan that fails overnight.
 
 ## Mode
 
-`PLAN.md` absent from the project root → **write mode** (full interview).
-Present → **update mode** (interview only the delta). Never silently overwrite
-an existing plan.
+Two axes. Check both.
+
+**Scope** — `MAP.md` at repo root?
+- **Present → lane mode.** Plan one lane only. Take the lane name from the
+  arg; if absent, list unassigned lanes from MAP.md and ask which.
+- **Absent → solo mode.** Plan the whole repo. Everything below applies except
+  the map-specific steps.
+
+**Write vs update** — `LANE.md` at repo root?
+- Absent → **write mode** (full interview).
+- Present → **update mode** (interview only the delta).
+
+Never silently overwrite an existing plan.
+
+## Lane mode — before the interview
+
+1. Read the lane's entry in MAP.md: `area:`, `owns:`, `depends on:`.
+2. Read the repo-level `protected:` list.
+3. Locate the frozen contracts + fixtures the `depends on:` edges name. **Not
+   found → stop and report.** The foundation pass is incomplete; planning
+   against an unfrozen contract is what the map layer exists to prevent.
+4. Not on a `lane/<name>` branch → create one off the foundation commit
+   (`/branch` flow), then continue.
+
+Scope every item to this lane. An item that must change a `protected:` path is
+not a lane item — surface it as an amendment request in the summary instead.
 
 ## Gather Context (before the first question)
 
 Read, in parallel where possible:
 
-1. **The schemas** — `~/os/knowledge/frameworks/plan-md.md` and
+1. **The schemas** — `~/os/knowledge/frameworks/lane-md.md` and
    `progress-md.md`. Non-negotiable; the output must validate against them,
    including the "Writing items for cheaper agents" section.
 2. **The project index** — the `~/os/projects/*/README.md` whose `repo:` matches
@@ -37,7 +60,7 @@ Read, in parallel where possible:
    actually disjoint.
 4. **Standards** — `~/os/skills/dev-team/system-standards.md`, especially the
    Scale & Infrastructure ladder. This drives your scale questions.
-5. **Update mode only** — the existing PLAN.md, PROGRESS.md, and
+5. **Update mode only** — the existing LANE.md, LANE_PROGRESS.md, and
    `git log --oneline` since the plan file's last commit, so the interview
    covers only what changed.
 
@@ -96,11 +119,24 @@ flow; this is the step that enforces the ones above.
 - Every `difficulty:` above `low`: name what is actually architecturally open.
   No answer → `low`.
 - Every speed criterion: name what grows with rows or rate. Nothing → cut it.
+- Every item still open after the above: route it per "Settle it now".
 
 Report what changed in one line per demotion. The user may veto any of them.
 
+**Settle it now.** Route each still-open item by what kind of open it is:
+
+- **"Which state model?" / "what should this look like?"** → offer `/prototype`
+  (LOGIC and UI branches). If taken: run it, re-interview that item with the
+  answer, name the decision as the item's approach, re-rate difficulty.
+- **Can't phrase the question sharply yet** → move to `## Not yet specified`, cut
+  from this round.
+- **Competing architectures, no cheap experiment** → leave open.
+
+Offer, never insist. Nothing from this step goes in the file as process — the
+plan states what is open; the orchestrator picks the response.
+
 **Update mode — cover only:**
-1. Restate what PROGRESS.md/git say landed since the plan was written; confirm.
+1. Restate what LANE_PROGRESS.md/git say landed since the plan was written; confirm.
 2. What changed — new goals, dropped items, reordered priorities, a blocker's
    resolution.
 3. For each new/changed item: the same `done when:`/`risk:`/`difficulty:` rigor
@@ -111,12 +147,25 @@ raises them.
 
 ## Write the File
 
-Write `PLAN.md` in the project root, exactly to the plan-md.md schema:
-preamble (title, status, global rules, context pointer, closed with `---`),
-then the ordered item blocks, stop marker where agreed. Every item carries
+Write `LANE.md` in the project root, exactly to the lane-md.md schema:
+preamble (title, status, global rules, context pointer, `## Not yet specified`
+and `## Out of scope` where either has content, closed with `---`), then the
+ordered item blocks, stop marker where agreed. Every item carries
 `task:`, `done when:`, `risk:`, `difficulty:`, and `status: not started`. Apply
 the "Writing items for cheaper agents" rules — name files, state known
 approaches. Name no agents, models, or attempt counts.
+
+**Lane mode — the preamble additionally carries, verbatim:**
+
+```markdown
+Lane: <name> — <area line from MAP.md>
+
+Protected — do not edit. Stop and report if an item requires changing one:
+  <protected: paths from MAP.md>
+
+Frozen contracts — build and test against these; they will not move:
+  <contract file + fixture path per `depends on:` edge>
+```
 
 Then show a short summary:
 
