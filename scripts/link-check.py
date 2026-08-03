@@ -107,7 +107,7 @@ def check_indexes(files):
                 continue
             if child.is_dir() or name.endswith(".md"):
                 present.add(name)
-        # An entry may name a file ("plan-md.md"), a folder ("dev-team"), or a
+        # An entry may name a file ("lane-md.md"), a folder ("dev-team"), or a
         # folder's stem — accept any spelling that points at something present.
         stems = {p.rsplit(".md", 1)[0] for p in present}
         for entry in sorted(claimed):

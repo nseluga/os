@@ -79,6 +79,8 @@ to `.claude/dev-team/team-memory.md`:
 TEAM <item title> — risk: <silent|loud, revertible|not> difficulty: <low|open: what> → <agents chosen> | skipped: <agent + why>
 ```
 
+On a lane branch this line is returned, not written — see "Run memory log".
+
 This is a forced declaration, not a gate. Under-running is a visible failure and
 over-running is invisible tokens, so latitude drifts heavy without it; writing
 "skipped: nothing" on a copy edit is the correction. It is also the only record
@@ -251,6 +253,15 @@ Each item ends in exactly one of:
 ## Run memory log (read at start, append the moment each item resolves)
 
 The team keeps a persistent, cross-run memory at **`.claude/dev-team/team-memory.md`** in the working repo. Unlike the per-run `*-report.md` files (overwritten each item), this file **accumulates**.
+
+**On a lane branch — never write this file.** Active when the branch matches
+`lane/*` and `MAP.md` is at repo root. Applies to **every** write below,
+including the `TEAM …` declaration before spawning. Return those lines verbatim
+in your outcome instead; `/merge-lane` appends them in merge order. Reading the
+file at run start is unchanged. Every live lane writes the same path, so a lane
+that appends conflicts on every merge into `integration` — on a file where a
+bad conflict resolution silently corrupts the record instead of breaking a
+build.
 
 - **At the start of a run**, both orchestrators read this file if it exists and factor its `Remember next run:` notes into team/model choices (e.g. a flaky test suite, a build command that needs a flag, an approach that failed before). If it does not exist, create it with a `# Dev-team memory log` header on first write.
 - **The moment an item resolves** — DONE or BLOCKED, *every* item, whatever team ran — append one entry **in the same step that records the item's outcome** (for `/dev-team-auto`, the item orchestrator appends it as its loop ends; for `/dev-team`, with the final report). Never defer it to shutdown — deferred, it does not get written. Append only; never rewrite prior entries (exception: compaction, below).

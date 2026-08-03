@@ -17,6 +17,8 @@ Invoke the `task-observer` skill now to begin observing this session.
 
 **Task:** any text that is not a flag is the task description. If no task text is given, read `LANE.md` from the project root, else `FOUNDATION.md` (a `/foundation` contract plan on `main`), else `PLAN.md` (pre-lane repos); if none exist, read `TASK.md`; if that's missing too, ask the user before proceeding. Capture the item's `done when:` criteria — QA turns these into the gate.
 
+**Lane branch** (`lane/*` + `MAP.md` at root): read MAP.md's `protected:` list and pass it verbatim into every agent prompt. An item that requires changing one of those paths is **blocked — needs amendment: `<path>`**. Never edit a protected path; never stub around it. Report it and stop.
+
 **Stage flag:** `--stage` takes one or more agent names joined by `+` (e.g. `--stage engineer`, `--stage qa`, `--stage review+fix`, `--stage analyze+engineer`). If given, run exactly those agents once in the order listed — this bypasses the convergence loop for targeted, single-shot work. Without `--stage`, run the full loop below.
 
 **Model & effort selection** and **Team selection** follow the **(shared)** sections in `convergence-loop.md`. Read `agent-glossary.md`'s "Worked routing examples" and pick your team from the nearest of the four risk×difficulty quadrants rather than re-deriving one from scratch. The model/effort table is a **default, not a ceiling or floor**: if your read of the item says a different tier fits better, deviate — record the deviation and its one-line justification in `team-memory.md`.
