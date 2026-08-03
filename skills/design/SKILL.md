@@ -37,6 +37,25 @@ one short message, then build — don't interview him.
 | **Intent** | What is this, who is it for, what should they do when they land. This drives everything downstream — layout, density, how hard the CTA works. Never skip it. |
 | **Guardrails** | What never to do. Starting set: no Inter / Geist / Space Grotesk / Plus Jakarta, no purple-blue gradients, no 3D SaaS blobs, no colored side-tab borders on cards, no eyebrow pill above the headline, no single accent-coloured word inside an otherwise plain headline. The last two are this wave's tells and they date a page instantly. Nate overrides freely; add whatever this project needs. |
 
+## Derive the direction first
+
+Before round 1, when the ask is open ("design this", "make it look right") rather
+than a targeted pass, use Impeccable to derive the direction instead of jumping to
+five drafts. `shape`, `critique`, `init` and `craft` are the verbs that reopen
+creative direction:
+
+```bash
+IMP=$(ls -d ~/.claude/plugins/cache/impeccable/impeccable/*/skills/impeccable | sort -V | tail -1)
+```
+
+Read `$IMP/reference/<verb>.md` and follow it. The output is a direction contract
+the five briefs are then written against — not a critique of drafts that already
+exist. Reach for these again whenever Nate wants the question reopened.
+
+Reference images are an input to this step, not just to the drafts: ask for a
+reference *family* (2–4 images that share a look), not one screenshot. One image
+gives a direction contract nothing to generalise from.
+
 ## Wide net, then narrow
 
 Everything comparable side by side, one page, one server. Draft in `.design/` at the
@@ -165,9 +184,8 @@ All of Impeccable's verbs are available — `typeset`, `colorize`, `layout`, `an
 `init`, `live`. Read `$IMP/reference/<verb>.md` and follow it. Nothing here is off
 limits; pick whichever actually fits the ask.
 
-Most are targeted passes on a design that already has a direction. `shape`, `critique`,
-`init` and `craft` are the ones that reopen creative direction — reach for them at the
-start, or when Nate wants the question reopened, rather than as a mid-flow reroute.
+The rest are targeted passes on a design that already has a direction. For the
+direction-setting verbs see "Derive the direction first" above.
 
 ## STYLE.md
 

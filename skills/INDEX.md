@@ -49,6 +49,10 @@ One folder per skill. Each `SKILL.md`'s `description:` frontmatter is the canoni
 - `leads` — Find, score, and track bcns sales leads in the Master Client List sheet
 - `career-advisor` — Senior career advisor reviewing portfolio sites and writeups
 
+## Writing
+
+- `humanizer` — Strip LLM writing tells and rewrite to Nate's voice via `knowledge/library/style_reference/`
+
 ## Utilities
 
 - `find-skills` — Discover and install agent skills
