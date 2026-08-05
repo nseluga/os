@@ -24,3 +24,5 @@
 - [vercel.json precedence](reference-vercel-json-precedence.md) — vercel.json overrides dashboard settings and its paths resolve relative to Root Directory; the monorepo double-nesting trap
 - [GCP auth under bcn-services.com](reference-gcp-auth-bcns.md) — SA keys blocked by Secure by Default and Sheets/Drive ADC scopes blocked on gcloud's client; use impersonation, and Places API (New) takes OAuth so needs no API key
 - [Research log entry format](feedback-research-log-entry-format.md) — decision-log and lab-notebook entries use closed five-field lists, 1-3 sentences per field, and never narrate the session or the agent's own errors
+- [Verify hook JSON schema against docs](feedback-hook-schema-verify-against-docs.md) — writing or debugging a Claude Code hook (UserPromptSubmit, PreToolUse, Stop) that reads stdin JSON; check field names against official docs, don't self-test with a guessed key
+- [Smoke-test against temp paths](feedback-smoke-test-temp-paths-only.md) — smoke tests write to /tmp; delete or wipe a results ledger, checkpoint, or built dataset and you throw away finished training runs

@@ -21,7 +21,7 @@ One folder per skill. Each `SKILL.md`'s `description:` frontmatter is the canoni
 - `map` — Partition a repo into parallel lanes for a team; emit MAP.md naming every cross-lane dependency
 - `foundation` — Freeze the contracts lanes build against: pin shapes, build them inline with the user, lock `protected:`, cut `integration`
 - `merge-lane` — Land a lane item on `integration`: overlap check, merge, archive progress, harvest memory, full suite
-- `grill-me` — A relentless interview to sharpen a plan or design
+- `grill-me` — Interview the user relentlessly in question rounds against a design tree, to sharpen a plan or design
 - `research-partner` — Build-time research partner standup ritual, methods pushback
 - `research-review` — Skeptical peer review of completed research work
 - `ml-engineer` — ML engineering partner for technique selection and training code
@@ -38,6 +38,7 @@ One folder per skill. Each `SKILL.md`'s `description:` frontmatter is the canoni
 - `task-observer` — Monitors task execution for skill-improvement opportunities
 - `handoff` — Compact the current conversation into a handoff document
 - `teach` — Teach the user a new skill or concept
+- `writing-for-agents` — Reference for writing any doc an agent consumes: skills, AGENTS.md/CLAUDE.md, disclosed reference
 
 ## Git & shipping
 
@@ -58,6 +59,7 @@ One folder per skill. Each `SKILL.md`'s `description:` frontmatter is the canoni
 ## Utilities
 
 - `tidy-downloads` — Sort a messy folder into meaningful subfolders
+- `wizard` — Generate an interactive bash wizard walking a human through manual setup/provisioning/migration steps
 
 ## Installed elsewhere, vendored here
 
