@@ -65,4 +65,4 @@ Write `.claude/dev-team/fix-report.md` with this exact structure:
 [findings you could not address and why — be honest]
 ---
 
-Keep every bullet to one line.
+Report discipline: keep every bullet to one line.

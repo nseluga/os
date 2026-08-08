@@ -1,6 +1,7 @@
 ---
 name: dev-team-auto
 description: "Autonomous dev team. Reads LANE.md top to bottom and drives each item to completion through the convergence loop — Engineer builds, QA gates with tests + behavioral checks, the Optimization Reviewer reviews, the Bug Fixer applies findings, repeating until the item works as specified or hits the attempt cap. Updates LANE_PROGRESS.md after each item and stops at any ⚠️ AUTONOMOUS RUN — STOP HERE marker. Runs unattended overnight on an experimental branch — no user interaction."
+disable-model-invocation: true
 ---
 
 **Related:** [[lane-md]] · [[progress-md]] · [[agent-glossary]] · [[skills/dev-team/skill|dev-team]]

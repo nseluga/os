@@ -1,6 +1,7 @@
 ---
 name: dev-team
 description: "Coordinates the professional dev team as a convergence loop: Engineer builds an item, QA gates it with tests, the Optimization Reviewer reviews it, the Bug Fixer applies findings — and the loop repeats until the item works as specified (QA PASS + clean review) or hits the attempt cap. Analyzer and UI Specialist join when the task calls for them. Task from inline arg, LANE.md, or TASK.md."
+disable-model-invocation: true
 ---
 
 **Related:** [[lane-md]] · [[progress-md]] · [[system-standards]] · [[skills/dev-team-auto/skill|dev-team-auto]]
@@ -11,7 +12,11 @@ Read `~/.claude/skills/dev-team/convergence-loop.md` now — it is the engine yo
 
 Invoke the `task-observer` skill now to begin observing this session.
 
-**Before choosing a team**, read both memory sources if they exist and factor them into your team, model, and approach choices: `.claude/dev-team/team-memory.md` (project-specific) and `~/.claude/memory/dev-team-learnings.md` (project-independent — you are the only reader of this file, since there's no nested item orchestrator here; compact it per `convergence-loop.md` → "Writing the global file" if it's past ~30 bullets, and keep the 3-5 bullets matching this item's failure family ready to inject per Efficiency rules). Compact `team-memory.md` if oversized per `convergence-loop.md` → "Compaction". Then delete any `*-report.md` files left by a prior run (keep `team-memory.md`; keep `analyze-report.md` only if this task works in the area it maps).
+**Before choosing a team**, read both memory sources if they exist and factor them into your team, model, and approach choices:
+- `.claude/dev-team/team-memory.md` (project-specific) — compact per `convergence-loop.md` → "Compaction" if oversized.
+- `~/.claude/memory/dev-team-learnings.md` (project-independent) — compact per `convergence-loop.md` → "Writing the global file" if oversized; keep the 3-5 bullets matching this item's failure family ready to inject per Efficiency rules.
+
+Then delete any `*-report.md` files left by a prior run (keep `team-memory.md`; keep `analyze-report.md` only if this task works in the area it maps).
 
 ## Parse Arguments
 

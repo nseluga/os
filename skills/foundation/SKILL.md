@@ -1,6 +1,6 @@
 ---
 name: foundation
-description: Freeze the contracts lanes build against — pins each shared shape, writes FOUNDATION.md, builds it inline with the user, then locks protected: and cuts the integration branch. Reviewer-only, runs after /map and before any lane starts. Use when the user says "/foundation", "freeze the contracts", "set up the foundation", or has a MAP.md but no integration branch yet.
+description: Freeze the contracts lanes build against — pins each shared shape, writes FOUNDATION.md, builds it inline with the user, then locks protected: and cuts the integration branch. Reviewer-only, runs after /map and before any lane starts. Use when the user says "/foundation", wants to freeze the contracts lanes build against, or has a MAP.md but no integration branch yet.
 ---
 
 **Related:** [[map-md]] · [[lane-md]] · [[skills/map/SKILL|map]] · [[skills/grill-me/SKILL|grill-me]]

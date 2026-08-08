@@ -1,6 +1,6 @@
 ---
 name: lane
-description: Write or update a lane plan — grills the user into a schema-valid LANE.md ready for dev-team execution. Use when the user says "/lane", "write a plan", "make a LANE.md", "update the plan", "start a lane", or wants to author/revise the plan file for a dev-team or dev-team-auto run.
+description: Write or update a lane plan — grills the user into a schema-valid LANE.md ready for dev-team execution. Use when the user says "/lane", wants to write a new lane plan, or wants to update an existing LANE.md for a dev-team or dev-team-auto run.
 ---
 
 **Related:** [[lane-md]] · [[map-md]] · [[agent-glossary]] · [[system-standards]] · [[skills/grill-me/SKILL|grill-me]]

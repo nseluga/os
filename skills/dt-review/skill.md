@@ -56,9 +56,6 @@ Write `.claude/dev-team/review-report.md` with this exact structure:
 **Files Reviewed:** [count]
 **Standards Applied:** efficiency, scalability, reliability, security[, observability/fault-tolerance if applied]
 
-## Summary
-[2-3 sentences: how well the implementation will perform and hold up under load and failure, the most significant finding, whether the implementation is fundamentally sound]
-
 ## Findings
 
 ### Critical
@@ -74,4 +71,4 @@ Write `.claude/dev-team/review-report.md` with this exact structure:
 [list of rules added to project STANDARDS.md, or "none" if no project-specific patterns observed]
 ---
 
-If a severity level has no findings, omit that section. Keep every finding to one line per field — the Bug Fixer applies them directly.
+Report discipline: if a severity level has no findings, omit that section; keep every finding to one line per field — the Bug Fixer applies them directly.

@@ -1,6 +1,6 @@
 ---
 name: map
-description: Partition a repo into parallel lanes — grills the user into a schema-valid MAP.md naming every cross-lane dependency. Use when the user says "/map", "draw the lanes", "split this repo up", "map the project", "set up lanes", or is breaking a round of work into separable pieces. Applies solo as well as across a team.
+description: Partition a repo into parallel lanes — grills the user into a schema-valid MAP.md naming every cross-lane dependency. Use when the user says "/map", wants to split a repo into parallel lanes, or is breaking a round of work into separable pieces for solo or team execution.
 ---
 
 **Related:** [[map-md]] · [[lane-md]] · [[skills/foundation/SKILL|foundation]] · [[skills/grill-me/SKILL|grill-me]]

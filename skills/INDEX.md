@@ -55,6 +55,7 @@ One folder per skill. Each `SKILL.md`'s `description:` frontmatter is the canoni
 ## Writing
 
 - `humanizer` — Strip LLM writing tells and rewrite to Nate's voice via `knowledge/library/style_reference/`
+- `explain` — Re-explain Claude's last response in ASD-STE100 Simplified Technical English, keeping Nate's os vocabulary defined
 
 ## Utilities
 

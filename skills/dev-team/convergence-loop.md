@@ -62,8 +62,9 @@ areas already covered by a live `analyze-report.md`.
 
 **`dt-research` — check the cache, always.** Before the first build, list
 `~/.claude/skills/dev-team/research-notes/` and name every package, service, or
-external system this item will use. Any that has no note → spawn `dt-research`
-(Sonnet, medium) on it first. Any that has one → read it, spawn nothing. It never
+external system this item will use. Any that has no note, or only a stale one
+(`updated:` older than 90 days) → spawn `dt-research` (Sonnet, medium) on it
+first. Any that has a fresh one → read it, spawn nothing. It never
 covers static architecture; the standards files own that. Its `research-brief.md`
 is injected into the builder/reviewer spawns (see Spawn template), and it may run
 in parallel with dt-analyze. The same rule fires again inside `dt-engineer`: it
