@@ -10,7 +10,7 @@ Observations captured during task-oriented work.
 
 ### Observation 1: dev-team-auto needs an environment preflight before spawning agents
 
-**Status:** OPEN
+**Status:** ACTIONED (2026-08-08)
 **Date:** 2026-07-24
 **Session context:** dev-team-auto pass-3 run on a client repo
 **Skill:** dev-team-auto
@@ -25,7 +25,7 @@ Observations captured during task-oriented work.
 
 ### Observation 2: Worktree-based runs must sync uncommitted tracker edits from the launch checkout
 
-**Status:** OPEN
+**Status:** ACTIONED (2026-08-08)
 **Date:** 2026-07-24
 **Session context:** dev-team-auto pass-3; session isolated into a fresh git worktree
 **Skill:** dev-team-auto
@@ -40,7 +40,7 @@ Observations captured during task-oriented work.
 
 ### Observation 3: Autonomous-run memory carries a "known failures" allowance that outlives the failures
 
-**Status:** OPEN
+**Status:** ACTIONED (2026-08-08)
 **Date:** 2026-07-27
 **Session context:** /dev-team-auto on project-dashboard; fixed 7 rotting tests, then had to correct team-memory.md before spawning any agent
 **Skill:** dev-team-auto (and convergence-loop.md → "Run memory log")
@@ -57,7 +57,7 @@ Observations captured during task-oriented work.
 
 ### Observation 4: dev-team-auto has no baseline-capture step before the first item
 
-**Status:** OPEN
+**Status:** ACTIONED (2026-08-08)
 **Date:** 2026-07-25
 **Session context:** /dev-team-auto run over project-dashboard PLAN.md v3
 **Skill:** dev-team-auto (and dev-team/convergence-loop.md)
@@ -72,7 +72,7 @@ Observations captured during task-oriented work.
 
 ### Observation 5: dev-team-auto assumes the test command in package.json is the real gate
 
-**Status:** OPEN
+**Status:** ACTIONED (2026-08-08)
 **Date:** 2026-07-25
 **Session context:** /dev-team-auto run over project-dashboard PLAN.md v3
 **Skill:** dev-team-auto / dev-team convergence-loop.md
@@ -87,7 +87,7 @@ Observations captured during task-oriented work.
 
 ### Observation 6: Grep-shaped acceptance criteria can be satisfied while missing the actual duplication
 
-**Status:** OPEN
+**Status:** ACTIONED (2026-08-08)
 **Date:** 2026-07-25
 **Session context:** /dev-team-auto item 2 — dedupe expandTilde into src/lib/paths.ts
 **Skill:** plan-md (criteria authoring) / dev-team convergence-loop.md
@@ -104,7 +104,7 @@ Observations captured during task-oriented work.
 
 ### Observation 7: A defect family that recurs across items is a standards-file signal, not just a per-item fix
 
-**Status:** OPEN
+**Status:** ACTIONED (2026-08-08)
 **Date:** 2026-07-26
 **Session context:** /dev-team-auto run over project-dashboard PLAN.md v3, items 3-5
 **Skill:** dev-team-auto / dev-team convergence-loop.md
@@ -119,7 +119,7 @@ Observations captured during task-oriented work.
 
 ### Observation 8: Probing the live environment before spawning invalidates false premises in the plan text
 
-**Status:** OPEN
+**Status:** DECLINED (2026-08-08)
 **Date:** 2026-07-26
 **Session context:** /dev-team-auto run over project-dashboard PLAN.md v3, item 4
 **Skill:** dev-team-auto / plan-md

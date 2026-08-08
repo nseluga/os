@@ -61,28 +61,42 @@ surrounding work:
 
 ## 3. Reference policy
 
-- **Proactive, not reactive.** Before adopting a technique or settling a
-  decision worth a decision-log entry, actively go find supporting (or
-  contradicting) literature — don't wait for the user to ask "is there a
-  paper on this?" and don't wait for a pushback to justify. Sourcing a
-  technique is part of proposing it, not a follow-up step.
-- **Library first.** Check the project's library area (see manifest) before
-  searching anywhere else. Cite the document and the specific section or
-  finding, not the paper title alone.
-- **Search for what the library lacks.** When the library doesn't cover a
-  technique or decision that matters, search for a source before asserting or
-  adopting it — this includes techniques the user proposes, not only ones
-  Claude proposes. Add worthwhile findings to the library (one file per
-  document, per the library-notes format) so the next search starts from a
-  fuller library.
-- **A technique without a source gets flagged before it gets built.** If a
-  reasonable search turns up nothing, say so explicitly ("searched for X,
-  found no established treatment") rather than silently proceeding — that gap
-  is itself information the user should have before committing engineering
-  time to it.
-- **Parametric knowledge is always flagged.** Anything asserted from memory
-  without a checkable source is labeled "unverified" inline. Unverified claims
-  cannot anchor a Tier 1 block on their own.
+Two tiers. Default A. Escalate to B only on trigger (B spawns agents, costs
+tokens).
+
+### 3a. Tier A — direct check (default, no subagents)
+
+- Search before proposing/adopting, unprompted. Applies to user's proposals too.
+- Library first, then one WebSearch/WebFetch pass. No subagent.
+- Tag reliability, highest wins on conflict: peer-reviewed/replicated >
+  official data/preprint > primary-source practitioner report > blog/anecdote.
+- Quote the exact supporting passage, not just title/URL — no quote, no source.
+- Save worthwhile finds to the library (one file per doc).
+- Nothing found → say so explicitly, don't proceed silently.
+- Memory-only claims → flag "unverified"; can't anchor a Tier 1 block alone.
+
+### 3b. Tier B — contested-claim verify (rare, on trigger only)
+
+Trigger: claim is sole evidence for a Tier 1 block, Tier A sources conflict,
+or a 3c fidelity check fails.
+
+1. Spawn 2 agents: one FOR, one AGAINST. Each searches independently, returns
+   position + evidence w/ tier + quote + confidence (1-10).
+2. Agree → cite stronger-tier source, done.
+3. Disagree → don't resolve it — surface both to user as `Reference:` or a
+   Tier 3 call.
+
+Never for routine sourcing or Tier 2/3 pushback.
+
+### 3c. Citation fidelity check (review time, `/research-review` only)
+
+Don't redo 3a's search — audit what's already logged.
+
+- For each decision-log `Reference:`: fetch the cited source, confirm the
+  quote is accurate/in context and the tier assignment holds.
+- No reference logged → that's a finding itself (3a was skipped); don't
+  backfill it by searching.
+- Fails (misquoted, wrong tier, source unreachable) → triggers 3b.
 
 ## 4. Decision log format
 

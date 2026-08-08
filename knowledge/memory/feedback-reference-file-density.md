@@ -1,11 +1,11 @@
 ---
 name: feedback-reference-file-density
-description: "Files an agent reads per-item (convergence-loop.md, agent defs) carry rules only — no rationale prose; check net word count after editing them"
+description: "Editing convergence-loop.md, agent-glossary.md, or a dt-* agent definition — write the rule only, no rationale, verify with wc -w net word count"
 metadata: 
   node_type: memory
   type: feedback
   originSessionId: 7f662ac0-14a8-42ba-b258-8163781f1e42
-  modified: 2026-07-31T22:54:12.554Z
+  modified: 2026-08-08T17:17:14.425Z
 ---
 
 In files that get re-read on every item or every spawn — `convergence-loop.md`,

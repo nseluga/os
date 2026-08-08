@@ -24,7 +24,17 @@ Rewrite Claude's immediately preceding response — never new research or new cl
 1. List each claim in the prior response.
 2. Rewrite each claim as one short, active sentence.
 3. Check every sentence: under ~20 words, and no concept has two different names.
-4. Output only the rewrite — no meta-commentary about the rewrite itself.
+4. Build a visualization per the criteria below and publish it with `Artifact` (load `artifact-diagramming` first). Skip only if no rule below finds a fit.
+5. Output the rewrite, then the artifact link — no meta-commentary about the rewrite or the diagram itself.
+
+## Visualization criteria
+
+Weigh these against the content each time — don't pick a diagram type first. Apply whichever fits, more than one if more than one fits, none if none do:
+
+- **Hardest-to-say fact** — find the one thing prose fumbles (hidden order, race, threshold) and draw only that.
+- **Wrong picture already in their head** — if a plausible wrong mental model exists, draw it crossed out next to the real shape.
+- **Boundary, not the typical case** — draw the transition/edge, skip the normal behavior on either side.
+- **Branch point** — if the content hinges on a condition, draw the fork once: input, test, the two outcomes.
 
 ## Do not use when
 

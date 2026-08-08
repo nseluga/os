@@ -38,6 +38,9 @@ Apply the standards §1 challenge checklist — all seven categories and the ful
 hunt-list. For domain-specific claims, ask the manifest's domain sanity
 questions: what is the mechanism, and who would have to believe it?
 
+Run standards §3c on each decision-log `Reference:` — a fidelity check, not a
+fresh search. A check that fails escalates to §3b before the review verdict.
+
 ## Review output
 
 **Strengths** — what is well-justified and why it holds up

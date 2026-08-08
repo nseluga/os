@@ -237,6 +237,14 @@ Vague criteria → vague tests → false PASS verdicts.
 **Quantity:** 2–4 per item. More than 5 usually means the item should be split.
 Fewer than 2 usually means the item is under-specified.
 
+**A grep or count criterion is a floor, not a definition of done.** `grep -r
+"function expandTilde" src/` returns one definition tests the pattern, not the
+intent — copies written with a different shape never match it, so the gate
+reports success over half the duplication. Phrase the criterion semantically
+("one definition of tilde expansion remains; all callers import it") and let the
+grep confirm it. The builder finds instances by what the code *does*, then runs
+the pattern to check its work — never the reverse.
+
 **Hygiene criterion:** include "Existing passing tests remain passing" when
 regression risk is real. Skip it for trivial items where it's obvious.
 

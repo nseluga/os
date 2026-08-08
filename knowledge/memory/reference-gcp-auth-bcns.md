@@ -1,11 +1,11 @@
 ---
 name: reference-gcp-auth-bcns
-description: GCP under bcn-services.com blocks service-account keys and Sheets/Drive ADC scopes — use impersonation; Places API (New) takes OAuth so needs no API key
+description: bcn-services.com GCP authentication — service-account creation blocked by org policy, gcloud ADC can't request Sheets/Drive scopes, go through service-account impersonation instead
 metadata: 
   node_type: memory
   type: reference
   originSessionId: 08984a96-e34c-4893-98db-d5ac18570eb4
-  modified: 2026-07-30T16:05:17.752Z
+  modified: 2026-08-08T17:17:11.289Z
 ---
 
 Two Google defaults block the obvious auth paths on the `bcn-services.com` org,

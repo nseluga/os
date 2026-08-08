@@ -23,7 +23,12 @@ Read these in parallel before doing anything else:
 
 Also run `git branch --show-current` and save the result as the **working branch** — you'll merge the worktree branch back into it at shutdown.
 
-If there is no existing worktree branch, the first agent creates one; all later agents work on that same branch.
+Then run `~/os/scripts/dt-preflight.sh` from the repo root and read its output. It reports the declared test command vs. test files on disk, any busy ports, and the baseline suite result. Three things to do with it, all before the first spawn:
+- **Kill any listener you did not start.** A stale server from a prior run makes live-smoke tests poll the wrong server/DB and fail reproducibly as phantom code bugs.
+- **Record the baseline** — pass/fail counts and the exact name of every failure — and pass it verbatim into every item prompt with: "these are pre-existing failures, not regressions; do not 'fix' them by editing assertions." Every item's `done when:` includes "existing passing tests remain passing", which is unverifiable without this.
+- **Reconcile `team-memory.md` against what you just measured.** Where its Standing notes disagree — especially "N pre-existing failures, do not chase" allowances and deferred-bug notes — correct the file now. A tolerance is a standing instruction, not a fact: it outlives the condition that justified it, and a stale one tells every agent to ignore genuine regressions.
+
+If there is no existing worktree branch, the first agent creates one; all later agents work on that same branch. When a worktree is created, `git diff --stat HEAD -- <plan file> <progress file>` in the **launch checkout** first: the worktree forks from the last commit, so uncommitted plan edits do not travel. Any diff means the run would build against a stale contract — commit those edits to the branch as the run's contract before item 1.
 
 ## Outer Loop: For Each Plan Item
 
@@ -39,7 +44,7 @@ If the current item sits at or past a plan-file line beginning with `> **⚠️ 
 
 **Everything else:** spawn one item orchestrator (`subagent_type: "dt-orchestrator"`, no model param — its agent definition pins Opus + xhigh effort in frontmatter; its own instructions carry the full contract), prompt:
 
-> Item: [task text + `done when:` criteria + the `risk:` and `difficulty:` lines from the plan file — verbatim; they are how you pick the team, see `convergence-loop.md` → Team selection]. Branch: [branch name]. [Or, first item with no branch: none exists — create the worktree and report the branch back.] Prior items this run: [one line each]. Known failure modes — avoid these: [the 3–5 bullets you matched from `dev-team-learnings.md` in Start Up, verbatim — or "none matched" if nothing fits].
+> Item: [task text + `done when:` criteria + the `risk:` and `difficulty:` lines from the plan file — verbatim; they are how you pick the team, see `convergence-loop.md` → Team selection]. Branch: [branch name]. [Or, first item with no branch: none exists — create the worktree and report the branch back.] Verified gate command: [the real test command from the preflight, not necessarily `npm test`]. Baseline: [pass/fail counts + the name of every pre-existing failure — these are not regressions; do not "fix" them by editing assertions]. Prior items this run: [one line each]. Known failure modes — avoid these: [the 3–5 bullets you matched from `dev-team-learnings.md` in Start Up, verbatim — or "none matched" if nothing fits] [plus every defect family carried from an earlier item **this run** (see step 3), most recent 3, verbatim].
 
 Do not read the inner agents' reports yourself — the returned line is your record.
 
@@ -53,6 +58,8 @@ From the returned line, before touching the next item, write both trackers — n
 - **The plan file** — set that item's `status:`.
 
 The item orchestrator already appended the team-memory entry; for Quadrant-1 items you ran directly, append it yourself per the "Run memory log" format. A blocked item does not stop the run. Back to step 1.
+
+**Carry the item's defect family forward.** If the returned line names a defect the review caught, keep it as a one-line family (the *shape*, not the file) and inject it into every later item's spawn prompt — see the slot in step 2. Per-item orchestrators share no memory, so cross-item pattern recognition is yours alone: without this, each item rediscovers the same family at full review cost. When the same family lands **twice**, stop patching it locally — say so in the next spawn prompt and require one shared construct both sides consume, and write it to the project's standards file.
 
 **On a lane branch, team-memory works differently — see "Lane mode" below.**
 

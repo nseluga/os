@@ -1,11 +1,11 @@
 ---
 name: reference-claude-in-chrome-limits
-description: Claude-in-Chrome MCP extension hard constraints — tab visibility, file:// block, and the stable deviceId→profile mapping
+description: Claude-in-Chrome / browser automation session — tab visibility across windows, file:// navigation, or which Chrome profile (deviceId) is connected
 metadata: 
   node_type: memory
   type: reference
   originSessionId: e9cc0f22-a17b-492f-abcb-ce5ad201bab9
-  modified: 2026-07-30T16:12:00.000Z
+  modified: 2026-08-08T17:15:16.206Z
 ---
 
 Three hard constraints found across multiple sessions using the Claude-in-Chrome extension:

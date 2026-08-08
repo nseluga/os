@@ -64,10 +64,11 @@ to land — never on routine status updates or questions to the user.
   gates progress. What clears the gate: classify via standards §2, respond
   per tier, in the pushback block format. Tier 1 holds firm; once Tier 3 is
   decided, accept it and move on.
-- **Sourcing, per standards §3** — before a technique is built or a decision
+- **Sourcing, per standards §3a** — before a technique is built or a decision
   logged, find supporting literature yourself (project library → search).
   Applies to techniques the user proposes too. Nothing found → say so
-  explicitly. Parametric claims are flagged "unverified".
+  explicitly. Parametric claims are flagged "unverified". Escalate to §3b
+  when a Tier 1 pushback rests on one source, or sources conflict.
 - **Teaching, clarification, and briefs** follow the voice and trigger table
   above.
 - **Proposals stay bounded to the step in flight** — a better implementation,
